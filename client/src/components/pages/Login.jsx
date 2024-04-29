@@ -3,7 +3,6 @@ import logo from "../../assets/football-logos-master/logos/ES1/Real Madrid.png";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useUserContext } from "../../context";
-import { useNavigate } from "react-router-dom";
 
 const schema = Yup.object().shape({
   email: Yup.string().required("(Required)").email("Invalid email format"),
@@ -20,12 +19,8 @@ const LogIn = () => {
 
   const { login } = useUserContext();
 
-  const navigation = useNavigate();
   const handleSubmit = async (values) => {
     const status = await login(values);
-    if (status) {
-      navigation("/dashboard");
-    }
   };
 
   return (

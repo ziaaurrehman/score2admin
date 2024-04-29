@@ -60,6 +60,7 @@ export const signupUser = async (form) => {
 export const loginUser = async (user) => {
   try {
     const res = await axios.post(`/login`, user);
+
     return res;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}`, {
