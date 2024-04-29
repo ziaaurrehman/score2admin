@@ -29,12 +29,14 @@ export const UserContextProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(res?.data));
         setUser({ isAuth: true, ...res?.data });
 
-        if (res?.data?.role === "Admin") {
+        if (res?.data?.role === "admin") {
           navigation("/dashboard");
         }
+        return true;
       }
     } catch (error) {
       console.log(error?.message);
+      return false;
     }
   };
 
