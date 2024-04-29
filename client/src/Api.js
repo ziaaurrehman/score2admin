@@ -1,8 +1,9 @@
 import instance from "axios";
 import { toast } from "react-toastify";
 
+const VITE_API_BASE_URL = "https://sportsdashboard.onrender.com/api";
 const axios = instance.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: VITE_API_BASE_URL,
 
   headers: {
     "Content-Type": "application/json",
