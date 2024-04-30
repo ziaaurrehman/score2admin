@@ -52,7 +52,7 @@ const androidSettingSchema = mongoose.Schema({
     },
     logo: {
       type: String,
-      required: true,
+      // required: true,
       trim: true,
     },
   },

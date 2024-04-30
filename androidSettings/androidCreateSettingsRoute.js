@@ -52,7 +52,6 @@ androidCreateSettingRoute.post(
       description,
     } = req.body;
     const filename = req?.file?.filename;
-    console.log(filename);
     if (
       android_privacy_policy &&
       android_terms_conditions &&
@@ -62,8 +61,7 @@ androidCreateSettingRoute.post(
       application_id &&
       app_url &&
       app_name &&
-      description &&
-      logo
+      description
     ) {
       try {
         if (filename) {
@@ -87,7 +85,7 @@ androidCreateSettingRoute.post(
 
           res.status(200).json({
             success: true,
-            message: "News created successfully",
+            message: "Settings Updated successfully",
           });
         }
       } catch (error) {
@@ -100,7 +98,7 @@ androidCreateSettingRoute.post(
     } else {
       res.status(400).json({
         success: false,
-        message: "something wents wrong",
+        message: "Please fill all empty fields",
       });
     }
   }

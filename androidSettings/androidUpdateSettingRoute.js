@@ -2,7 +2,6 @@ import path from "path";
 import express from "express";
 import multer from "multer";
 import fs from "fs";
-import AppInformation from "./appInformationModel.js";
 import AndroidSetting from "./androidModel.js";
 const androidUpdateSettingRoute = express.Router();
 

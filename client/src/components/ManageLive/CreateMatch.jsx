@@ -64,7 +64,6 @@ const CreateMatch = () => {
     status,
     team_one,
     team_two,
-    streaming_source,
   } = data;
 
   const handleChange = (e) => {

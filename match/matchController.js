@@ -83,6 +83,7 @@ const getMatches = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Matches",
+      mobile_view: false,
       totalPages,
       paginatedMatches: matches,
     });

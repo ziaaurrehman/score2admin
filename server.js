@@ -15,6 +15,7 @@ import appInformationRouter from "./AppInformation/appInformationRoute.js";
 import appInformationCreateRoute from "./AppInformation/appInformationCreateRoute.js";
 import appInformationUpdateRoute from "./AppInformation/appInformationUpdateRoute.js";
 import androidCreateSettingRoute from "./androidSettings/androidCreateSettingsRoute.js";
+import androidUpdateSettingRoute from "./androidSettings/androidUpdateSettingRoute.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -50,12 +51,13 @@ app.use("/api", appInformationRouter);
 app.use("/api", appInformationCreateRoute);
 app.use("/api", appInformationUpdateRoute);
 app.use("/api", androidCreateSettingRoute);
+app.use("/api", androidUpdateSettingRoute);
 
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "./client/dist")));
 
   app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "./client/dist/index.html"))
+    res.sendFile(path.resolve(__dirname, ".client/dist/index.html"))
   );
 } else {
   app.get("/", (req, res) => {

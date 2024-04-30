@@ -48,7 +48,6 @@ appInformationCreateRoute.post(
       status,
     } = req.body;
     const filename = req?.file?.filename;
-    console.log(filename);
     if (
       appName &&
       app_unique_id &&
@@ -57,24 +56,27 @@ appInformationCreateRoute.post(
       sports_api_key
     ) {
       try {
-      
-          if (filename) {
-            const appInformation = new AppInformation({
-              appName: appName,
-              sports_api_base_url: sports_api_base_url,
-              status: status,
-              app_unique_id: app_unique_id,
-              sports_api_key: sports_api_key,
-              app_logo: filename,
-            });
-            await appInformation.save();
+        if (filename) {
+          const appInformation = new AppInformation({
+            appName: appName,
+            sports_api_base_url: sports_api_base_url,
+            status: status,
+            app_unique_id: app_unique_id,
+            sports_api_key: sports_api_key,
+            app_logo: filename,
+          });
+          await appInformation.save();
 
-            res.status(200).json({
-              success: true,
-              message: "News created successfully",
-            });
-          }
-       
+          res.status(200).json({
+            success: true,
+            message: "News created successfully",
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: `Please upload app logo`,
+          });
+        }
       } catch (error) {
         console.log(error, "error");
         res.status(400).json({
@@ -85,7 +87,7 @@ appInformationCreateRoute.post(
     } else {
       res.status(400).json({
         success: false,
-        message: "something wents wrong",
+        message: "Please fill all empty fields",
       });
     }
   }
