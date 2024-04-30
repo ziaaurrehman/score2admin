@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Portal from "./Portal";
 import { fetchAllMatches } from "../../Api";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [matches, setMatches] = useState([]);

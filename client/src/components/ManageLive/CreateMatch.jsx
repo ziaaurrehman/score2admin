@@ -50,6 +50,7 @@ const CreateMatch = () => {
         status: "active",
         stream_type: "",
         stream_url: "",
+        stream_thumbnail: "",
       },
     ],
   });
@@ -585,7 +586,7 @@ const CreateMatch = () => {
                         </div>
 
                         <div className="p-3 flex gap-5">
-                          <div className="w-full">
+                          <div className="w-1/2">
                             <label
                               htmlFor="sports-type"
                               className="text-xs font-bold"
@@ -597,6 +598,23 @@ const CreateMatch = () => {
                               className="w-full block p-1 rounded-md border-2 border-gray-200"
                               name="stream_url"
                               value={streaming.stream_url}
+                              onChange={(e) => handleStreamingChange(e, index)}
+                            />
+                          </div>
+
+                          <div className="w-1/2">
+                            <label
+                              htmlFor="stream_thumbnail"
+                              className="text-xs font-bold"
+                            >
+                              Stream Thumbnail{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              className="w-full block p-1 rounded-md border-2 border-gray-200"
+                              name="stream_thumbnail"
+                              value={streaming.stream_thumbnail}
                               onChange={(e) => handleStreamingChange(e, index)}
                             />
                           </div>

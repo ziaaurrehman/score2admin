@@ -329,3 +329,48 @@ export const duplicateMatch = async (id) => {
     return error;
   }
 };
+export const createAppInformation = async (data) => {
+  try {
+    const res = await axios.post(`/add-app-information`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+
+export const androidCreateSettings = async (data) => {
+  try {
+    const res = await axios.post(`/add-android-setting`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};

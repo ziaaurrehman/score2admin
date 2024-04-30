@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { createAppInformation } from "../../Api";
 import { toast } from "react-toastify";
@@ -70,7 +70,7 @@ export const AppInformation = () => {
   const handleFormData = (values) => {
     var formData = new FormData();
     formData.append("appName", values?.appName);
-    if (!!file) formData.append("filename", file);
+    if (!file) formData.append("filename", file);
     formData.append("app_unique_id", values?.app_unique_id);
     formData.append("sports_api_base_url", values?.sports_api_base_url);
     formData.append("sports_api_key", values?.sports_api_key);

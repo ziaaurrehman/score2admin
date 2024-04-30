@@ -1,7 +1,27 @@
 import { useState } from "react";
 import SettingForms from "./SettingForms";
+import { IoLogoAndroid, IoIosNotifications } from "react-icons/io";
+import { FaAppStoreIos } from "react-icons/fa";
+import { CiApple } from "react-icons/ci";
+import { SiGoogleads } from "react-icons/si";
+import { IoShareSocial } from "react-icons/io5";
 
-const Accordion = ({ title, img, form }) => {
+const Accordion = ({ title, form }) => {
+  const getImgComponent = () => {
+    if (title === "Android Settings") {
+      return <IoLogoAndroid className="h-10 w-10" />;
+    } else if (title === "iOS Settings") {
+      return <CiApple className="h-10 w-10" />;
+    } else if (title === "App Information") {
+      return <FaAppStoreIos className="w-10 h-10" />;
+    } else if (title === "Ads Control") {
+      return <SiGoogleads className="h-10 w-10" />;
+    } else if (title === "Notification Settings") {
+      return <IoIosNotifications className="h-10 w-10" />;
+    } else if (title === "Social Links") {
+      return <IoShareSocial className="h-10 w-10" />;
+    }
+  };
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleContent = () => setIsOpen(!isOpen);
@@ -13,7 +33,7 @@ const Accordion = ({ title, img, form }) => {
         onClick={toggleContent}
       >
         <div className="flex gap-3 items-center">
-          <img src={img} alt="notification-icon" className="h-10 w-10" />
+          {getImgComponent()}
           <h2 className="font-bold">{title}</h2>
         </div>
         <span

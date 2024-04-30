@@ -6,7 +6,7 @@ import { MdDragIndicator } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Reorder } from "framer-motion";
-import { fetchAllMatches, deleteMatch, duplicateMatch } from "../../Api";
+import { fetchAllMatches, deleteMatch, duplicateMatch } from "../../Api.js";
 import { toast } from "react-toastify";
 import LoadingBall from "../global/LoadingBall.jsx";
 

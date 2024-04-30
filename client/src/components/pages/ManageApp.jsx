@@ -1,7 +1,8 @@
-import Accordion from "../global/Accordian";
+import Accordion from "../ManageApp/Accordian";
 import { useLocation } from "react-router-dom";
 import Location from "../global/Location";
 import Portal from "./Portal";
+import { IoLogoAndroid } from "react-icons/io";
 const ManageApp = () => {
   const location = useLocation();
   const contentList = [
@@ -27,6 +28,11 @@ const ManageApp = () => {
       img: "https://placehold.jp/300x300.png",
     },
     {
+      title: "Ads Control",
+      form: "AdsControl",
+      img: "https://placehold.jp/300x300.png",
+    },
+    {
       title: "Social Links",
       form: "SocialLinks",
       img: "https://placehold.jp/300x300.png",
@@ -46,11 +52,7 @@ const ManageApp = () => {
             <div className="flex flex-col gap-5 w-[90%] mx-auto bg-white p-3 rounded-md shadow-md">
               {contentList.map((item, index) => (
                 <div key={index} className="rounded-md">
-                  <Accordion
-                    title={item.title}
-                    img={item.img}
-                    form={item.form}
-                  />
+                  <Accordion title={item.title} form={item.form} />
                 </div>
               ))}
             </div>

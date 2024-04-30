@@ -99,6 +99,11 @@ const matchSchema = mongoose.Schema(
           trim: true,
           required: true,
         },
+        stream_thumbnail: {
+          type: String,
+          trim: true,
+          required: true,
+        },
       },
     ],
   },
