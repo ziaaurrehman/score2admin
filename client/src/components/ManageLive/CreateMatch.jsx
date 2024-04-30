@@ -11,7 +11,6 @@ import { toast } from "react-toastify";
 const CreateMatch = () => {
   const location = useLocation();
   const [showCal, setShowCal] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
   const defaultPortraitWatermark = {
@@ -64,6 +63,7 @@ const CreateMatch = () => {
     status,
     team_one,
     team_two,
+    //streaming_source,
   } = data;
 
   const handleChange = (e) => {
@@ -619,7 +619,6 @@ const CreateMatch = () => {
 
           <button
             onClick={handleSubmit}
-            disabled={isClicked}
             className="absolute text-sm font-semibold right-12 bottom-[60px] bg-blue-600 py-2 px-4 text-white uppercase animate-bounce hover:bg-blue-800 transition active:scale-95 rounded-md shadow-lg"
           >
             Create Match

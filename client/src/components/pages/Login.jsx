@@ -21,6 +21,7 @@ const LogIn = () => {
 
   const handleSubmit = async (values) => {
     const status = await login(values);
+    console.log(status);
   };
 
   return (
