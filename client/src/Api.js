@@ -1,9 +1,10 @@
 import instance from "axios";
 import { toast } from "react-toastify";
 
-const VITE_API_BASE_URL = "https://sportsdashboard.onrender.com/api";
+const VITE_API_BASE_URL = "http://localhost:5050/api";
+const PROD = "https://sportsdashboard.onrender.com/api/";
 const axios = instance.create({
-  baseURL: VITE_API_BASE_URL,
+  baseURL: PROD,
   headers: {
     "Content-Type": "application/json",
   },
@@ -371,6 +372,34 @@ export const androidCreateSettings = async (data) => {
       progress: undefined,
       theme: "light",
     });
+    return error;
+  }
+};
+
+export const handleView = async (data) => {
+  try {
+    const res = await axios.post("/mobile-view", data);
+    return res;
+  } catch (err) {
+    toast.error(`Error occured`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+};
+
+export const fetchMobileView = async () => {
+  try {
+    const res = await axios.get("/get-view");
+    return res;
+  } catch (error) {
+    console.log(error);
     return error;
   }
 };

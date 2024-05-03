@@ -16,6 +16,11 @@ import appInformationCreateRoute from "./AppInformation/appInformationCreateRout
 import appInformationUpdateRoute from "./AppInformation/appInformationUpdateRoute.js";
 import androidCreateSettingRoute from "./androidSettings/androidCreateSettingsRoute.js";
 import androidUpdateSettingRoute from "./androidSettings/androidUpdateSettingRoute.js";
+import androidGetSettingRoute from "./androidSettings/androidGetSettingsRoute.js";
+import iosCreateSettingRoute from "./iosSettings/iosCreatSettingsRoute.js";
+import iosUpdateSettingRoute from "./iosSettings/iosUpdateSettingRoute.js";
+import iosGetSettingRoute from "./iosSettings/iosGetSettingsRoute.js";
+import blockRoutes from "./blockedCountries/blockRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -43,7 +48,12 @@ app.use(
   "/androidSettingUpload",
   express.static(path.join(__dirname, "/androidSettingUpload"))
 );
+app.use(
+  "/iosSettingUpload",
+  express.static(path.join(__dirname, "/iosSettingUpload"))
+);
 app.use("/api", profileRoute);
+app.use("/api", blockRoutes);
 app.use("/api", newsRoute);
 app.use("/api", newsUpdateRoute);
 app.use("/api", newsRouter);
@@ -52,6 +62,10 @@ app.use("/api", appInformationCreateRoute);
 app.use("/api", appInformationUpdateRoute);
 app.use("/api", androidCreateSettingRoute);
 app.use("/api", androidUpdateSettingRoute);
+app.use("/api", androidGetSettingRoute);
+app.use("/api", iosCreateSettingRoute);
+app.use("/api", iosUpdateSettingRoute);
+app.use("/api", iosGetSettingRoute);
 
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "./client/dist")));

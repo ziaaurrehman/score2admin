@@ -1,4 +1,5 @@
 import Matches from "./matchModel.js";
+import MobileView from "./viewModel.js";
 
 const createMatch = async (req, res) => {
   const {
@@ -65,6 +66,7 @@ const getMatches = async (req, res) => {
   const searchQuery = req.query.search || "";
 
   try {
+    const view = await MobileView.findOne();
     let query = {};
     if (req.query.search) {
       query.league_type = { $regex: searchQuery, $options: "i" };
@@ -83,7 +85,7 @@ const getMatches = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Matches",
-      mobile_view: false,
+      mobile_view: view.mobile_view,
       totalPages,
       paginatedMatches: matches,
     });
@@ -240,6 +242,41 @@ const duplicateMatchById = async (req, res) => {
   }
 };
 
+const CreateOrUpdateMobileView = async (req, res) => {
+  const { mobile_view } = req.body;
+  try {
+    let view = await MobileView.findOne();
+
+    if (!view) {
+      view = new MobileView({ mobile_view: mobile_view });
+      await view.save();
+    } else {
+      view.mobile_view = mobile_view;
+      await view.save();
+    }
+    res.status(200).json({ success: true, data: mobile_view });
+  } catch (err) {
+    console.error("Error creating or updating mobile view:", err);
+    res.status(500).json({ success: false, err: "Server error" });
+  }
+};
+
+// Get mobile view
+const getMobileView = async (req, res) => {
+  try {
+    const view = await MobileView.findOne();
+    if (!view) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Mobile view not found" });
+    }
+    res.status(200).json({ success: true, data: view.mobile_view });
+  } catch (err) {
+    console.error("Error retrieving mobile view:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 export {
   createMatch,
   getMatches,
@@ -247,4 +284,6 @@ export {
   deleteMatchById,
   getMatchById,
   duplicateMatchById,
+  CreateOrUpdateMobileView,
+  getMobileView,
 };

@@ -159,11 +159,37 @@ export const AppInformation = () => {
             />
           </div>
         </div>
+        <div className="w-[98%] mx-auto flex justify-between">
+          <div className="w-[49%] text-sm">
+            <label className="font-bold">
+              IP API Key <span className="text-red-600 font-bold">*</span>
+            </label>
+            <input
+              type="text"
+              name="ip_api_key"
+              className="border-2 block w-[100%] rounded-md border-gray-500 p-1"
+              placeholder="WT29xOIs0sf8ZyWwaeyiyRC20ZGtGiGB02Z0eTnwwbO10BoMOe"
+            />
+          </div>
+
+          <div className="w-[49%] text-sm">
+            <label className="font-bold">Highlights Type</label>
+            <select
+              className="border-2 border-gray-500 rounded-md py-1 outline-none w-[100%]"
+              name="highlights_type"
+            >
+              <option value="">Select One</option>
+              <option value="enable">Enable</option>
+              <option value="disable">Disable</option>
+              <option value="youtube">YouTube Only</option>
+            </select>
+          </div>
+        </div>
 
         <div className="p-1">
-          <h3 className="mb-2 text-sm font-bold">App Logo</h3>
+          <h3 className="my-1 ml-1 text-sm font-bold">App Logo</h3>
           {previewImage ? (
-            <div className="bg-gray-400 rounded-md p-3 flex gap-3 items-center">
+            <div className="bg-gray-600 rounded-md p-3 flex gap-3 items-center">
               <img
                 src={previewImage}
                 alt="app-icon"

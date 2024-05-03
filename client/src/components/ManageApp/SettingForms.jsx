@@ -1,7 +1,9 @@
 import "../styles/toggleBtn.css";
 import { AppInformation } from "./AppInformation";
 import AndroidSettings from "./AndroidSettings";
-import NotificationSettings from "./NotificationSettings";
+import IOS from "./IOS";
+import Ads from "./Ads";
+import BlockCountries from "./BlockCountries";
 
 const SettingForms = ({ form }) => {
   return form === "AppInformation" ? (
@@ -15,10 +17,16 @@ const SettingForms = ({ form }) => {
   ) : form === "SocialLinks" ? (
     <div>SocialLinks</div>
   ) : form === "iOSSettings" ? (
-    <div>iOS Settings</div>
-  ) : form === "NotificationSettings" ? (
     <>
-      <NotificationSettings />
+      <IOS />
+    </>
+  ) : form === "AdsControl" ? (
+    <>
+      <Ads />
+    </>
+  ) : form === "BlockCountries" ? (
+    <>
+      <BlockCountries />
     </>
   ) : (
     <div>Other Settings</div>

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import logo from "../../assets/football-logos-master/logos/ES1/Real Madrid.png";
+import logo from "../../assets/ball-football-icon.svg";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useUserContext } from "../../context";
+import "../styles/loadingAnimation.css";
 
 const schema = Yup.object().shape({
   email: Yup.string().required("(Required)").email("Invalid email format"),
@@ -10,8 +11,10 @@ const schema = Yup.object().shape({
     .required("(Required)")
     .min(8, "Password must be at least 8 characters"),
 });
+
 const LogIn = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isLogin, setLogin] = useState(false);
 
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
@@ -20,8 +23,11 @@ const LogIn = () => {
   const { login } = useUserContext();
 
   const handleSubmit = async (values) => {
+    setLogin(true);
     const status = await login(values);
-    console.log(status);
+    if (status) {
+      setLogin(false);
+    }
   };
 
   return (
@@ -30,17 +36,17 @@ const LogIn = () => {
         <div className="flex h-full  justify-center items-center  ">
           <img
             alt="gallery"
-            className="w-12 object-cover h-12 object-center block"
+            className="w-12 object-cover h-12 object-center block bg-white p-1 rounded-md"
             src={logo}
           />
         </div>
 
         <div className="flex flex-col justify-center md:items-start items-center p-2  gap-1 text-gray-300">
-          <h1 className="font-normal text-xl ">Admin Login</h1>
+          <h1 className="font-semibold text-lg text-white ">Admin Login</h1>
           <p className="text-md font-normal">
             {" "}
-            you have to fill up all (<span className="text-red-500 ">*</span>)
-            required field!
+            Fill up all (<span className="text-red-500 ">*</span>) required
+            field!
           </p>
         </div>
 
@@ -151,11 +157,19 @@ const LogIn = () => {
 
                   <div className="w-full mt-6">
                     <button
-                      className="bg-blue-500 w-full hover:bg-blue-700 text-white font-base py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline"
+                      className={` w-full hover:bg-blue-700 text-white font-base py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline flex justify-center transition ${
+                        isLogin
+                          ? "pointer-events-none bg-gray-500"
+                          : "bg-blue-500"
+                      }`}
                       type="submit"
                       onSubmit={handleSubmit}
                     >
-                      LOGIN
+                      {isLogin ? (
+                        <div className="load"></div>
+                      ) : (
+                        <p className="font-semibold">SIGN IN</p>
+                      )}
                     </button>
                   </div>
                 </form>

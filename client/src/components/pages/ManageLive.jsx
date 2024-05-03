@@ -3,14 +3,50 @@ import { Link, useLocation } from "react-router-dom";
 import Location from "../global/Location";
 import { IoGrid } from "react-icons/io5";
 import { FaList } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Portal from "./Portal";
+import { handleView, fetchMobileView } from "../../Api.js";
+import { toast } from "react-toastify";
 
 const ManageLive = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const view = await fetchMobileView();
+        setMobileView(view.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+  const [mobileView, setMobileView] = useState(true);
   const location = useLocation();
   const [isGrid, setIsGrid] = useState(false);
   const handleGrid = (gridValue) => {
     setIsGrid(gridValue);
+  };
+  const handleViewState = async () => {
+    setMobileView((prevState) => !prevState);
+    try {
+      // Construct the view object using the updated state
+      const view = {
+        mobile_view: !mobileView, // Use !mobileView to reflect the updated state
+      };
+      const res = await handleView(view);
+      if (res) {
+        toast.success("Mobile View Updated!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (err) {
+      console.error("Something went wrong");
+    }
   };
 
   return (
@@ -23,7 +59,13 @@ const ManageLive = () => {
               <div className="flex gap-3 items-center">
                 <p className="font-semibold">Show on Mobile</p>
                 <label className="inline-flex items-center cursor-pointer">
-                  <input type="checkbox" value="" className="sr-only peer" />
+                  <input
+                    type="checkbox"
+                    value=""
+                    className="sr-only peer"
+                    checked={mobileView}
+                    onChange={handleViewState}
+                  />
                   <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 </label>
               </div>

@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
-const androidSettingSchema = mongoose.Schema({
+const iosSettingSchema = mongoose.Schema({
   general_settings: {
-    android_privacy_policy: {
+    ios_privacy_policy: {
       type: String,
       trim: true,
       unique: true,
     },
-    android_terms_conditions: {
+    ios_terms_conditions: {
       type: String,
       trim: true,
     },
-    android_app_share_link: {
+    ios_app_share_link: {
       type: String,
       trim: true,
     },
@@ -64,6 +64,6 @@ const androidSettingSchema = mongoose.Schema({
   },
 });
 
-const AndroidSetting = mongoose.model("Android-setting", androidSettingSchema);
+const iosSettings = mongoose.model("iOS-Settings", iosSettingSchema);
 
-export default AndroidSetting;
+export default iosSettings;

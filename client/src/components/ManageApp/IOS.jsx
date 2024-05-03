@@ -3,7 +3,7 @@ import { androidCreateSettings } from "../../Api";
 import { toast } from "react-toastify";
 import { FaTrash } from "react-icons/fa";
 
-const AndroidSettings = () => {
+const IOS = () => {
   const [dragging, setDragging] = useState(false);
   const [file, setFile] = useState();
   const [previewImage, setPreviewImage] = useState(null);
@@ -25,7 +25,7 @@ const AndroidSettings = () => {
     android_terms_conditions,
     android_app_share_link,
     app_default_page,
-    enable_app,
+    required_enable_app,
     application_id,
     app_url,
     app_name,
@@ -119,7 +119,7 @@ const AndroidSettings = () => {
         <h2 className="text-sm font-semibold">GENERAL SETTINGS</h2>
         <div className="w-full flex gap-2">
           <div className="w-1/4">
-            <label className="text-xs font-bold">Android Privacy Policy</label>
+            <label className="text-xs font-bold">iOS Privacy Policy</label>
             <input
               type="text"
               value={android_privacy_policy}
@@ -131,9 +131,7 @@ const AndroidSettings = () => {
           </div>
 
           <div className="w-1/4">
-            <label className="text-xs font-bold">
-              Android Terms Conditions
-            </label>
+            <label className="text-xs font-bold">iOS Terms Conditions</label>
             <input
               type="text"
               value={android_terms_conditions}
@@ -145,7 +143,7 @@ const AndroidSettings = () => {
           </div>
 
           <div className="w-1/4">
-            <label className="text-xs font-bold">Android App Share Link</label>
+            <label className="text-xs font-bold">iOS App Share Link</label>
             <input
               type="text"
               value={android_app_share_link}
@@ -158,17 +156,14 @@ const AndroidSettings = () => {
 
           <div className="w-1/4">
             <label className="text-xs font-bold">App Default Page</label>
-            <select
+            <input
+              type="text"
               value={app_default_page}
               name="app_default_page"
               onChange={handleChange}
-              className="border-2 border-gray-300 rounded-md py-[0.2rem] text-xs w-[100%]"
+              className="border-2 block w-full rounded-md border-gray-200 p-1 text-xs"
               placeholder="Home"
-            >
-              <option value="">Select One</option>
-              <option value="Live">Live</option>
-              <option value="Home">Home</option>
-            </select>
+            />
           </div>
         </div>
 
@@ -179,7 +174,7 @@ const AndroidSettings = () => {
               <span className="text-red-600 font-bold">*</span>
             </label>
             <select
-              className="border-2 border-gray-300 rounded-md py-[0.2rem] text-xs w-[100%]"
+              className="border-2 border-gray-300 rounded-md py-[0.2rem] text-xs focus:outline-blue focus:ring-1 focus:ring-indigo-500 w-[100%]"
               name="notification_type"
             >
               <option value="">Select One</option>
@@ -211,6 +206,33 @@ const AndroidSettings = () => {
               className="border-2 block w-full rounded-md border-gray-200 p-1 text-xs"
               placeholder="high_importance_channel"
             />
+          </div>
+        </div>
+
+        <div className="w-full flex justify-between">
+          <div className="w-[49%]">
+            <label className="text-xs font-bold">
+              IP API Key <span className="text-red-600 font-bold">*</span>
+            </label>
+            <input
+              type="text"
+              name="ip_api_key"
+              className="border-2 block w-[100%] rounded-md border-gray-200 p-1 text-xs"
+              placeholder="WT29xOIs0sf8ZyWwaeyiyRC20ZGtGiGB02Z0eTnwwbO10BoMOe"
+            />
+          </div>
+
+          <div className="w-[49%]">
+            <label className="text-xs font-bold">Highlights Type</label>
+            <select
+              className="border-2 border-gray-300 rounded-md py-[0.2rem] text-xs outline-none w-[100%]"
+              name="highlights_type"
+            >
+              <option value="">Select One</option>
+              <option value="enable">Enable</option>
+              <option value="disable">Disable</option>
+              <option value="youtube">YouTube Only</option>
+            </select>
           </div>
         </div>
       </div>
@@ -349,4 +371,4 @@ const AndroidSettings = () => {
   );
 };
 
-export default AndroidSettings;
+export default IOS;

@@ -11,7 +11,9 @@ import { toast } from "react-toastify";
 const CreateMatch = () => {
   const location = useLocation();
   const [showCal, setShowCal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [isTime, setIsTime] = useState(false);
+  const [time, setTime] = useState({ hours: 12, minutes: 0, isPM: false });
 
   const defaultPortraitWatermark = {
     top: 1.1,
@@ -98,14 +100,30 @@ const CreateMatch = () => {
   // set date handler
   const handleDateChange = (date) => {
     const currentTime = new Date();
-    date.setHours(currentTime.getHours(), currentTime.getMinutes());
-    const formattedDate = format(date, "yyyy:MM:dd hh:mm a");
-    setSelectedDate(formattedDate);
-    setData({
-      ...data,
-      match_time: formattedDate,
-    });
-    setShowCal((prevState) => !prevState);
+    // Check if the selected date is greater than or equal to the current date
+    if (
+      date.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      }) >=
+      currentTime.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      })
+    ) {
+      date.setHours(currentTime.getHours(), currentTime.getMinutes());
+      const formattedDate = format(date, "yyyy-MM-dd hh:mm a");
+      setSelectedDate(formattedDate);
+      setData({
+        ...data,
+        match_time: formattedDate,
+      });
+    } else {
+      toast.error("Please select a valid date");
+    }
+    handleShowCal();
   };
 
   // scroll to top button
@@ -283,6 +301,22 @@ const CreateMatch = () => {
                       value={selectedDate}
                     />
                   )}
+                  {/* {time && (
+                    <div className="absolute w-max p-5">
+                      <label>
+                        Hours:
+                        <input type="number" min="1" max="12" />
+                      </label>
+                      <label>
+                        Minutes:
+                        <input type="number" min="0" max="59" />
+                      </label>
+                      <label>
+                        <input type="checkbox" />
+                        PM
+                      </label>
+                    </div>
+                  )} */}
                 </div>
 
                 <div className="p-2 w-[33.3%]">

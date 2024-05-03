@@ -79,13 +79,16 @@ const MatchList = ({ isGrid }) => {
             <Reorder.Item value={match} key={match.id}>
               {!isGrid ? (
                 <div className="w-[100%] flex border-2 bg-white rounded-md">
-                  <div className="flex justify-between items-center p-1 w-[49%]">
-                    <div id="team-1" className="flex gap-3 items-center">
+                  <div className="flex justify-around items-center p-1 w-[50%]">
+                    <div
+                      id="team-1"
+                      className="flex gap-5 items-center w-[35%]"
+                    >
                       <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
                         <img
                           src={match.team_one_img}
                           alt={match.team_one}
-                          className="h-[50px] w-[40px]"
+                          className="h-[50px] w-[50px]"
                         />
                       </div>
                       <h4 className="text-sm font-semibold">
@@ -93,7 +96,10 @@ const MatchList = ({ isGrid }) => {
                       </h4>
                     </div>
 
-                    <div id="match-info" className="flex flex-col text-center">
+                    <div
+                      id="match-info"
+                      className="flex flex-col text-center w-[30%]"
+                    >
                       <h3 className="text-sm font-semibold uppercase">
                         {match.league_type.split("-").join(" ")}
                       </h3>
@@ -103,7 +109,10 @@ const MatchList = ({ isGrid }) => {
                       <p className="text-gray-500 text-sm">VS</p>
                     </div>
 
-                    <div id="team-2" className="flex gap-3 items-center">
+                    <div
+                      id="team-2"
+                      className="flex gap-5 justify-end items-center w-[35%]"
+                    >
                       <h4 className="text-sm font-semibold">
                         {match.team_two}
                       </h4>
@@ -111,13 +120,13 @@ const MatchList = ({ isGrid }) => {
                         <img
                           src={match.team_two_img}
                           alt={match.team_two}
-                          className="h-[50px] w-[40px]"
+                          className="h-[50px] w-[50px]"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <div className="border-l-2 border-gray-100 w-[48%] flex justify-between items-center pl-2 text-sm">
+                  <div className="border-l-2 border-gray-100 w-[50%] flex justify-between items-center pl-2 text-sm">
                     <p className="w-[35%] overflow-hidden">
                       {match.stream_title}
                     </p>
@@ -132,7 +141,7 @@ const MatchList = ({ isGrid }) => {
                         {match.status === "active" ? "Active" : "Inactive"}
                       </p>
                     </div>
-                    <div className="p-1 flex gap-4 text-xl w-max">
+                    <div className="p-1 flex gap-4 text-xl w-max justify-end mr-5">
                       <BsSortUpAlt
                         className="cursor-pointer"
                         onClick={() => handleMoveUp(index)}

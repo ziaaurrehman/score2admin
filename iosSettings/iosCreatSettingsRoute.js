@@ -1,13 +1,13 @@
 import path from "path";
 import express from "express";
 import multer from "multer";
-import AndroidSetting from "./androidModel.js";
+import iosSettings from "./iosModel.js";
 
-const androidCreateSettingRoute = express.Router();
+const iosCreateSettingRoute = express.Router();
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "androidSettingupload/");
+    cb(null, "iosSettingupload/");
   },
   filename(req, file, cb) {
     cb(null, `${Date.now()}.${file.originalname}`);
@@ -36,14 +36,14 @@ const upload = multer({
   },
 });
 
-androidCreateSettingRoute.post(
-  "/add-android-setting",
+iosCreateSettingRoute.post(
+  "/add-ios-setting",
   upload.single("filename"),
   async (req, res) => {
     const {
-      android_privacy_policy,
-      android_terms_conditions,
-      android_app_share_link,
+      ios_privacy_policy,
+      ios_terms_conditions,
+      ios_app_share_link,
       app_default_page,
       notification_type,
       firebase_server_key,
@@ -58,11 +58,11 @@ androidCreateSettingRoute.post(
     if (notification_type && firebase_server_key && firebase_topic) {
       try {
         if (filename) {
-          const android = new AndroidSetting({
+          const ios = new iosSettings({
             general_settings: {
-              android_privacy_policy: android_privacy_policy,
-              android_terms_conditions: android_terms_conditions,
-              android_app_share_link: android_app_share_link,
+              ios_privacy_policy: ios_privacy_policy,
+              ios_terms_conditions: ios_terms_conditions,
+              ios_app_share_link: ios_app_share_link,
               app_default_page: app_default_page,
               notification_type: notification_type,
               firebase_server_key: firebase_server_key,
@@ -77,7 +77,7 @@ androidCreateSettingRoute.post(
               logo: filename,
             },
           });
-          await android.save();
+          await ios.save();
 
           res.status(200).json({
             success: true,
@@ -100,4 +100,4 @@ androidCreateSettingRoute.post(
   }
 );
 
-export default androidCreateSettingRoute;
+export default iosCreateSettingRoute;
