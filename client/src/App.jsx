@@ -24,6 +24,7 @@ import {
 } from "./components/pages/index.js";
 import AddNews from "./components/News/AddNews.jsx";
 import EditNews from "./components/News/EditNews.jsx";
+import CreateNotification from "./components/Notifications/CreateNotification.jsx";
 
 function App() {
   return (
@@ -46,6 +47,10 @@ function App() {
           <Route path="/highlights" element={<Highlights />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/notifications" element={<Notification />} />
+          <Route
+            path="/notification/create-notification"
+            element={<CreateNotification />}
+          />
           <Route path="/logout" element={<Logout />} />
         </Routes>
         {/* <Portal /> */}

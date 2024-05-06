@@ -13,17 +13,17 @@ const Logout = () => {
       const value = JSON.parse(localStorage.getItem("user"));
       setUser(value);
       if (!value) {
-        toast.error("You must be logged in first..");
+        console.error("No user found!");
       } else {
-        logout();
+        toast.success("Logged out successfully!");
         const timeout = setTimeout(() => {
           navigate("/");
-        }, 2000);
+          logout();
+        }, 3000);
 
         return () => clearTimeout(timeout);
       }
     };
-
     getUser();
   }, [navigate, logout]);
 

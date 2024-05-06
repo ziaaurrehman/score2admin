@@ -25,9 +25,8 @@ const LogIn = () => {
   const handleSubmit = async (values) => {
     setLogin(true);
     const status = await login(values);
-    if (status) {
-      setLogin(false);
-    }
+    if (status) setLogin(false);
+    else setLogin(false);
   };
 
   return (

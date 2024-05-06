@@ -1,7 +1,12 @@
-const singleLoadingBall = () => {
-  return (
-    <div>singleLoadingBall</div>
-  )
-}
+import Football from "../../assets/ball-football-icon.svg";
+import "../styles/singleBall.css";
 
-export default singleLoadingBall
+const SingleLoadingBall = () => {
+  return (
+    <div className="loading-container">
+      <img src={Football} alt="football-icon" className="singleBall" />
+    </div>
+  );
+};
+
+export default SingleLoadingBall;

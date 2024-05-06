@@ -7,8 +7,8 @@ import {
 
 const router = express.Router();
 
-router.post("/manageApp/blockCountry", blockCountry);
-router.delete("manageApp/unblockCountry", unblockCountry);
-router.get("manageApp/blocked", getBlockedCountries);
+router.post("/blockCountry", blockCountry);
+router.delete("/unblockCountry", unblockCountry);
+router.get("/blocked", getBlockedCountries);
 
 export default router;

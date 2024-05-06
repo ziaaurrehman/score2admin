@@ -1,9 +1,16 @@
-import { Signup, Login } from "./userController.js ";
+import {
+  createNotification,
+  getAllNotifications,
+  deleteNotification,
+  sendNotification,
+} from "./notificationController.js";
 import express from "express";
 
-const router = express.Router();
+const notificationRouter = express.Router();
 
-router.post("/signup", Signup);
-router.post("/login", Login);
+notificationRouter.get("/get-all-notifications", getAllNotifications);
+notificationRouter.post("/create-notification", createNotification);
+notificationRouter.delete("/delete-notification/:id", deleteNotification);
+notificationRouter.post("/send-notification/:id", sendNotification);
 
-export default router;
+export default notificationRouter;

@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 
 const notificationSchema = mongoose.Schema({
-  userId: {
+  title: {
     type: String,
     required: true,
     trim: true,
   },
-  message: {
+  body: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  image: {
     type: String,
     required: true,
     trim: true,

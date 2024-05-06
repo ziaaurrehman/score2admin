@@ -26,12 +26,12 @@ const MatchList = ({ isGrid }) => {
           hot_match: match.hot_match,
           match_title: match.match_title,
           match_time: match.match_time,
-          sports_type: match.sports_type,
+          sports_type: match.sport_type,
           team_one: match.team_one.name,
           team_one_img: match.team_one.image,
           team_two: match.team_two.name,
           team_two_img: match.team_one.image,
-          stream_title: match.streaming_source.streaming_title,
+          stream_count: match.streaming_source.length,
         }));
         setMatches(extractedMatches);
       } catch (error) {
@@ -127,8 +127,11 @@ const MatchList = ({ isGrid }) => {
                   </div>
 
                   <div className="border-l-2 border-gray-100 w-[50%] flex justify-between items-center pl-2 text-sm">
-                    <p className="w-[35%] overflow-hidden">
-                      {match.stream_title}
+                    <p className="w-[35%] overflow-hidden font-semibold">
+                      Streams:{" "}
+                      <span className="text-blue-500">
+                        {match.stream_count}
+                      </span>
                     </p>
                     <div
                       className={`w-max h-max p-1 rounded-md text-center shadow-md ${

@@ -21,6 +21,7 @@ import iosCreateSettingRoute from "./iosSettings/iosCreatSettingsRoute.js";
 import iosUpdateSettingRoute from "./iosSettings/iosUpdateSettingRoute.js";
 import iosGetSettingRoute from "./iosSettings/iosGetSettingsRoute.js";
 import blockRoutes from "./blockedCountries/blockRoutes.js";
+import notificationRouter from "./notification/notificationRouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,6 +37,7 @@ const MONGO_DB = process.env.MONGO_DB;
 connectDb(MONGO_DB);
 
 app.use("/api", router);
+app.use("/api", notificationRouter);
 app.use("/api", matchRouter);
 app.use(express.urlencoded({ extended: true, limit: "500mb" }));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));

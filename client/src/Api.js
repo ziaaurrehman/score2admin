@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const VITE_API_BASE_URL = "http://localhost:5050/api";
 const PROD = "https://sportsdashboard.onrender.com/api/";
 const axios = instance.create({
-  baseURL: PROD,
+  baseURL: VITE_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -37,6 +37,8 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// ***************************************** USER APIS ******************************************************//
 
 export const signupUser = async (form) => {
   try {
@@ -75,6 +77,8 @@ export const loginUser = async (user) => {
     return error;
   }
 };
+
+// ***************************************** MATCHES APIS ******************************************************//
 
 export const createMatch = async (formData) => {
   try {
@@ -143,6 +147,89 @@ export const deleteMatch = async (id) => {
   }
 };
 
+export const getMatch = async (id) => {
+  try {
+    const res = await axios.get(`/${id}`);
+
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+export const duplicateMatch = async (id) => {
+  try {
+    const res = await axios.post(`/duplicate/${id}`);
+    if (res) {
+      toast.success("Match duplicated successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+
+export const updateMatch = async (id, formData) => {
+  try {
+    const res = await axios.put(`/match/${id}`, formData);
+    if (res) {
+      toast.success("Match updated successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+
+// ***************************************** NEWS APIS ******************************************************//
+
 export const createNews = async (data) => {
   try {
     const res = await axios.post(`/create/news`, data, {
@@ -209,58 +296,6 @@ export const getAllNews = async (currentPage, searchQuery, perPage) => {
     return error;
   }
 };
-
-export const getMatch = async (id) => {
-  try {
-    const res = await axios.get(`/${id}`);
-
-    return res;
-  } catch (error) {
-    toast.error(`${error?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return error;
-  }
-};
-
-export const updateMatch = async (id, formData) => {
-  try {
-    const res = await axios.put(`/match/${id}`, formData);
-    if (res) {
-      toast.success("Match updated successfully!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-    return res;
-  } catch (error) {
-    toast.error(`${error?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return error;
-  }
-};
-
 export const deleteSingleNews = async (id) => {
   try {
     const res = await axios.delete(`/delete-news/${id}`);
@@ -300,36 +335,7 @@ export const getSingleNews = async (id) => {
   }
 };
 
-export const duplicateMatch = async (id) => {
-  try {
-    const res = await axios.post(`/duplicate/${id}`);
-    if (res) {
-      toast.success("Match duplicated successfully!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-    return res;
-  } catch (error) {
-    toast.error(`${error?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return error;
-  }
-};
+// ************************************* APP INFORMATION APIS ************************************************//
 export const createAppInformation = async (data) => {
   try {
     const res = await axios.post(`/add-app-information`, data, {
@@ -376,6 +382,8 @@ export const androidCreateSettings = async (data) => {
   }
 };
 
+// ***************************************** MOBILE VIEW APIS ******************************************************//
+
 export const handleView = async (data) => {
   try {
     const res = await axios.post("/mobile-view", data);
@@ -401,5 +409,112 @@ export const fetchMobileView = async () => {
   } catch (error) {
     console.log(error);
     return error;
+  }
+};
+
+// ***************************************** NOTIFICATION APIS ******************************************************//
+export const createNotification = async (notification) => {
+  try {
+    const res = await axios.post(`/create-notification`, notification);
+    toast.success(`Notification created successfully!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+
+export const getAllNotifications = async () => {
+  try {
+    const notifications = await axios.get("/get-all-notifications");
+    return notifications.data;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return err;
+  }
+};
+
+export const deleteNotification = async (id) => {
+  try {
+    const del = await axios.delete(`/delete-notification/${id}`);
+    toast.success(`Notification deleted successfully!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return del;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return err;
+  }
+};
+
+export const sendNotification = async (id) => {
+  try {
+    const notify = await axios.post(`/send-notification/${id}`);
+    toast.success(`Notification sent successfully!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return notify;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return err;
   }
 };
