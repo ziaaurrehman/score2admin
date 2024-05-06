@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllNotifications } from "../../Api";
-import SingleLoadingBall from "../global/SingleLoadingBall";
+import LoadingBall from "../global/LoadingBall";
 import NotificationItem from "./NotificationItem";
 import { toast } from "react-toastify";
 
@@ -25,7 +25,7 @@ const NotificationList = () => {
   return (
     <div className="w-full">
       {loading ? (
-        <SingleLoadingBall />
+        <LoadingBall />
       ) : (
         <div className="w-[97%] mx-auto font-semibold">
           <div className="border-b flex justify-between px-3 py-1">
