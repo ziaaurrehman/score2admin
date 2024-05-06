@@ -1,12 +1,8 @@
 import Portal from "./Portal";
-import SingleLoadingBall from "../global/SingleLoadingBall.jsx";
 import NotificationList from "../Notifications/NotificationList.jsx";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Notification = () => {
-  const [loading, setLoading] = useState(false);
-
   return (
     <>
       <Portal>
@@ -22,7 +18,7 @@ const Notification = () => {
             </Link>
 
             <div className="min-h-[400px] bg-white p-5 rounded-md shadow-md">
-              {loading ? <SingleLoadingBall /> : <NotificationList />}
+              <NotificationList />
             </div>
           </div>
         </div>
