@@ -1,8 +1,17 @@
 import express from "express";
-import { createAppInformation } from "./appInformationController.js";
+import {
+  getAppInformationSettings,
+  createAndUpdateSettings,
+  upload,
+} from "./appInformationController.js";
 
 const appInformationRouter = express.Router();
 
-// appInformationRouter.post("/add-app-information", createAppInformation);
+appInformationRouter.post(
+  "/set-app-information",
+  upload.single("filename"),
+  createAndUpdateSettings
+);
+appInformationRouter.get("/get-app-information", getAppInformationSettings);
 
 export default appInformationRouter;

@@ -1,34 +1,88 @@
-import BlockedCountry from "./blockModel.js";
+import Country from "./blockModel.js";
 
-// Controller function to handle blocking a country
-export const blockCountry = async (req, res) => {
-  const { country } = req.body;
+// Function to validate and filter unique countries
+const validateCountries = (countries) => {
+  const uniqueCountries = new Set(countries);
+  if (uniqueCountries.size !== countries.length) {
+    throw new Error("Duplicate countries found in request array.");
+  }
+  return Array.from(uniqueCountries); // Convert Set back to array
+};
+
+const createAndUpdateCountryArray = async (req, res) => {
   try {
-    const blockedCountry = new BlockedCountry({ country });
-    await blockedCountry.save();
-    res.status(201).json({ message: `Successfully blocked ${country}` });
+    const { countries } = req.body;
+    if (!countries || !countries.length) {
+      return res.status(400).json({ message: "Empty country array provided." });
+    }
+
+    const validatedCountries = validateCountries(countries);
+
+    const existingCountry = await Country.findOne();
+
+    if (existingCountry) {
+      existingCountry.countryArray = validatedCountries;
+      await existingCountry.save();
+      return res
+        .status(200)
+        .json({ message: "Country array updated successfully." });
+    }
+
+    const newCountry = new Country({ countryArray: validatedCountries });
+    await newCountry.save();
+    return res
+      .status(201)
+      .json({ message: "Country array created successfully." });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
 
-// Controller function to handle unblocking a country
-export const unblockCountry = async (req, res) => {
-  const { country } = req.body;
+const deleteCountry = async (req, res) => {
   try {
-    await BlockedCountry.findOneAndDelete({ country });
-    res.json({ message: `Successfully unblocked ${country}` });
+    const { country } = req.params;
+    const countryName = country;
+    // some basic validation
+    if (!countryName) {
+      return res.status(400).json({ message: "Country name not provided." });
+    }
+    // fetching array from db
+    const existingCountry = await Country.findOne();
+    // more validation
+    if (!existingCountry) {
+      return res.status(404).json({ message: "Country array not found." });
+    }
+
+    // getting index of requested array
+    const countryIndex = existingCountry.countryArray.indexOf(countryName);
+    if (countryIndex === -1) {
+      return res.status(404).json({ message: "Country not found in array." });
+    }
+    // remove country from array
+    existingCountry.countryArray.splice(countryIndex, 1);
+    // save the new array
+    await existingCountry.save();
+    return res.status(200).json({ message: "Country deleted successfully." });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
 
-// Controller function to get the list of blocked countries
-export const getBlockedCountries = async (req, res) => {
+const getCountryArray = async (req, res) => {
   try {
-    const blockedCountries = await BlockedCountry.find();
-    res.json(blockedCountries);
+    const country = await Country.findOne();
+
+    if (!country) {
+      return res.status(404).json({ message: "Country array not found." });
+    }
+
+    return res.status(200).json({ countryArray: country.countryArray });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
+
+export { getCountryArray, deleteCountry, createAndUpdateCountryArray };

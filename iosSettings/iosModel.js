@@ -64,6 +64,6 @@ const iosSettingSchema = mongoose.Schema({
   },
 });
 
-const iosSettings = mongoose.model("iOS-Settings", iosSettingSchema);
+const iosSetting = mongoose.model("ios-setting", iosSettingSchema);
 
-export default iosSettings;
+export default iosSetting;

@@ -1,14 +1,14 @@
 import express from "express";
 import {
-  blockCountry,
-  unblockCountry,
-  getBlockedCountries,
+  getCountryArray,
+  deleteCountry,
+  createAndUpdateCountryArray,
 } from "./blockController.js";
 
-const router = express.Router();
+const blockCountry = express.Router();
 
-router.post("/blockCountry", blockCountry);
-router.delete("/unblockCountry", unblockCountry);
-router.get("/blocked", getBlockedCountries);
+blockCountry.post("/block-countries", createAndUpdateCountryArray);
+blockCountry.delete("/unblock-country/:country", deleteCountry);
+blockCountry.get("/get-block-countries", getCountryArray);
 
-export default router;
+export default blockCountry;

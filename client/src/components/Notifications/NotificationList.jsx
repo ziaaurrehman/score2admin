@@ -24,15 +24,15 @@ const NotificationList = () => {
   }, []);
   return (
     <div className="w-full">
-      {loading ? (
-        <LoadingBall />
-      ) : (
-        <div className="w-[97%] mx-auto font-semibold">
-          <div className="border-b flex justify-between px-3 py-1">
-            <h4>Title</h4>
-            <h4>Body</h4>
-            <h4>Action</h4>
-          </div>
+      <div className="w-[97%] mx-auto font-semibold">
+        <div className="border-b flex justify-between px-3 py-1">
+          <h4>Title</h4>
+          <h4>Body</h4>
+          <h4>Action</h4>
+        </div>
+        {loading ? (
+          <LoadingBall />
+        ) : (
           <div className="p-3 flex flex-col gap-2 justify-center">
             {notifs.map((notification) => (
               <div key={notification._id}>
@@ -40,8 +40,8 @@ const NotificationList = () => {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

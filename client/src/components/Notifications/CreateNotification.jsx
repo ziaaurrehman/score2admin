@@ -1,11 +1,11 @@
 import Portal from "../pages/Portal.jsx";
 import Location from "../global/Location.jsx";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { createNotification } from "../../Api.js";
-import { toast } from "react-toastify";
 
 const CreateNotification = () => {
+  const navigation = useNavigate();
   const location = useLocation();
   const [data, setData] = useState({
     title: "",
@@ -29,6 +29,7 @@ const CreateNotification = () => {
     try {
       const res = await createNotification(notification);
       console.log(res.status);
+      navigation("/notifications");
     } catch (err) {
       console.error(err);
     }

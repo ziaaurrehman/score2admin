@@ -1,24 +1,84 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import {
+  getBlockedCountries,
+  CreateAndUpdateBlockedCountry,
+  deleteCountry,
+} from "../../Api.js";
+import LaodingSemiCircle from "../global/LoadingSemiCircle.jsx";
+import LoadingSemiCircle from "../global/LoadingSemiCircle.jsx";
 const BlockCountries = () => {
   const [blocked, setBlocked] = useState([]);
+  const [loading, setLoading] = useState();
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchData = async () => {
+      try {
+        const countries = await getBlockedCountries();
+        setBlocked(countries.countryArray);
+        //console.log(countries.countryArray);
+      } catch (error) {
+        console.error("Error fetching blocked countries:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData(); // Invoke fetchData function when component mounts
+  }, []);
 
   const handleBlockCountry = (country) => {
-    // check if country exists in the list
+    // Check if country exists in the list
     if (!blocked.includes(country)) {
       setBlocked((prevBlocked) => [...prevBlocked, country]);
     }
   };
 
-  const handleRemoveCountry = (countryToRemove) => {
-    setBlocked((prevBlocked) =>
-      prevBlocked.filter((country) => country !== countryToRemove)
-    );
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      // Create a copy of the blocked state to avoid mutation
+      const blockCountries = await CreateAndUpdateBlockedCountry({
+        countries: [...blocked],
+      });
+      console.log(blockCountries);
+    } catch (err) {
+      console.error("Error: ", err);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleRemoveCountry = async (countryToRemove) => {
+    setLoading(true);
+    try {
+      const remove = await deleteCountry(countryToRemove);
+      if (remove) {
+        setBlocked((prevBlocked) =>
+          prevBlocked.filter((country) => country !== countryToRemove)
+        );
+      }
+    } catch (err) {
+      console.error("Error: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="w-full p-5 flex flex-col gap-2">
-      {blocked.length > 0 && (
-        <div className="w-full flex gap-1 rounded-md p-1 border font-semibold border-gray-400 items-center">
+    <div
+      className={`w-full p-5 flex flex-col gap-2 ${
+        loading ? "pointer-events-none" : ""
+      }`}
+    >
+      {loading ? (
+        <LoadingSemiCircle />
+      ) : (
+        <div
+          className={`w-full flex gap-1 rounded-md p-1 border font-semibold border-gray-400 items-center ${
+            blocked.length === 0 ? "hidden" : "display-block"
+          }`}
+        >
           {blocked.map((block, index) => (
             <div
               key={index}
@@ -335,7 +395,10 @@ const BlockCountries = () => {
       </div>
 
       <div className="w-full flex justify-end">
-        <button className="text-sm my-4 font-semibold right-12 bottom-5 bg-blue-600 py-2 px-4 text-white uppercase hover:bg-blue-800 transition active:scale-95 rounded-md shadow-lg">
+        <button
+          className="text-sm my-4 font-semibold right-12 bottom-5 bg-blue-600 py-2 px-4 text-white uppercase hover:bg-blue-800 transition active:scale-95 rounded-md shadow-lg"
+          onClick={() => handleSave()}
+        >
           Save
         </button>
       </div>

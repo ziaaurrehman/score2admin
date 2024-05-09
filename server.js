@@ -12,24 +12,19 @@ import newsRoute from "./news/newUpload.js";
 import newsUpdateRoute from "./news/newsupdate.js";
 import newsRouter from "./news/newsRouter.js";
 import appInformationRouter from "./AppInformation/appInformationRoute.js";
-import appInformationCreateRoute from "./AppInformation/appInformationCreateRoute.js";
-import appInformationUpdateRoute from "./AppInformation/appInformationUpdateRoute.js";
-import androidCreateSettingRoute from "./androidSettings/androidCreateSettingsRoute.js";
-import androidUpdateSettingRoute from "./androidSettings/androidUpdateSettingRoute.js";
-import androidGetSettingRoute from "./androidSettings/androidGetSettingsRoute.js";
-import iosCreateSettingRoute from "./iosSettings/iosCreatSettingsRoute.js";
-import iosUpdateSettingRoute from "./iosSettings/iosUpdateSettingRoute.js";
-import iosGetSettingRoute from "./iosSettings/iosGetSettingsRoute.js";
 import blockRoutes from "./blockedCountries/blockRoutes.js";
 import notificationRouter from "./notification/notificationRouter.js";
+import AdRoutes from "./AdsControl/AdRoutes.js";
+import androidSettingRouter from "./androidSettings/androidSettingsRoutes.js";
+import iosSettingRouter from "./iosSettings/iosSettingsRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+app.use(express.json());
 
 app.use(cors());
-app.use(express.json());
 
 dotenv.config();
 
@@ -37,7 +32,12 @@ const MONGO_DB = process.env.MONGO_DB;
 connectDb(MONGO_DB);
 
 app.use("/api", router);
+app.use("/api", blockRoutes);
+app.use("/api", appInformationRouter);
+app.use("/api", AdRoutes);
 app.use("/api", notificationRouter);
+app.use("/api", androidSettingRouter);
+app.use("/api", iosSettingRouter);
 app.use("/api", matchRouter);
 app.use(express.urlencoded({ extended: true, limit: "500mb" }));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
@@ -55,19 +55,9 @@ app.use(
   express.static(path.join(__dirname, "/iosSettingUpload"))
 );
 app.use("/api", profileRoute);
-app.use("/api", blockRoutes);
 app.use("/api", newsRoute);
 app.use("/api", newsUpdateRoute);
 app.use("/api", newsRouter);
-app.use("/api", appInformationRouter);
-app.use("/api", appInformationCreateRoute);
-app.use("/api", appInformationUpdateRoute);
-app.use("/api", androidCreateSettingRoute);
-app.use("/api", androidUpdateSettingRoute);
-app.use("/api", androidGetSettingRoute);
-app.use("/api", iosCreateSettingRoute);
-app.use("/api", iosUpdateSettingRoute);
-app.use("/api", iosGetSettingRoute);
 
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "./client/dist")));

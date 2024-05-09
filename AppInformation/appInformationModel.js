@@ -22,14 +22,21 @@ const appInformationSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  app_logo: {
+  ip_api_key: {
     type: String,
     required: true,
     trim: true,
   },
-  status: {
+  highlights_type: {
     type: String,
-    required: true,
+    trim: true,
+  },
+  app_logo: {
+    type: String,
+    trim: true,
+  },
+  status: {
+    type: Boolean,
     trim: true,
   },
 });

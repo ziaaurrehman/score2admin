@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const adModel = mongoose.Schema(
+const adSchema = mongoose.Schema(
   {
     ad_status: {
       type: String,
@@ -44,4 +44,6 @@ const adModel = mongoose.Schema(
   { timestamps: true }
 );
 
-export default adModel;
+const AdModel = mongoose.model("AdModel", adSchema);
+
+export default AdModel;

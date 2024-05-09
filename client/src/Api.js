@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const VITE_API_BASE_URL = "http://localhost:5050/api";
 const PROD = "https://sportsdashboard.onrender.com/api/";
 const axios = instance.create({
-  baseURL: PROD,
+  baseURL: VITE_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -335,50 +335,182 @@ export const getSingleNews = async (id) => {
   }
 };
 
-// ************************************* APP INFORMATION APIS ************************************************//
-export const createAppInformation = async (data) => {
+// ************************************* MANAGE APP APIS ************************************************//
+
+// *********** APP INFORMATION SECTION ************ //
+export const createUpdateAppInformation = async (data) => {
   try {
-    const res = await axios.post(`/add-app-information`, data, {
+    const res = await axios.post(`/set-app-information`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
+    });
+    toast.success(`Settings updated!`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      theme: "light",
     });
     return res;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}`, {
       position: "top-right",
-      autoClose: 5000,
+      autoClose: 800,
       hideProgressBar: false,
       closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+export const getAppInformation = async () => {
+  try {
+    const res = await axios.get(`/get-app-information`);
+    return res.data;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      closeOnClick: true,
       theme: "light",
     });
     return error;
   }
 };
 
-export const androidCreateSettings = async (data) => {
+// *********** ANDROID SECTION ************ //
+export const androidCreateUpdateSettings = async (data) => {
   try {
-    const res = await axios.post(`/add-android-setting`, data, {
+    const res = await axios.post(`/set-android-setting`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
+    });
+    toast.success(`${res?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      theme: "light",
     });
     return res;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}`, {
       position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+      autoClose: 800,
       theme: "light",
     });
     return error;
+  }
+};
+export const getAndroidSettings = async () => {
+  try {
+    const settings = await axios.get("/get-android-setting");
+    return settings;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      closeOnClick: true,
+      theme: "light",
+    });
+    return err;
+  }
+};
+
+// *********** iOS SECTION ************ //
+export const iosCreateUpdateSettings = async (data) => {
+  try {
+    const res = await axios.post(`/set-ios-setting`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    toast.success(`${res?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      theme: "light",
+    });
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      theme: "light",
+    });
+    return error;
+  }
+};
+export const getIosSettings = async () => {
+  try {
+    const settings = await axios.get("/get-ios-setting");
+    return settings;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      closeOnClick: true,
+      theme: "light",
+    });
+    return err;
+  }
+};
+// *********** BLOCK COUNTRIES SECTION ************ //
+export const getBlockedCountries = async () => {
+  try {
+    const blockedCountries = await axios.get("/get-block-countries");
+    return blockedCountries.data;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      theme: "light",
+    });
+    return err;
+  }
+};
+
+export const CreateAndUpdateBlockedCountry = async (countries) => {
+  try {
+    const res = await axios.post(`/block-countries`, countries);
+    toast.success(`Changes saved!`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      theme: "light",
+    });
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      theme: "light",
+    });
+    return error;
+  }
+};
+
+export const deleteCountry = async (country) => {
+  try {
+    const del = await axios.delete(`/unblock-country/${country}`);
+    toast.success(`Country unblocked!`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: true,
+      theme: "light",
+    });
+    return del;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: true,
+      theme: "light",
+    });
+    return err;
   }
 };
 
@@ -508,6 +640,55 @@ export const sendNotification = async (id) => {
     toast.error(`${err?.response?.data?.message}`, {
       position: "top-right",
       autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return err;
+  }
+};
+
+// ***************************************** Ads APIs ******************************************************//
+export const createUpdateAdSettings = async (settings) => {
+  try {
+    const res = await axios.post(`/google-ads-settings`, settings);
+    toast.success(`Changes saved!`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+
+export const getAdsSettings = async () => {
+  try {
+    const settings = await axios.get("/get-ads-settings");
+    return settings.data;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,

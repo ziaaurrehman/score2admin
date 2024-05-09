@@ -4,6 +4,7 @@ import firebase from "../config/firebase.js";
 // Create Notifications
 const createNotification = async (req, res) => {
   const { title, body, image } = req.body;
+  console.log(image);
   if (!title || !body) {
     res.status(500).json({
       status: false,
@@ -14,12 +15,24 @@ const createNotification = async (req, res) => {
     const notification = new Notification({
       title: title,
       body: body,
-      image: image,
+      image: image || "",
     });
     const notif = await notification.save();
-    res
-      .status(200)
-      .json({ status: true, message: "Notification Created", Item: notif });
+
+    // Save notification and also preparing notification message
+    const message = {
+      title: title,
+      body: body,
+      image: image || "",
+    };
+
+    const send = await sendToFirebase(message);
+    res.status(200).json({
+      status: true,
+      message: "Notification Created & Delivered",
+      Sent: send,
+      Item: notif,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal Server Error" });
@@ -69,8 +82,6 @@ const sendNotification = async (req, res) => {
     const { id } = req.params;
     const notif = await Notification.findById(id);
     const { title, body, image } = notif;
-    const topic = "SportsAdmin";
-    const img = image || "";
 
     // Validating input
     if (!title || !body) {
@@ -79,33 +90,61 @@ const sendNotification = async (req, res) => {
         .json({ message: "Missing required fields: title, body" });
     }
 
+    // preparing notification message
+
     const message = {
-      data: {
-        title: title,
-        body: body,
-        image: img,
-      },
-      topic: topic,
+      title: title,
+      body: body,
+      image: image,
     };
+    console.log(message);
 
-    // Initliaze message function
-    const { messaging } = firebase;
-
-    // Send a message to devices subscribed to the provided topic.
-    await messaging()
-      .send(message)
-      .then((response) => {
-        console.log("Successfully sent message:", response);
-        res.status(200).json({ message: "Notification sent!" });
-      })
-      .catch((error) => {
-        console.log("Error sending message:", error);
-        res.status(500).json({ message: "Internal Server Error" });
-      });
+    const send = await sendToFirebase(message);
+    res.status(200).json({ status: send, message: "Notification sent" });
   } catch (err) {
     console.error("Error processing notification:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
+};
+
+// Send notifications to FCM topics
+const sendToFirebase = async (message) => {
+  // Setting topic and image variable
+  const topic = "saad";
+
+  // Initliaze message function
+  const { messaging } = firebase;
+
+  // preparing notification message
+  let notification = {};
+
+  if (message.image) {
+    notification = {
+      notification: {
+        title: message.title,
+        body: message.body,
+        imageUrl: message.image,
+      },
+      topic: topic,
+    };
+  } else {
+    notification = {
+      notification: {
+        title: message.title,
+        body: message.body,
+      },
+      topic: topic,
+    };
+  }
+  // Send a message to devices subscribed to the provided topic.
+  await messaging()
+    .send(notification)
+    .then((response) => {
+      console.log("Successfully sent message:", response);
+    })
+    .catch((error) => {
+      console.log("Error sending message:", error);
+    });
 };
 
 export {

@@ -13,7 +13,6 @@ const notificationSchema = mongoose.Schema({
   },
   image: {
     type: String,
-    required: true,
     trim: true,
   },
 });

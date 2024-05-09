@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-const blockedCountrySchema = new mongoose.Schema({
-  country: {
-    type: String,
+const countrySchema = new mongoose.Schema({
+  countryArray: {
+    type: [String],
     required: true,
     unique: true,
   },
 });
 
-const BlockedCountry = mongoose.model("BlockedCountry", blockedCountrySchema);
+const Country = mongoose.model("Country", countrySchema);
 
-export default BlockedCountry;
+export default Country;
