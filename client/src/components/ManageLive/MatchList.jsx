@@ -165,64 +165,76 @@ const MatchList = ({ isGrid }) => {
                   </div>
                 </div>
               ) : (
-                <div className="w-[250px] flex flex-col items-center border-2 bg-white rounded-md">
-                  <div className="flex gap-2 items-center p-2">
-                    <div id="team-1" className="flex flex-col items-center">
-                      <h4 className="text-xs font-semibold">
-                        {match.team_one}
-                      </h4>
-                      <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
-                        <img src="" alt="" className="h-[80px] w-[70px]" />
+                <div className="flex flex-col">
+                  <div className="w-[250px] h-[250px] flex flex-col items-center border-2 bg-white rounded-md">
+                    <div className="flex gap-2 items-center p-2">
+                      <div id="team-1" className="flex flex-col items-center">
+                        <h4 className="text-xs font-semibold">
+                          {match.team_one}
+                        </h4>
+                        <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
+                          <img
+                            src={match.team_one_img}
+                            alt=""
+                            className="h-[80px] w-[70px]"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-xs text-center">VS</p>
+                      <div id="team-2" className="flex flex-col items-center">
+                        <h4 className="text-xs font-semibold">
+                          {match.team_two}
+                        </h4>
+                        <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
+                          <img
+                            src={match.team_two_img}
+                            alt=""
+                            className="h-[80px] w-[70px]"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <p className="text-xs text-center">VS</p>
-                    <div id="team-2" className="flex flex-col items-center">
-                      <h4 className="text-xs font-semibold">
-                        {match.team_two}
-                      </h4>
-                      <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
-                        <img src="" alt="" className="h-[80px] w-[70px]" />
-                      </div>
-                    </div>
-                  </div>
 
-                  <div id="match-info" className="flex flex-col text-center">
-                    <h3 className="text-sm font-semibold uppercase">
-                      {match.league_type}
-                    </h3>
-                    <p className="text-gray-500 text-xs">{match.match_time}</p>
-                    <p className="text-xs">Stream 1</p>
-                  </div>
-
-                  <div className="p-2 border-l-2 border-gray-100 w-full flex justify-between items-center pl-2 text-xs">
-                    <div
-                      className={`w-max h-max p-1 rounded-md text-center shadow-md ${
-                        match.status === "active"
-                          ? "bg-green-400"
-                          : "bg-red-400"
-                      }`}
-                    >
-                      <p className=" text-white text-xs font-semibold">
-                        {match.status === "active" ? "Active" : "Inactive"}
+                    <div id="match-info" className="flex flex-col text-center">
+                      <h3 className="text-sm font-semibold uppercase">
+                        {match.league_type}
+                      </h3>
+                      <p className="text-gray-500 text-xs">
+                        {match.match_time}
                       </p>
+                      <p className="text-xs">Stream 1</p>
                     </div>
-                    <div className="ml-3 p-1 flex gap-2 text-xl">
-                      <BsSortUpAlt
-                        className="cursor-pointer"
-                        onClick={() => handleMoveUp(index)}
-                      />
-                      <IoCopyOutline
-                        className="text-blue-400 cursor-pointer"
-                        onClick={() => handleDuplicate(match.id)}
-                      />
-                      <Link to={`/manage-live/edit?id=${match.id}`}>
-                        <FiEdit className="text-blue-400 cursor-pointer" />
-                      </Link>
-                      <RiDeleteBin5Line
-                        className="text-red-400 cursor-pointer"
-                        onClick={() => handleDelete(match.id)}
-                      />
-                      <MdDragIndicator className="cursor-grab" />
+
+                    <div className="p-2 border-l-2 border-gray-100 w-full flex justify-between items-center pl-2 text-xs">
+                      <div
+                        className={`w-max h-max p-1 rounded-md text-center shadow-md ${
+                          match.status === "active"
+                            ? "bg-green-400"
+                            : "bg-red-400"
+                        }`}
+                      >
+                        <p className=" text-white text-xs font-semibold">
+                          {match.status === "active" ? "Active" : "Inactive"}
+                        </p>
+                      </div>
+                      <div className="ml-3 p-1 flex gap-2 text-xl">
+                        <BsSortUpAlt
+                          className="cursor-pointer"
+                          onClick={() => handleMoveUp(index)}
+                        />
+                        <IoCopyOutline
+                          className="text-blue-400 cursor-pointer"
+                          onClick={() => handleDuplicate(match.id)}
+                        />
+                        <Link to={`/manage-live/edit?id=${match.id}`}>
+                          <FiEdit className="text-blue-400 cursor-pointer" />
+                        </Link>
+                        <RiDeleteBin5Line
+                          className="text-red-400 cursor-pointer"
+                          onClick={() => handleDelete(match.id)}
+                        />
+                        <MdDragIndicator className="cursor-grab" />
+                      </div>
                     </div>
                   </div>
                 </div>
