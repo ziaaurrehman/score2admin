@@ -110,7 +110,7 @@ const sendNotification = async (req, res) => {
 // Send notifications to FCM topics
 const sendToFirebase = async (message) => {
   // Setting topic and image variable
-  const topic = "saad";
+  const topic = "blueFootball";
 
   // Initliaze message function
   const { messaging } = firebase;

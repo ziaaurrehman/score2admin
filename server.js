@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import colors from "colors";
 import cors from "cors";
 import connectDb from "./config/db.js";
 import router from "./user/userRoute.js";
@@ -73,5 +74,5 @@ if (process.env.NODE_ENV === "PRODUCTION") {
 
 const PORT = process.env.PORT;
 app.listen(PORT, (req, res) => {
-  console.log(`server is running on port ${PORT}`);
+  console.log(`\nServer is running on Port: ${PORT}`.yellow.bold);
 });

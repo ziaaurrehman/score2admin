@@ -3,6 +3,11 @@ import User from "../user/userModel.js";
 
 const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization");
+  if (token) {
+    console.log(token);
+  } else {
+    console.log("Token: ", token, " Error: Missing JWT Token");
+  }
 
   if (!token) {
     return res
