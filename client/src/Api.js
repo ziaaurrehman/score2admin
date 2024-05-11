@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const prod = "https://sportsdashboard.onrender.com/api/";
 const local = "http://localhost:5050/api";
 const axios = instance.create({
-  baseURL: prod,
+  baseURL: local,
   headers: {
     "Content-Type": "application/json",
   },
@@ -82,7 +82,7 @@ export const loginUser = async (user) => {
 
 export const createMatch = async (formData) => {
   try {
-    const res = await axios.post(`/create-match`, formData);
+    const res = await axios.post(`/live/create-match`, formData);
     return res;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}`, {
@@ -101,7 +101,7 @@ export const createMatch = async (formData) => {
 
 export const fetchAllMatches = async () => {
   try {
-    const res = await axios.get("/all-matches");
+    const res = await axios.get("/live/all-matches");
     return res;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}`, {
@@ -120,7 +120,7 @@ export const fetchAllMatches = async () => {
 
 export const deleteMatch = async (id) => {
   try {
-    const res = await axios.delete(`/delete-match/${id}`);
+    const res = await axios.delete(`/live/delete-match/${id}`);
     toast.success("Match deleted successfully!", {
       position: "top-right",
       autoClose: 5000,
@@ -149,7 +149,7 @@ export const deleteMatch = async (id) => {
 
 export const getMatch = async (id) => {
   try {
-    const res = await axios.get(`/${id}`);
+    const res = await axios.get(`/live/get-single-match/${id}`);
 
     return res;
   } catch (error) {
@@ -168,7 +168,7 @@ export const getMatch = async (id) => {
 };
 export const duplicateMatch = async (id) => {
   try {
-    const res = await axios.post(`/duplicate/${id}`);
+    const res = await axios.post(`/live/duplicate/${id}`);
     if (res) {
       toast.success("Match duplicated successfully!", {
         position: "top-right",
@@ -199,7 +199,7 @@ export const duplicateMatch = async (id) => {
 
 export const updateMatch = async (id, formData) => {
   try {
-    const res = await axios.put(`/match/${id}`, formData);
+    const res = await axios.put(`/live/update-match/${id}`, formData);
     if (res) {
       toast.success("Match updated successfully!", {
         position: "top-right",
@@ -340,7 +340,7 @@ export const getSingleNews = async (id) => {
 // *********** APP INFORMATION SECTION ************ //
 export const createUpdateAppInformation = async (data) => {
   try {
-    const res = await axios.post(`/set-app-information`, data, {
+    const res = await axios.post(`/app-information/set-app-information`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -366,7 +366,7 @@ export const createUpdateAppInformation = async (data) => {
 };
 export const getAppInformation = async () => {
   try {
-    const res = await axios.get(`/get-app-information`);
+    const res = await axios.get(`/app-information/get-app-information`);
     return res.data;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}`, {
@@ -383,7 +383,7 @@ export const getAppInformation = async () => {
 // *********** ANDROID SECTION ************ //
 export const androidCreateUpdateSettings = async (data) => {
   try {
-    const res = await axios.post(`/set-android-setting`, data, {
+    const res = await axios.post(`/android/set-android-setting`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -405,7 +405,7 @@ export const androidCreateUpdateSettings = async (data) => {
 };
 export const getAndroidSettings = async () => {
   try {
-    const settings = await axios.get("/get-android-setting");
+    const settings = await axios.get("/android/get-android-setting");
     return settings;
   } catch (err) {
     toast.error(`${err?.response?.data?.message}`, {
@@ -421,7 +421,7 @@ export const getAndroidSettings = async () => {
 // *********** iOS SECTION ************ //
 export const iosCreateUpdateSettings = async (data) => {
   try {
-    const res = await axios.post(`/set-ios-setting`, data, {
+    const res = await axios.post(`/ios/set-ios-setting`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -443,7 +443,7 @@ export const iosCreateUpdateSettings = async (data) => {
 };
 export const getIosSettings = async () => {
   try {
-    const settings = await axios.get("/get-ios-setting");
+    const settings = await axios.get("/ios/get-ios-setting");
     return settings;
   } catch (err) {
     toast.error(`${err?.response?.data?.message}`, {
@@ -458,7 +458,7 @@ export const getIosSettings = async () => {
 // *********** BLOCK COUNTRIES SECTION ************ //
 export const getBlockedCountries = async () => {
   try {
-    const blockedCountries = await axios.get("/get-block-countries");
+    const blockedCountries = await axios.get("/block/get-block-countries");
     return blockedCountries.data;
   } catch (err) {
     toast.error(`${err?.response?.data?.message}`, {
@@ -474,7 +474,7 @@ export const getBlockedCountries = async () => {
 
 export const CreateAndUpdateBlockedCountry = async (countries) => {
   try {
-    const res = await axios.post(`/block-countries`, countries);
+    const res = await axios.post(`/block/block-countries`, countries);
     toast.success(`Changes saved!`, {
       position: "top-right",
       autoClose: 800,
@@ -495,7 +495,7 @@ export const CreateAndUpdateBlockedCountry = async (countries) => {
 
 export const deleteCountry = async (country) => {
   try {
-    const del = await axios.delete(`/unblock-country/${country}`);
+    const del = await axios.delete(`/block/unblock-country/${country}`);
     toast.success(`Country unblocked!`, {
       position: "top-right",
       autoClose: 800,
@@ -514,147 +514,10 @@ export const deleteCountry = async (country) => {
   }
 };
 
-// ***************************************** MOBILE VIEW APIS ******************************************************//
-
-export const handleView = async (data) => {
-  try {
-    const res = await axios.post("/mobile-view", data);
-    return res;
-  } catch (err) {
-    toast.error(`Error occured`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  }
-};
-
-export const fetchMobileView = async () => {
-  try {
-    const res = await axios.get("/get-view");
-    return res;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
-
-// ***************************************** NOTIFICATION APIS ******************************************************//
-export const createNotification = async (notification) => {
-  try {
-    const res = await axios.post(`/create-notification`, notification);
-    toast.success(`Notification created successfully!`, {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return res;
-  } catch (error) {
-    toast.error(`${error?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return error;
-  }
-};
-
-export const getAllNotifications = async () => {
-  try {
-    const notifications = await axios.get("/get-all-notifications");
-    return notifications.data;
-  } catch (err) {
-    toast.error(`${err?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return err;
-  }
-};
-
-export const deleteNotification = async (id) => {
-  try {
-    const del = await axios.delete(`/delete-notification/${id}`);
-    toast.success(`Notification deleted successfully!`, {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return del;
-  } catch (err) {
-    toast.error(`${err?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return err;
-  }
-};
-
-export const sendNotification = async (id) => {
-  try {
-    const notify = await axios.post(`/send-notification/${id}`);
-    toast.success(`Notification sent successfully!`, {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return notify;
-  } catch (err) {
-    toast.error(`${err?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-    return err;
-  }
-};
-
-// ***************************************** Ads APIs ******************************************************//
+// *********** ADS SECTION ************ //
 export const createUpdateAdSettings = async (settings) => {
   try {
-    const res = await axios.post(`/google-ads-settings`, settings);
+    const res = await axios.post(`/ads/google-ads-settings`, settings);
     toast.success(`Changes saved!`, {
       position: "top-right",
       autoClose: 800,
@@ -683,7 +546,7 @@ export const createUpdateAdSettings = async (settings) => {
 
 export const getAdsSettings = async () => {
   try {
-    const settings = await axios.get("/get-ads-settings");
+    const settings = await axios.get("/ads/get-ads-settings");
     return settings.data;
   } catch (err) {
     toast.error(`${err?.response?.data?.message}`, {
@@ -693,6 +556,193 @@ export const getAdsSettings = async () => {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return err;
+  }
+};
+// ***************************************** MOBILE VIEW APIS ******************************************************//
+
+export const handleView = async (data) => {
+  try {
+    const res = await axios.post("/live/mobile-view", data);
+    return res;
+  } catch (err) {
+    toast.error(`Error occured`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  }
+};
+
+export const fetchMobileView = async () => {
+  try {
+    const res = await axios.get("/live/get-view");
+    return res;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+// ***************************************** NOTIFICATION APIS ******************************************************//
+export const createNotification = async (notification) => {
+  try {
+    const res = await axios.post(
+      `/notifications/create-notification`,
+      notification
+    );
+    toast.success(`Notification created successfully!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+
+export const getAllNotifications = async () => {
+  try {
+    const notifications = await axios.get(
+      "/notifications/get-all-notifications"
+    );
+    return notifications.data;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return err;
+  }
+};
+
+export const deleteNotification = async (id) => {
+  try {
+    const del = await axios.delete(`/notifications/delete-notification/${id}`);
+    toast.success(`Notification deleted successfully!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return del;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return err;
+  }
+};
+
+export const sendNotification = async (id) => {
+  try {
+    const notify = await axios.post(`/notifications/send-notification/${id}`);
+    toast.success(`Notification sent successfully!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return notify;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+    return err;
+  }
+};
+
+// ***************************************** ADMIN SETTINGS APIS ******************************************************//
+export const createAdminSettings = async (admin) => {
+  try {
+    const res = await axios.post(`/admin/set-admin-settings`, admin);
+    toast.success(`Settings saved successfully!`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      progress: undefined,
+      theme: "light",
+    });
+    return res;
+  } catch (error) {
+    toast.error(`${error?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      progress: undefined,
+      theme: "light",
+    });
+    return error;
+  }
+};
+
+export const getAdminSettings = async () => {
+  try {
+    const settings = await axios.get("/admin/get-admin-settings");
+    return settings.data;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
       progress: undefined,
       theme: "light",
     });

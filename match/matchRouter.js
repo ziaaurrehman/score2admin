@@ -13,16 +13,16 @@ import {
 
 const matchRouter = express.Router();
 
-// Public routes
-matchRouter.get("/get-view", getMobileView);
-matchRouter.get("/all-matches", getMatches);
-matchRouter.get("/:id", getMatchById);
-
 // Protected routes
 matchRouter.post("/mobile-view", CreateOrUpdateMobileView);
 matchRouter.post("/create-match", createMatch);
-matchRouter.put("/match/:id", updateMatch);
+matchRouter.put("/update-match/:id", updateMatch);
 matchRouter.delete("/delete-match/:id", deleteMatchById);
 matchRouter.post("/duplicate/:id", duplicateMatchById);
+
+// Public routes
+matchRouter.get("/get-view", getMobileView);
+matchRouter.get("/all-matches", getMatches);
+matchRouter.get("/get-single-match/:id", getMatchById);
 
 export default matchRouter;

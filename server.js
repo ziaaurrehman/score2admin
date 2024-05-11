@@ -4,7 +4,6 @@ import colors from "colors";
 import cors from "cors";
 import connectDb from "./config/db.js";
 import router from "./user/userRoute.js";
-import matchRouter from "./match/matchRouter.js";
 import profileRoute from "./user/userProfileUpload.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -18,6 +17,8 @@ import notificationRouter from "./notification/notificationRouter.js";
 import AdRoutes from "./AdsControl/AdRoutes.js";
 import androidSettingRouter from "./androidSettings/androidSettingsRoutes.js";
 import iosSettingRouter from "./iosSettings/iosSettingsRoutes.js";
+import matchRouter from "./match/matchRouter.js";
+import administratorSettings from "./AdminSettings/adminRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,13 +34,14 @@ const MONGO_DB = process.env.MONGO_DB;
 connectDb(MONGO_DB);
 
 app.use("/api", router);
-app.use("/api", blockRoutes);
-app.use("/api", appInformationRouter);
-app.use("/api", AdRoutes);
-app.use("/api", notificationRouter);
-app.use("/api", androidSettingRouter);
-app.use("/api", iosSettingRouter);
-app.use("/api", matchRouter);
+app.use("/api/notifications", notificationRouter);
+app.use("/api/block", blockRoutes);
+app.use("/api/app-information", appInformationRouter);
+app.use("/api/ads", AdRoutes);
+app.use("/api/android", androidSettingRouter);
+app.use("/api/ios", iosSettingRouter);
+app.use("/api/admin", administratorSettings);
+
 app.use(express.urlencoded({ extended: true, limit: "500mb" }));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 app.use("/newsuploads", express.static(path.join(__dirname, "/newsuploads")));
@@ -59,6 +61,7 @@ app.use("/api", profileRoute);
 app.use("/api", newsRoute);
 app.use("/api", newsUpdateRoute);
 app.use("/api", newsRouter);
+app.use("/api/live", matchRouter);
 
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "./client/dist")));

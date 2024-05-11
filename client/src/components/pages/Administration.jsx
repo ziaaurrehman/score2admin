@@ -1,11 +1,121 @@
 import { useLocation } from "react-router-dom";
 import Location from "../global/Location";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Portal from "./Portal";
+import Circle from "../global/LoadingSemiCircle";
+import GeneralSettings from "../AdminSettings/GeneralSettings";
+import AppsSocialSettings from "../AdminSettings/AppsSocialSettings";
+import ContactInfo from "../AdminSettings/ContactInfo";
+import { createAdminSettings, getAdminSettings } from "../../Api";
 
 const Administration = () => {
   const location = useLocation();
+
+  // States
+  const [loading, setLoading] = useState(false);
   const [isActive, setIsActive] = useState(1);
+  const [general, setGeneral] = useState({});
+  const [social, setSocial] = useState({});
+  const [contact, setContact] = useState({});
+  const [privacy, setPrivacy] = useState({
+    privacy_policy: "",
+    terms_conditions: "",
+  });
+
+  // Handler functions for states
+  const handleGeneralChange = (e) => {
+    const target = e.target;
+    setGeneral({
+      ...general,
+      [target.name]: target.value,
+    });
+  };
+
+  const handleSocialChange = (e) => {
+    const target = e.target;
+    setSocial({
+      ...social,
+      [target.name]: target.value,
+    });
+  };
+  const handleContactChange = (e) => {
+    const target = e.target;
+    setContact({
+      ...contact,
+      [target.name]: target.value,
+    });
+  };
+
+  const handleChange = (e) => {
+    const target = e.target;
+    setPrivacy({
+      ...privacy,
+      [target.name]: target.value,
+    });
+  };
+
+  // Fetching data at start
+  useEffect(() => {
+    setLoading(true);
+    try {
+      getAdminSettings()
+        .then((settings) => {
+          setGeneral(settings.admin_settings.general_settings);
+          setSocial(settings.admin_settings.social_settings);
+          setContact(settings.admin_settings.contact_info);
+          setPrivacy({
+            privacy_policy: settings.admin_settings.privacy_policy,
+            terms_conditions: settings.admin_settings.terms_conditions,
+          });
+        })
+        .catch((err) => {
+          console.error("Error occurred: ", err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } catch (err) {
+      console.error("Error occurred: ", err);
+      setLoading(false);
+    }
+  }, []);
+
+  // Collect all data
+  const collectSettingsData = () => {
+    const setting = {
+      company_name: general.company_name,
+      site_title: general.site_title,
+      time_zone: general.time_zone,
+      language: general.language,
+      app_logo_url: general.app_logo_url,
+      app_icon_url: general.app_icon_url,
+      facebook: social.facebook,
+      twitter: social.twitter,
+      instagram: social.instagram,
+      android_app_link: social.android_app_link,
+      ios_app_link: social.ios_app_link,
+      privacy_policy: privacy.privacy_policy,
+      terms_conditions: privacy.terms_conditions,
+      phone: contact.phone,
+      email: contact.email,
+    };
+
+    return setting;
+  };
+
+  // Save the settings
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      const data = collectSettingsData();
+      const res = await createAdminSettings(data);
+      console.log(res);
+      setLoading(false);
+    } catch (err) {
+      console.error(err.message);
+      setLoading(false);
+    }
+  };
   return (
     <>
       <Portal>
@@ -13,6 +123,7 @@ const Administration = () => {
           <Location location={location} />
           <div className="flex flex-col">
             <div className="flex gap-2 mt-5">
+              {/********************** SETTINGS SIDEBAR **********************/}
               <div className="flex flex-col w-[20%] gap-2">
                 <div
                   className={`p-2 font-semibold text-sm rounded-md shadow-sm transition-colors cursor-pointer ${
@@ -44,7 +155,7 @@ const Administration = () => {
                   }`}
                   onClick={() => setIsActive(3)}
                 >
-                  <p>Logo & Icon</p>
+                  <p>Contact Information</p>
                 </div>
 
                 <div
@@ -69,93 +180,49 @@ const Administration = () => {
                   <p>Terms & Conditions</p>
                 </div>
               </div>
+              {/*********************************** INPUT FIELD AREA *****************************/}
               <div className="border-l-2 border-blue-600 w-[80%] bg-white rounded-r-md shadow-md">
-                {isActive === 1 ? (
-                  <div className="w-full flex flex-col gap-2 m-3">
-                    <h2 className="font-semibold">General Settings</h2>
-
-                    <div className="mt-4 flex mx-2 gap-2">
-                      <div className="text-sm flex flex-col w-1/2 gap-1">
-                        <label className="font-semibold text-xs">
-                          Company Name <span className="text-red-600">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          className="w-[90%] appearance-none bg-white border border-gray-300 text-gray-700 py-1 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-500 text-xs"
-                          placeholder="Type something here..."
-                        />
-                      </div>
-
-                      <div className="text-sm flex flex-col w-1/2 gap-1">
-                        <label className="font-semibold text-xs">
-                          Site Title <span className="text-red-600">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          className="w-[90%] appearance-none bg-white border border-gray-300 text-gray-700 py-1 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-500 text-xs"
-                          placeholder="Type something here..."
-                        />
-                      </div>
+                {loading ? (
+                  <Circle />
+                ) : isActive === 1 ? (
+                  <GeneralSettings
+                    data={general}
+                    childFunction={handleGeneralChange}
+                  />
+                ) : isActive === 2 ? (
+                  <AppsSocialSettings
+                    data={social}
+                    childFunction={handleSocialChange}
+                  />
+                ) : isActive === 3 ? (
+                  <ContactInfo
+                    data={contact}
+                    childFunction={handleContactChange}
+                  />
+                ) : isActive === 4 ? (
+                  <div className="w-full flex flex-col m-3">
+                    <h2 className="font-semibold">Privacy Policy</h2>
+                    <div className="text-sm flex flex-col w-full mx-auto gap-1">
+                      <textarea
+                        className="mt-2 w-[95%] h-[10rem] appearance-none bg-white border border-gray-300 text-gray-700 py-1 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-500 text-xs"
+                        placeholder="Type something here..."
+                        name="privacy_policy"
+                        value={privacy.privacy_policy}
+                        onChange={(e) => handleChange(e)}
+                      />
                     </div>
-
-                    <div className="mt-2 flex mx-2 gap-2">
-                      <div className="text-sm flex flex-col w-1/2 gap-1">
-                        <label className="font-semibold text-xs">
-                          Time Zone <span className="text-red-600">*</span>
-                        </label>
-                        <div className="relative w-[90%] text-xs cursor-pointer">
-                          <select className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-1 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option value="volvo">Khatmandu</option>
-                            <option value="saab">Astana</option>
-                            <option value="mercedes">Berlin</option>
-                            <option value="audi">London</option>
-                          </select>
-                          <div className="my-1 absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none border-l border-gray-300">
-                            <svg
-                              className="h-4 w-4 text-gray-500"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="text-sm flex flex-col w-1/2 gap-1">
-                        <label className="font-semibold text-xs">
-                          Language <span className="text-red-600">*</span>
-                        </label>
-                        <div className="relative w-[90%] text-xs cursor-pointer">
-                          <select className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-1 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-500">
-                            <option value="volvo">English</option>
-                            <option value="saab">Arabic</option>
-                            <option value="mercedes">German</option>
-                            <option value="audi">Urdu</option>
-                          </select>
-                          <div className="my-1 absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none border-l border-gray-300">
-                            <svg
-                              className="h-4 w-4 text-gray-500"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
+                  </div>
+                ) : isActive === 5 ? (
+                  <div className="w-full flex flex-col m-3">
+                    <h2 className="font-semibold">Terms & Conditions</h2>
+                    <div className="text-sm flex flex-col w-full mx-auto gap-1">
+                      <textarea
+                        className="mt-2 w-[95%] h-[10rem] appearance-none bg-white border border-gray-300 text-gray-700 py-1 px-2 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-500 text-xs"
+                        placeholder="Type something here..."
+                        name="terms_conditions"
+                        value={privacy.terms_conditions}
+                        onChange={(e) => handleChange(e)}
+                      />
                     </div>
                   </div>
                 ) : (
@@ -164,7 +231,12 @@ const Administration = () => {
               </div>
             </div>
             <div className="mt-5 flex justify-end">
-              <button className="p-2 bg-blue-600 text-sm text-white font-semibold rounded-md shadow-md hover:bg-blue-900 transition-colors">
+              <button
+                className={`p-2 text-sm text-white font-semibold rounded-md shadow-md hover:bg-blue-900 transition active:scale-95 ${
+                  loading ? "bg-gray-600 pointer-events-none" : "bg-blue-600"
+                }`}
+                onClick={handleSave}
+              >
                 SUBMIT
               </button>
             </div>

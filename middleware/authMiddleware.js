@@ -3,21 +3,18 @@ import User from "../user/userModel.js";
 
 const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization");
-  if (token) {
-    console.log(token);
-  } else {
-    console.log("Token: ", token, " Error: Missing JWT Token");
-  }
-
+  console.log("Token: ", token);
   if (!token) {
     return res
       .status(401)
       .json({ success: false, message: "Authorization token is missing" });
   }
-
   try {
+    console.log("try block working");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded: ", decoded);
     const user = await User.findById(decoded.userId);
+    console.log(user);
 
     if (!user) {
       return res
@@ -28,6 +25,7 @@ const authMiddleware = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    console.log(error);
     return res.status(401).json({ success: false, message: "Invalid token" });
   }
 };
