@@ -36,11 +36,11 @@ connectDb(MONGO_DB);
 
 app.use("/api", router);
 app.use("/api/notifications", notificationRouter);
-app.use("/api/block", blockRoutes);
-app.use("/api/app-information", appInformationRouter);
-app.use("/api/ads", AdRoutes);
-app.use("/api/android", androidSettingRouter);
-app.use("/api/ios", iosSettingRouter);
+app.use("/api/manage-app/block", blockRoutes);
+app.use("/api/manage-app/app-information", appInformationRouter);
+app.use("/api/manage-app/ads", AdRoutes);
+app.use("/api/manage-app/android", androidSettingRouter);
+//app.use("/api/ios", iosSettingRouter);
 app.use("/api/admin", administratorSettings);
 app.use("/api/fixture", fixtureRouter);
 app.use(express.urlencoded({ extended: true, limit: "500mb" }));

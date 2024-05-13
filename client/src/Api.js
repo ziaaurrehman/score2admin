@@ -342,11 +342,15 @@ export const getSingleNews = async (id) => {
 // *********** APP INFORMATION SECTION ************ //
 export const createUpdateAppInformation = async (data) => {
   try {
-    const res = await axios.post(`/app-information/set-app-information`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await axios.post(
+      `/manage-app/app-information/set-app-information`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     toast.success(`Settings updated!`, {
       position: "top-right",
       autoClose: 800,
@@ -368,7 +372,9 @@ export const createUpdateAppInformation = async (data) => {
 };
 export const getAppInformation = async () => {
   try {
-    const res = await axios.get(`/app-information/get-app-information`);
+    const res = await axios.get(
+      `/manage-app/app-information/get-app-information`
+    );
     return res.data;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}`, {
@@ -385,11 +391,15 @@ export const getAppInformation = async () => {
 // *********** ANDROID SECTION ************ //
 export const androidCreateUpdateSettings = async (data) => {
   try {
-    const res = await axios.post(`/android/set-android-setting`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await axios.post(
+      `/manage-app/android/set-android-setting`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     toast.success(`${res?.data?.message}`, {
       position: "top-right",
       autoClose: 800,
@@ -407,7 +417,7 @@ export const androidCreateUpdateSettings = async (data) => {
 };
 export const getAndroidSettings = async () => {
   try {
-    const settings = await axios.get("/android/get-android-setting");
+    const settings = await axios.get("/manage-app/android/get-android-setting");
     return settings;
   } catch (err) {
     toast.error(`${err?.response?.data?.message}`, {
@@ -421,46 +431,48 @@ export const getAndroidSettings = async () => {
 };
 
 // *********** iOS SECTION ************ //
-export const iosCreateUpdateSettings = async (data) => {
-  try {
-    const res = await axios.post(`/ios/set-ios-setting`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    toast.success(`${res?.data?.message}`, {
-      position: "top-right",
-      autoClose: 800,
-      theme: "light",
-    });
-    return res;
-  } catch (error) {
-    toast.error(`${error?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 800,
-      theme: "light",
-    });
-    return error;
-  }
-};
-export const getIosSettings = async () => {
-  try {
-    const settings = await axios.get("/ios/get-ios-setting");
-    return settings;
-  } catch (err) {
-    toast.error(`${err?.response?.data?.message}`, {
-      position: "top-right",
-      autoClose: 800,
-      closeOnClick: true,
-      theme: "light",
-    });
-    return err;
-  }
-};
+// export const iosCreateUpdateSettings = async (data) => {
+//   try {
+//     const res = await axios.post(`/ios/set-ios-setting`, data, {
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//       },
+//     });
+//     toast.success(`${res?.data?.message}`, {
+//       position: "top-right",
+//       autoClose: 800,
+//       theme: "light",
+//     });
+//     return res;
+//   } catch (error) {
+//     toast.error(`${error?.response?.data?.message}`, {
+//       position: "top-right",
+//       autoClose: 800,
+//       theme: "light",
+//     });
+//     return error;
+//   }
+// };
+// export const getIosSettings = async () => {
+//   try {
+//     const settings = await axios.get("/ios/get-ios-setting");
+//     return settings;
+//   } catch (err) {
+//     toast.error(`${err?.response?.data?.message}`, {
+//       position: "top-right",
+//       autoClose: 800,
+//       closeOnClick: true,
+//       theme: "light",
+//     });
+//     return err;
+//   }
+// };
 // *********** BLOCK COUNTRIES SECTION ************ //
 export const getBlockedCountries = async () => {
   try {
-    const blockedCountries = await axios.get("/block/get-block-countries");
+    const blockedCountries = await axios.get(
+      "/manage-app/block/get-block-countries"
+    );
     return blockedCountries.data;
   } catch (err) {
     toast.error(`${err?.response?.data?.message}`, {
@@ -476,7 +488,10 @@ export const getBlockedCountries = async () => {
 
 export const CreateAndUpdateBlockedCountry = async (countries) => {
   try {
-    const res = await axios.post(`/block/block-countries`, countries);
+    const res = await axios.post(
+      `/manage-app/block/block-countries`,
+      countries
+    );
     toast.success(`Changes saved!`, {
       position: "top-right",
       autoClose: 800,
@@ -497,7 +512,9 @@ export const CreateAndUpdateBlockedCountry = async (countries) => {
 
 export const deleteCountry = async (country) => {
   try {
-    const del = await axios.delete(`/block/unblock-country/${country}`);
+    const del = await axios.delete(
+      `/manage-app/block/unblock-country/${country}`
+    );
     toast.success(`Country unblocked!`, {
       position: "top-right",
       autoClose: 800,
@@ -519,7 +536,10 @@ export const deleteCountry = async (country) => {
 // *********** ADS SECTION ************ //
 export const createUpdateAdSettings = async (settings) => {
   try {
-    const res = await axios.post(`/ads/google-ads-settings`, settings);
+    const res = await axios.post(
+      `/manage-app/ads/google-ads-settings`,
+      settings
+    );
     toast.success(`Changes saved!`, {
       position: "top-right",
       autoClose: 800,
@@ -548,7 +568,7 @@ export const createUpdateAdSettings = async (settings) => {
 
 export const getAdsSettings = async () => {
   try {
-    const settings = await axios.get("/ads/get-ads-settings");
+    const settings = await axios.get("/manage-app/ads/get-ads-settings");
     return settings.data;
   } catch (err) {
     toast.error(`${err?.response?.data?.message}`, {
