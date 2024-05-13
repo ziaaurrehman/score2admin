@@ -64,6 +64,16 @@ app.use("/api", newsUpdateRoute);
 app.use("/api", newsRouter);
 app.use("/api/live", matchRouter);
 
+// Define routes for terms and conditions page
+app.get("/terms", (req, res) => {
+  res.sendFile(path.join(__dirname, "static", "terms.html"));
+});
+
+// Define routes for privacy policy page
+app.get("/privacy", (req, res) => {
+  res.sendFile(path.join(__dirname, "static", "privacy.html"));
+});
+
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "./client/dist")));
 

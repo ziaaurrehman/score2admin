@@ -93,11 +93,11 @@ const NavList = () => {
       icon: <IoSettings />,
       path: "/administration",
     },
-    {
-      name: "Logout",
-      icon: <CiLogout />,
-      path: "/logout",
-    },
+    // {
+    //   name: "Logout",
+    //   icon: <CiLogout />,
+    //   path: "/logout",
+    // },
   ];
 
   const handleItemClick = (index) => {
