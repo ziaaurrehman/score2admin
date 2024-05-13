@@ -31,7 +31,9 @@ const NotificationList = () => {
           <h4>Action</h4>
         </div>
         {loading ? (
-          <LoadingBall />
+          <div className="mt-5">
+            <LoadingBall />
+          </div>
         ) : (
           <div className="p-3 flex flex-col gap-2 justify-center">
             {notifs.map((notification) => (

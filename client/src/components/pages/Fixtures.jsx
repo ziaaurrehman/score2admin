@@ -3,9 +3,38 @@ import LeagueFixtures from "../global/LeagueFixture";
 import Location from "../global/Location";
 import { useLocation } from "react-router-dom";
 import Portal from "./Portal";
+import { useEffect, useState } from "react";
+import { getFixtures } from "../../Api";
+import LoadingBall from "../global/LoadingBall.jsx";
 
 const Fixtures = () => {
   const location = useLocation();
+  const [fixtures, setFixtures] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0].toString()
+  );
+
+  useEffect(() => {
+    setLoading(true);
+    const fixtures = async () => {
+      try {
+        const dailyFixtures = await getFixtures({
+          date: selectedDate,
+        });
+        setFixtures(dailyFixtures);
+      } catch (err) {
+        console.error("Error: ", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fixtures();
+  }, [selectedDate]);
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date); // Update selectedDate state
+  };
   return (
     <>
       <Portal>
@@ -15,11 +44,17 @@ const Fixtures = () => {
           </div>
           <div className="flex flex-col gap-10 bg-white shadow-md w-full mx-auto rounded-md p-5">
             <p className="font-bold">Pick Your Date</p>
-            <DateSelector />
+            <DateSelector onDateSelect={handleDateSelect} />
           </div>
 
-          <div className="flex flex-col bg-white shadow-md w-full mx-auto rounded-md p-5">
-            <LeagueFixtures leagueName="Bundesliga" />
+          <div className="min-h-[200px] bg-white shadow-md w-full mx-auto rounded-md p-5">
+            {loading ? (
+              <div className="mt-5">
+                <LoadingBall />
+              </div>
+            ) : (
+              <LeagueFixtures fixture={fixtures.fixtures} />
+            )}
           </div>
         </div>
       </Portal>

@@ -19,6 +19,7 @@ import androidSettingRouter from "./androidSettings/androidSettingsRoutes.js";
 import iosSettingRouter from "./iosSettings/iosSettingsRoutes.js";
 import matchRouter from "./match/matchRouter.js";
 import administratorSettings from "./AdminSettings/adminRoutes.js";
+import fixtureRouter from "./Leagues_Fixtures/fixtureRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,7 +42,7 @@ app.use("/api/ads", AdRoutes);
 app.use("/api/android", androidSettingRouter);
 app.use("/api/ios", iosSettingRouter);
 app.use("/api/admin", administratorSettings);
-
+app.use("/api/fixture", fixtureRouter);
 app.use(express.urlencoded({ extended: true, limit: "500mb" }));
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 app.use("/newsuploads", express.static(path.join(__dirname, "/newsuploads")));

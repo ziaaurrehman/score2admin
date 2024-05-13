@@ -6,6 +6,8 @@ import "../../../node_modules/suneditor/dist/css/suneditor.min.css";
 import { createNews } from "../../Api";
 import { toast } from "react-toastify";
 import Portal from "../pages/Portal";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/dark.css";
 
 const AddNews = () => {
   const location = useLocation();
@@ -30,6 +32,21 @@ const AddNews = () => {
     publish_date: "",
     status: "",
   });
+
+  const handleDateChange = (date) => {
+    const selectedDateTime = new Date(date);
+
+    // Format the date and time
+    const formattedDateTime = selectedDateTime.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true, // Include AM/PM indicator
+    });
+    setData({ ...data, publish_date: formattedDateTime });
+  };
 
   const [dragging, setDragging] = useState(false);
   const navigation = useNavigate();
@@ -97,7 +114,7 @@ const AddNews = () => {
         formData.append(key, data[key]);
       }
     }
-    if (!!file) formData.append("filename", file);
+    if (!file) formData.append("filename", file);
     // console.log(file);
 
     return formData;
@@ -436,14 +453,14 @@ const AddNews = () => {
                   <label htmlFor="publish-date">
                     Publish Date <span className="text-red-600">*</span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder="Enter date: YYYY:MM:DD HH:MM"
-                    name="publish_date"
-                    onChange={(e) =>
-                      setData({ ...data, publish_date: e.target.value })
-                    }
-                    className="my-2 w-full bg-white border border-gray-300 text-gray-700 py-[.435rem] px-2 rounded outline-blue-400"
+                  <Flatpickr
+                    className="mt-2 border-2 border-gray-300 cursor-pointer w-full py-[.435rem] font-normal px-2 rounded p-1 text-black "
+                    options={{
+                      enableTime: true,
+                      dateFormat: "Y-m-d h:i K",
+                    }}
+                    value={data.publish_date}
+                    onChange={handleDateChange}
                   />
                 </div>
                 {/* Status of article*/}

@@ -23,6 +23,7 @@ const User = ({ name, imgSrc }) => {
       return firstInitial + lastInitial;
     }
   };
+  const onClick = () => {};
   return (
     <div className="w-max overflow-hidden">
       {imgSrc ? (

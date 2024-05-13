@@ -44,11 +44,19 @@ export const UserContextProvider = ({ children }) => {
     localStorage.removeItem("user");
     setUser(null);
     setIsAuthenticated(false);
+    toast.success("Logged out successfully!");
     navigation("/");
   };
+
   return (
     <UserContext.Provider
-      value={{ user, setUser, isAuthenticated, login, logout }}
+      value={{
+        user,
+        setUser,
+        isAuthenticated,
+        login,
+        logout,
+      }}
     >
       {children}
     </UserContext.Provider>

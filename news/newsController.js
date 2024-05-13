@@ -1,7 +1,7 @@
 import News from "./newsModel.js";
 
 const getAllNews = async (req, res) => {
-  const perPage = parseInt(req.query.perPage) || 8;
+  const perPage = parseInt(req.query.perPage);
   const searchQuery = req.query.search || "";
   try {
     let query = {};

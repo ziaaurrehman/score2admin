@@ -2,12 +2,19 @@ import Sidebar from "../Navbar/Sidebar.jsx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import User from "../Navbar/User.jsx";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CiLogout } from "react-icons/ci";
 
 const Portal = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [user, setUser] = useState({});
   const navigation = useNavigate();
+
+  const handleOpen = () => {
+    setOpen((prevState) => !prevState);
+    console.log(open);
+  };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -56,7 +63,20 @@ const Portal = ({ children }) => {
                     </p>
                   </div>
                 </div>
-                <User name={"moiz khan"} imgSrc={user.img} />
+                <div className="relative" onClick={handleOpen}>
+                  <User name={"moiz khan"} imgSrc={user.img} />
+                  {open ? (
+                    <Link
+                      className="absolute right-0 p-2 bg-white rounded-md z-10 min-w-[100px] flex gap-2 items-center justify-center font-sm transition hover:text-gray-500"
+                      to="/logout"
+                    >
+                      <CiLogout className="text-xl" />
+                      <p>Logout</p>
+                    </Link>
+                  ) : (
+                    ""
+                  )}
+                </div>
               </div>
             </div>
             <div>{children}</div>

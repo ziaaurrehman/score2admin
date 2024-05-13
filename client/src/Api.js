@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const prod = "https://sportsdashboard.onrender.com/api/";
 const local = "http://localhost:5050/api";
 const axios = instance.create({
-  baseURL: prod,
+  baseURL: local,
   headers: {
     "Content-Type": "application/json",
   },
@@ -99,9 +99,11 @@ export const createMatch = async (formData) => {
   }
 };
 
-export const fetchAllMatches = async () => {
+export const fetchAllMatches = async (currentPage, searchQuery, perPage) => {
   try {
-    const res = await axios.get("/live/all-matches");
+    const res = await axios.get(
+      `/live/all-matches?page=${currentPage}&search=${searchQuery}&perPage=${perPage}`
+    );
     return res;
   } catch (error) {
     toast.error(`${error?.response?.data?.message}`, {
@@ -747,5 +749,56 @@ export const getAdminSettings = async () => {
       theme: "light",
     });
     return err;
+  }
+};
+
+// ***************************************** FIXTURES & LEAGUES ******************************************************//
+export const searchLeagues = async (country) => {
+  if (country) {
+    try {
+      const res = await axios.get(`/fixture/get-leagues-rapid/${country}`);
+      return res.data;
+    } catch (err) {
+      toast.error(`Something went wrong: ${err.message}`);
+    }
+  }
+};
+export const getLeagues = async () => {
+  try {
+    const res = await axios.get(`/fixture/get-leagues`);
+    return res.data;
+  } catch (err) {
+    toast.error(`Something went wrong: ${err.message}`);
+  }
+};
+export const saveLeagues = async (data) => {
+  try {
+    const res = await axios.post(`/fixture/set-leagues`, data);
+    toast.success("League saved!");
+    return res;
+  } catch (err) {
+    toast.error(`Something went wrong: ${err.message}`);
+  }
+};
+export const deleteLeague = async (id) => {
+  try {
+    const res = await axios.delete(`/fixture/delete-league/${id}`);
+    toast.success("League deleted successully");
+    return res;
+  } catch (err) {
+    toast.error(`Something went wrong: ${err.message}`);
+  }
+};
+export const getFixtures = async (date) => {
+  try {
+    const res = await axios.post(`/fixture/get-fixture-rapid`, date);
+    return res.data;
+  } catch (err) {
+    toast.error(`${err?.response?.data?.message}`, {
+      position: "top-right",
+      autoClose: 800,
+      hideProgressBar: true,
+      theme: "light",
+    });
   }
 };

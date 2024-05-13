@@ -12,7 +12,7 @@ const News = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [perPage, setPerPage] = useState("");
+  const [perPage, setPerPage] = useState(10);
 
   const [news, setNews] = useState([]);
   const [isGrid, setIsGrid] = useState(false);
@@ -80,7 +80,11 @@ const News = () => {
                   </div>
                   <div className="flex gap-3">
                     <p className="text-sm">Page Size: </p>
-                    <select className="bg-white rounded-md border-2 border-black h-max text-xs text-center pl-2">
+                    <select
+                      className="bg-white rounded-md border-2 border-black h-max text-xs text-center pl-2"
+                      value={perPage}
+                      onChange={(e) => setPerPage(parseInt(e.target.value))}
+                    >
                       <option value="10">10</option>
                       <option value="20">20</option>
                       <option value="50">50</option>

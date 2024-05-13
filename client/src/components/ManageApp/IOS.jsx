@@ -266,7 +266,8 @@ const IosSettings = () => {
             </div>
           </div>
 
-          <div className="w-full bg-white rounded-md p-2 flex flex-col gap-2">
+          {/****************** REQUIRED APP SECTION (HIDDEN) ***************/}
+          {/* <div className="w-full bg-white rounded-md p-2 flex flex-col gap-2">
             <h2 className="text-sm font-semibold">REQUIRED APP</h2>
             <div className="w-full flex gap-2">
               <div className="w-1/4">
@@ -330,7 +331,7 @@ const IosSettings = () => {
                 className="rounded-md w-full border-2 border-gray-300 p-2 h-[6rem] text-sm"
               />
             </div>
-          </div>
+          </div> */}
 
           <div
             id="drag-and-drop"

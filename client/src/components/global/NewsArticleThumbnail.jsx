@@ -6,6 +6,7 @@ import { deleteSingleNews } from "../../Api";
 import { toast } from "react-toastify";
 
 const NewsArticleThumbnail = ({ isGrid, data }) => {
+  console.log(data);
   const handleDelete = async (id) => {
     const res = await deleteSingleNews(id);
     if (res?.data?.success) {
@@ -84,12 +85,12 @@ const NewsArticleThumbnail = ({ isGrid, data }) => {
   } else {
     return (
       <div className="mt-2 bg-gray-200 w-full rounded-md shadow-md flex justify-between">
-        <div className="rounded-md w-[30%]">
+        <div className="rounded-md w-max">
           {data?.image_url ? (
             <img
               src={data?.image_url}
               alt={data?.title}
-              className="w-[220px] h-[150px] rounded-md"
+              className="w-[350px] h-[200px] rounded-md"
             />
           ) : (
             <img
@@ -99,17 +100,20 @@ const NewsArticleThumbnail = ({ isGrid, data }) => {
             />
           )}
         </div>
-        <div id="news-info" className="p-3 flex justify-around w-[65%]">
-          <div className="h-full flex flex-col justify-between w-[45%]">
-            <h3 className="text-gray-600 font-semibold">Title: {data.title}</h3>
-            <div className="flex gap-2">
+        <div id="news-info" className="p-3 flex justify-around w-full">
+          <div className="h-full flex flex-col justify-between max-w-[40%]">
+            <h3 className="text-gray-600 font-semibold">
+              Title: <span className="uppercase text-lg">{data.title}</span>
+            </h3>
+            <div className="flex gap-2 min-w-[200px]">
               <h4 className="text-xs">
                 <span className="font-bold">Category:</span> {data?.category}
               </h4>
               <LuPencilLine className="text-green-400 text-lg hover:text-green-600 transition-colors" />
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex flex-col justify-center items-center w-full">
+            <p className="font-semibold">Publish Date</p>
             <p className="text-center text-gray-600 text-sm font-semibold">
               {data?.publish_date}
             </p>
@@ -118,11 +122,15 @@ const NewsArticleThumbnail = ({ isGrid, data }) => {
           <div className="flex items-center">
             {data?.status === "active" ? (
               <div className=" bg-green-400 rounded-md p-1 text-center">
-                <p className="text-xs text-white">{data?.status}</p>
+                <p className="text-xs text-white uppercase font-semibold">
+                  {data?.status}
+                </p>
               </div>
             ) : (
               <div className=" bg-red-400 rounded-md p-1 text-center">
-                <p className="text-xs text-white">{data?.status}</p>
+                <p className="text-xs text-white uppercase font-semibold">
+                  {data?.status}
+                </p>
               </div>
             )}
           </div>

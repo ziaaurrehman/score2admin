@@ -1,16 +1,39 @@
 import { useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
-import Calendar from "react-calendar";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/dark.css";
 
-const DateSelector = () => {
+const DateSelector = ({ onDateSelect }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showFlatpickr, setShowFlatpickr] = useState(false);
 
-  const toggleCalendar = () => {
-    setShowCalendar(!showCalendar);
+  const handleChange = (date) => {
+    const formattedDate = formatDate(date[0]);
+    setSelectedDate(date[0]);
+    setShowFlatpickr(false);
+    onDateSelect(formattedDate);
   };
+
+  const toggleFlatpickr = () => {
+    setShowFlatpickr(!showFlatpickr);
+  };
+
+  const formatDate = (date) => {
+    const myDate = date;
+    // Format the date as "YYYY-MM-DD"
+    const year = myDate.getFullYear();
+    const month = String(myDate.getMonth() + 1).padStart(2, "0");
+    const day = String(myDate.getDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  };
+
   const handleDateClick = (date) => {
+    const x = formatDate(date);
+    onDateSelect(x);
     setSelectedDate(date);
+    setShowFlatpickr(false);
   };
 
   const generateDates = (selectedDate) => {
@@ -24,6 +47,7 @@ const DateSelector = () => {
     }
     return dates;
   };
+
   return (
     <div className="flex gap-3 justify-center items-center">
       {generateDates(selectedDate).map((date, index) => (
@@ -36,11 +60,7 @@ const DateSelector = () => {
           }`}
           onClick={() => handleDateClick(date)}
         >
-          {index === 3 ? (
-            <p className="font-bold text-white block">Today</p>
-          ) : (
-            ""
-          )}
+          {index === 3 && <p className="font-bold text-white block">Today</p>}
           <p>
             {date.getDate()}{" "}
             {date.toLocaleString("default", { month: "short" })}
@@ -52,11 +72,18 @@ const DateSelector = () => {
       <div className="relative">
         <FaCalendarAlt
           className="w-[6.5rem] h-[4rem] text-md p-4 rounded-full bg-gray-600 text-white cursor-pointer hover:bg-gray-500 transition-colors"
-          onClick={toggleCalendar}
+          onClick={toggleFlatpickr}
         />
-        {showCalendar && (
-          <div className="absolute bg-gray-800 rounded-xl text-white p-3 top-20 right-10 w-max h-max">
-            <Calendar value={selectedDate} onChange={toggleCalendar} />
+        {showFlatpickr && (
+          <div className="absolute right-0">
+            <Flatpickr
+              value={selectedDate}
+              onChange={handleChange}
+              options={{
+                inline: true,
+              }}
+              className="hidden"
+            />
           </div>
         )}
       </div>

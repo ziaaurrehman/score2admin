@@ -1,5 +1,6 @@
 import NavList from "./NavList";
 import { FaRegArrowAltCircleLeft } from "react-icons/fa";
+import Football from "../../assets/ball-football-icon.svg";
 
 const Sidebar = ({ isOpen, onClose }) => {
   return (
@@ -13,9 +14,11 @@ const Sidebar = ({ isOpen, onClose }) => {
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         } transition-opacity`}
       >
-        <div className="font-bold rounded-full w-[40px] h-[40px] text-white text-xl bg-black flex justify-center items-center m-1 cursor-pointer shadow-sm">
-          ZS
-        </div>
+        <img
+          className="font-bold rounded-full w-[45px] h-[45px] text-white text-xl flex justify-center items-center m-1 cursor-pointer shadow-sm p-1 border-2 border-black"
+          src={Football}
+          alt="sports-dashboard"
+        />
         <FaRegArrowAltCircleLeft
           className="text-4xl p-1 m-2 hover:text-gray-500 transition-colors cursor-pointer"
           onClick={onClose}

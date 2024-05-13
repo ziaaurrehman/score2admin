@@ -61,7 +61,7 @@ const createMatch = async (req, res) => {
 
 const getMatches = async (req, res) => {
   // const page = parseInt(req.query.page) || 1;
-  const perPage = parseInt(req.query.perPage) || 8;
+  const perPage = parseInt(req.query.perPage) || 10;
   // const skip = (page - 1) * perPage;
   const searchQuery = req.query.search || "";
 

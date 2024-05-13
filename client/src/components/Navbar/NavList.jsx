@@ -56,38 +56,38 @@ const NavList = () => {
       icon: <FaNewspaper />,
       path: "/news",
     },
-    {
-      name: "Contact Us",
-      icon: <MdContactPage />,
-      path: "/contact-us",
-    },
+    // {
+    //   name: "Contact Us",
+    //   icon: <MdContactPage />,
+    //   path: "/contact-us",
+    // },
     {
       name: "Notifications",
       icon: <IoNotifications />,
       path: "/notifications",
     },
-    {
-      name: "Types",
-      icon: <IoOptionsSharp />,
-      path: "/types",
-      subSection: [
-        {
-          name: "Ads",
-          icon: <MdHorizontalRule />,
-          path: "/types/ads",
-        },
-        {
-          name: "Sports",
-          icon: <MdHorizontalRule />,
-          path: "/types/sports",
-        },
-        {
-          name: "Leagues",
-          icon: <MdHorizontalRule />,
-          path: "/types/leagues",
-        },
-      ],
-    },
+    // {
+    //   name: "Types",
+    //   icon: <IoOptionsSharp />,
+    //   path: "/types",
+    //   subSection: [
+    //     {
+    //       name: "Ads",
+    //       icon: <MdHorizontalRule />,
+    //       path: "/types/ads",
+    //     },
+    //     {
+    //       name: "Sports",
+    //       icon: <MdHorizontalRule />,
+    //       path: "/types/sports",
+    //     },
+    //     {
+    //       name: "Leagues",
+    //       icon: <MdHorizontalRule />,
+    //       path: "/types/leagues",
+    //     },
+    //   ],
+    // },
     {
       name: "Administration",
       icon: <IoSettings />,

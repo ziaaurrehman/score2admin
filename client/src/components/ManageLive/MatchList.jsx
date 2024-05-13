@@ -6,42 +6,22 @@ import { MdDragIndicator } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Reorder } from "framer-motion";
-import { fetchAllMatches, deleteMatch, duplicateMatch } from "../../Api.js";
-import { toast } from "react-toastify";
+import { deleteMatch, duplicateMatch } from "../../Api.js";
 import LoadingBall from "../global/LoadingBall.jsx";
 
-const MatchList = ({ isGrid }) => {
+const MatchList = ({ isGrid, matchesArray }) => {
   const [matches, setMatches] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchAllMatches();
-        const { paginatedMatches } = response.data;
-        const extractedMatches = paginatedMatches.map((match) => ({
-          id: match._id,
-          status: match.status,
-          league_type: match.league_type,
-          hot_match: match.hot_match,
-          match_title: match.match_title,
-          match_time: match.match_time,
-          sports_type: match.sport_type,
-          team_one: match.team_one.name,
-          team_one_img: match.team_one.image,
-          team_two: match.team_two.name,
-          team_two_img: match.team_one.image,
-          stream_count: match.streaming_source.length,
-        }));
-        setMatches(extractedMatches);
-      } catch (error) {
-        toast.error("Error fetching matches:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+    setLoading(true);
+    try {
+      setMatches(matchesArray);
+    } catch (err) {
+      console.error("Error: ", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [matchesArray]);
 
   const handleMoveUp = (index) => {
     if (index > 0) {
@@ -71,9 +51,10 @@ const MatchList = ({ isGrid }) => {
         <LoadingBall />
       ) : (
         <Reorder.Group
+          axis={isGrid ? "x" : "y"}
           values={matches}
           onReorder={setMatches}
-          className={`${isGrid ? "flex flex-row w-1/4" : ""}`}
+          className={`${isGrid ? "flex flex-wrap gap-1" : "flex flex-col"}`}
         >
           {matches.map((match, index) => (
             <Reorder.Item value={match} key={match.id}>
@@ -101,7 +82,7 @@ const MatchList = ({ isGrid }) => {
                       className="flex flex-col text-center w-[30%]"
                     >
                       <h3 className="text-sm font-semibold uppercase">
-                        {match.league_type.split("-").join(" ")}
+                        {match.league_type}
                       </h3>
                       <p className="text-gray-500 text-xs">
                         {match.match_time}
@@ -165,76 +146,72 @@ const MatchList = ({ isGrid }) => {
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col">
-                  <div className="w-[250px] h-[250px] flex flex-col items-center border-2 bg-white rounded-md">
-                    <div className="flex gap-2 items-center p-2">
-                      <div id="team-1" className="flex flex-col items-center">
-                        <h4 className="text-xs font-semibold">
-                          {match.team_one}
-                        </h4>
-                        <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
-                          <img
-                            src={match.team_one_img}
-                            alt=""
-                            className="h-[80px] w-[70px]"
-                          />
-                        </div>
-                      </div>
-                      <p className="text-xs text-center">VS</p>
-                      <div id="team-2" className="flex flex-col items-center">
-                        <h4 className="text-xs font-semibold">
-                          {match.team_two}
-                        </h4>
-                        <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
-                          <img
-                            src={match.team_two_img}
-                            alt=""
-                            className="h-[80px] w-[70px]"
-                          />
-                        </div>
+                <div className="w-[240px] h-[250px] flex flex-col items-center border-2 bg-white rounded-md">
+                  <div className="flex gap-2 items-center p-2">
+                    <div id="team-1" className="flex flex-col items-center">
+                      <h4 className="text-xs font-semibold text-center">
+                        {match.team_one}
+                      </h4>
+                      <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
+                        <img
+                          src={match.team_one_img}
+                          alt=""
+                          className="h-[70px] w-[60px]"
+                        />
                       </div>
                     </div>
+                    <p className="text-xs text-center">VS</p>
+                    <div id="team-2" className="flex flex-col items-center">
+                      <h4 className="text-xs font-semibold text-center">
+                        {match.team_two}
+                      </h4>
+                      <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">
+                        <img
+                          src={match.team_two_img}
+                          alt=""
+                          className="h-[70px] w-[60px]"
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-                    <div id="match-info" className="flex flex-col text-center">
-                      <h3 className="text-sm font-semibold uppercase">
-                        {match.league_type}
-                      </h3>
-                      <p className="text-gray-500 text-xs">
-                        {match.match_time}
+                  <div id="match-info" className="flex flex-col text-center">
+                    <h3 className="text-sm font-semibold uppercase">
+                      {match.league_type}
+                    </h3>
+                    <p className="text-gray-500 text-xs">{match.match_time}</p>
+                    <p className="text-xs">Stream 1</p>
+                  </div>
+
+                  <div className="p-2 border-l-2 border-gray-100 w-full flex justify-between items-center pl-2 text-xs">
+                    <div
+                      className={`w-max h-max p-1 rounded-md text-center shadow-md ${
+                        match.status === "active"
+                          ? "bg-green-400"
+                          : "bg-red-400"
+                      }`}
+                    >
+                      <p className=" text-white text-xs font-semibold">
+                        {match.status === "active" ? "Active" : "Inactive"}
                       </p>
-                      <p className="text-xs">Stream 1</p>
                     </div>
-
-                    <div className="p-2 border-l-2 border-gray-100 w-full flex justify-between items-center pl-2 text-xs">
-                      <div
-                        className={`w-max h-max p-1 rounded-md text-center shadow-md ${
-                          match.status === "active"
-                            ? "bg-green-400"
-                            : "bg-red-400"
-                        }`}
-                      >
-                        <p className=" text-white text-xs font-semibold">
-                          {match.status === "active" ? "Active" : "Inactive"}
-                        </p>
-                      </div>
-                      <div className="ml-3 p-1 flex gap-2 text-xl">
-                        <BsSortUpAlt
-                          className="cursor-pointer"
-                          onClick={() => handleMoveUp(index)}
-                        />
-                        <IoCopyOutline
-                          className="text-blue-400 cursor-pointer"
-                          onClick={() => handleDuplicate(match.id)}
-                        />
-                        <Link to={`/manage-live/edit?id=${match.id}`}>
-                          <FiEdit className="text-blue-400 cursor-pointer" />
-                        </Link>
-                        <RiDeleteBin5Line
-                          className="text-red-400 cursor-pointer"
-                          onClick={() => handleDelete(match.id)}
-                        />
-                        <MdDragIndicator className="cursor-grab" />
-                      </div>
+                    <div className="ml-3 p-1 flex gap-2 text-xl">
+                      <BsSortUpAlt
+                        className="cursor-pointer"
+                        onClick={() => handleMoveUp(index)}
+                      />
+                      <IoCopyOutline
+                        className="text-blue-400 cursor-pointer"
+                        onClick={() => handleDuplicate(match.id)}
+                      />
+                      <Link to={`/manage-live/edit?id=${match.id}`}>
+                        <FiEdit className="text-blue-400 cursor-pointer" />
+                      </Link>
+                      <RiDeleteBin5Line
+                        className="text-red-400 cursor-pointer"
+                        onClick={() => handleDelete(match.id)}
+                      />
+                      <MdDragIndicator className="cursor-grab" />
                     </div>
                   </div>
                 </div>

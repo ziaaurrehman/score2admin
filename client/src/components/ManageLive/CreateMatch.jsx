@@ -1,19 +1,16 @@
 import Location from "../global/Location";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createMatch } from "../../Api.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaRegArrowAltCircleUp } from "react-icons/fa";
-import Calendar from "react-calendar";
-import { format } from "date-fns";
 import Portal from "../pages/Portal.jsx";
 import { toast } from "react-toastify";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/dark.css";
 
 const CreateMatch = () => {
   const location = useLocation();
-  const [showCal, setShowCal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [isTime, setIsTime] = useState(false);
-  const [time, setTime] = useState({ hours: 12, minutes: 0, isPM: false });
+  const searchParams = new URLSearchParams(location.search);
 
   const defaultPortraitWatermark = {
     top: 1.1,
@@ -57,6 +54,36 @@ const CreateMatch = () => {
     ],
   });
 
+  // Populate values of search params if they exist
+  useEffect(() => {
+    const id = searchParams.get("id");
+    const date = searchParams.get("date");
+    const homeName = searchParams.get("homeName");
+    const homeLogo = searchParams.get("homeLogo");
+    const awayName = searchParams.get("awayName");
+    const awayLogo = searchParams.get("awayLogo");
+    const matchTitle = searchParams.get("matchTitle");
+    const sports = searchParams.get("sports");
+
+    setData((prevData) => ({
+      ...prevData,
+      sport_type: sports || prevData.sport_type,
+      match_title: matchTitle || prevData.match_title,
+      match_time: date || prevData.match_time,
+      fixture_id: id || prevData.fixture_id,
+      team_one: {
+        ...prevData.team_one,
+        name: homeName || prevData.team_one.name,
+        image: homeLogo || prevData.team_one.image,
+      },
+      team_two: {
+        ...prevData.team_two,
+        name: awayName || prevData.team_two.name,
+        image: awayLogo || prevData.team_two.image,
+      },
+    }));
+  }, []);
+
   const {
     sport_type,
     league_type,
@@ -92,38 +119,23 @@ const CreateMatch = () => {
 
   const navigation = useNavigate();
 
-  // show calendar handler
-  const handleShowCal = () => {
-    setShowCal((prevState) => !prevState);
-  };
-
   // set date handler
   const handleDateChange = (date) => {
-    const currentTime = new Date();
-    // Check if the selected date is greater than or equal to the current date
-    if (
-      date.toLocaleDateString("en-US", {
-        day: "numeric",
-        month: "numeric",
-        year: "numeric",
-      }) >=
-      currentTime.toLocaleDateString("en-US", {
-        day: "numeric",
-        month: "numeric",
-        year: "numeric",
-      })
-    ) {
-      date.setHours(currentTime.getHours(), currentTime.getMinutes());
-      const formattedDate = format(date, "yyyy-MM-dd hh:mm a");
-      setSelectedDate(formattedDate);
-      setData({
-        ...data,
-        match_time: formattedDate,
-      });
-    } else {
-      toast.error("Please select a valid date");
-    }
-    handleShowCal();
+    const selectedDateTime = new Date(date);
+
+    // Format the date and time
+    const formattedDateTime = selectedDateTime.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true, // Include AM/PM indicator
+    });
+    setData({
+      ...data,
+      match_time: formattedDateTime,
+    });
   };
 
   // scroll to top button
@@ -286,37 +298,15 @@ const CreateMatch = () => {
                   <label htmlFor="sports-type" className="text-xs font-bold">
                     Match Time <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
-                    className="cursor-pointer w-full block p-1 rounded-md border-2 border-gray-300"
-                    placeholder="YYYY-MM-DD HH:MM"
-                    name="match_time"
-                    value={selectedDate}
-                    onClick={handleShowCal}
+                  <Flatpickr
+                    className="border-2 border-gray-300 cursor-pointer w-full rounded-md p-1 text-black"
+                    options={{
+                      enableTime: true,
+                      dateFormat: "Y-m-d h:i K",
+                    }}
+                    value={data.match_time}
+                    onChange={handleDateChange}
                   />
-                  {showCal && (
-                    <Calendar
-                      className="absolute bg-purple-900 p-2 rounded-md text-white"
-                      onChange={handleDateChange}
-                      value={selectedDate}
-                    />
-                  )}
-                  {/* {time && (
-                    <div className="absolute w-max p-5">
-                      <label>
-                        Hours:
-                        <input type="number" min="1" max="12" />
-                      </label>
-                      <label>
-                        Minutes:
-                        <input type="number" min="0" max="59" />
-                      </label>
-                      <label>
-                        <input type="checkbox" />
-                        PM
-                      </label>
-                    </div>
-                  )} */}
                 </div>
 
                 <div className="p-2 w-[33.3%]">

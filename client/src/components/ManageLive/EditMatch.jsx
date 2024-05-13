@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 import { updateMatch, getMatch } from "../../Api.js";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaRegArrowAltCircleUp } from "react-icons/fa";
-import Calendar from "react-calendar";
-import { format } from "date-fns";
 import Portal from "../pages/Portal.jsx";
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/dark.css";
 
 const EditMatch = () => {
   const location = useLocation();
-  const [showCal, setShowCal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [isClicked, setIsClicked] = useState(false);
 
   const defaultPortraitWatermark = {
@@ -129,22 +127,23 @@ const EditMatch = () => {
 
   const navigation = useNavigate();
 
-  // show calendar handler
-  const handleShowCal = () => {
-    setShowCal((prevState) => !prevState);
-  };
-
   // set date handler
   const handleDateChange = (date) => {
-    const currentTime = new Date();
-    date.setHours(currentTime.getHours(), currentTime.getMinutes());
-    const formattedDate = format(date, "yyyy:MM:dd hh:mm a");
-    setSelectedDate(formattedDate);
+    const selectedDateTime = new Date(date);
+
+    // Format the date and time
+    const formattedDateTime = selectedDateTime.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true, // Include AM/PM indicator
+    });
     setData({
       ...data,
-      match_time: formattedDate,
+      match_time: formattedDateTime,
     });
-    setShowCal((prevState) => !prevState);
   };
 
   // scroll to top button
@@ -310,21 +309,15 @@ const EditMatch = () => {
                   <label htmlFor="sports-type" className="text-xs font-bold">
                     Match Time <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
-                    className="cursor-pointer w-full block p-1 rounded-md border-2 border-gray-300"
-                    placeholder="YYYY-MM-DD HH:MM"
-                    name="match_time"
-                    value={match_time || selectedDate}
-                    onClick={handleShowCal}
+                  <Flatpickr
+                    className="border-2 border-gray-300 cursor-pointer w-full rounded-md p-1 text-black"
+                    options={{
+                      enableTime: true,
+                      dateFormat: "Y-m-d h:i K",
+                    }}
+                    value={match_time}
+                    onChange={handleDateChange}
                   />
-                  {showCal && (
-                    <Calendar
-                      className="absolute bg-purple-900 p-2 rounded-md text-white"
-                      onChange={handleDateChange}
-                      value={selectedDate}
-                    />
-                  )}
                 </div>
 
                 <div className="p-2 w-[33.3%]">
@@ -640,6 +633,23 @@ const EditMatch = () => {
                               className="w-full block p-1 rounded-md border-2 border-gray-200"
                               name="stream_url"
                               value={streaming.stream_url}
+                              onChange={(e) => handleStreamingChange(e, index)}
+                            />
+                          </div>
+
+                          <div className="w-1/2">
+                            <label
+                              htmlFor="stream_thumbnail"
+                              className="text-xs font-bold"
+                            >
+                              Stream Thumbnail{" "}
+                              <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              className="w-full block p-1 rounded-md border-2 border-gray-200"
+                              name="stream_thumbnail"
+                              value={streaming.stream_thumbnail}
                               onChange={(e) => handleStreamingChange(e, index)}
                             />
                           </div>

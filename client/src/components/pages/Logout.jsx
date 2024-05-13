@@ -15,7 +15,6 @@ const Logout = () => {
       if (!value) {
         console.error("No user found!");
       } else {
-        toast.success("Logged out successfully!");
         const timeout = setTimeout(() => {
           navigate("/");
           logout();
