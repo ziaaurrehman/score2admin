@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { iosCreateUpdateSettings, getIosSettings } from "../../Api";
+//import { iosCreateUpdateSettings, getIosSettings } from "../../Api";
 import { FaTrash } from "react-icons/fa";
 import LoadingSemiCircle from "../global/LoadingSemiCircle";
 
@@ -23,42 +23,42 @@ const IosSettings = () => {
     description: "",
   });
 
-  useEffect(() => {
-    setLoading(true);
-    try {
-      getIosSettings()
-        .then((settings) => {
-          const general = settings.data.settings.general_settings;
-          const required = settings.data.settings.required_app;
-          if (general && required) {
-            setData({
-              ios_privacy_policy: general.ios_privacy_policy || "",
-              ios_terms_conditions: general.ios_terms_conditions || "",
-              ios_app_share_link: general.ios_app_share_link || "",
-              app_default_page: general.app_default_page || "",
-              notification_type: general.notification_type || "",
-              firebase_server_key: general.firebase_server_key || "",
-              firebase_topic: general.firebase_topic || "",
-              required_enable_app: required.required_enable_app || "",
-              application_id: required.application_id || "",
-              app_url: required.app_url || "",
-              app_name: required.app_name || "",
-              description: required.description || "",
-            });
-            setPreviewImage(required.logo);
-          }
-        })
-        .catch((err) => {
-          console.error("Error occurred: ", err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } catch (err) {
-      console.error("Error occurred: ", err);
-      setLoading(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   try {
+  //     getIosSettings()
+  //       .then((settings) => {
+  //         const general = settings.data.settings.general_settings;
+  //         const required = settings.data.settings.required_app;
+  //         if (general && required) {
+  //           setData({
+  //             ios_privacy_policy: general.ios_privacy_policy || "",
+  //             ios_terms_conditions: general.ios_terms_conditions || "",
+  //             ios_app_share_link: general.ios_app_share_link || "",
+  //             app_default_page: general.app_default_page || "",
+  //             notification_type: general.notification_type || "",
+  //             firebase_server_key: general.firebase_server_key || "",
+  //             firebase_topic: general.firebase_topic || "",
+  //             required_enable_app: required.required_enable_app || "",
+  //             application_id: required.application_id || "",
+  //             app_url: required.app_url || "",
+  //             app_name: required.app_name || "",
+  //             description: required.description || "",
+  //           });
+  //           setPreviewImage(required.logo);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error occurred: ", err);
+  //       })
+  //       .finally(() => {
+  //         setLoading(false);
+  //       });
+  //   } catch (err) {
+  //     console.error("Error occurred: ", err);
+  //     setLoading(false);
+  //   }
+  // }, []);
 
   // Handle Drag enter
   const {
@@ -138,16 +138,16 @@ const IosSettings = () => {
   };
   const handleSave = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await iosCreateUpdateSettings(handleFormData(data));
-      console.log(res);
-      if (res) {
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error?.message);
-    }
+    // setLoading(true);
+    // try {
+    //   const res = await iosCreateUpdateSettings(handleFormData(data));
+    //   console.log(res);
+    //   if (res) {
+    //     setLoading(false);
+    //   }
+    // } catch (error) {
+    //   console.log(error?.message);
+    // }
   };
   return (
     <div
