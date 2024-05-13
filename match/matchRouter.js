@@ -14,11 +14,11 @@ import {
 const matchRouter = express.Router();
 
 // Protected routes
-matchRouter.post("/mobile-view", CreateOrUpdateMobileView);
-matchRouter.post("/create-match", createMatch);
-matchRouter.put("/update-match/:id", updateMatch);
-matchRouter.delete("/delete-match/:id", deleteMatchById);
-matchRouter.post("/duplicate/:id", duplicateMatchById);
+matchRouter.post("/mobile-view", authMiddleware, CreateOrUpdateMobileView);
+matchRouter.post("/create-match", authMiddleware, createMatch);
+matchRouter.put("/update-match/:id", authMiddleware, updateMatch);
+matchRouter.delete("/delete-match/:id", authMiddleware, deleteMatchById);
+matchRouter.post("/duplicate/:id", authMiddleware, duplicateMatchById);
 
 // Public routes
 matchRouter.get("/get-view", getMobileView);

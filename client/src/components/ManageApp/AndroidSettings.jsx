@@ -34,7 +34,9 @@ const AndroidSettings = () => {
             android_privacy_policy: general.android_privacy_policy,
             android_terms_conditions: general.android_terms_conditions,
             android_app_share_link: general.android_app_share_link,
-            app_default_page: general.app_default_page,
+            android_default_page: general.android_default_page,
+            ios_app_share_link: general.ios_app_share_link,
+            ios_default_page: general.ios_default_page,
             notification_type: general.notification_type,
             firebase_server_key: general.firebase_server_key,
             firebase_topic: general.firebase_topic,
@@ -63,7 +65,9 @@ const AndroidSettings = () => {
     android_privacy_policy,
     android_terms_conditions,
     android_app_share_link,
-    app_default_page,
+    android_default_page,
+    ios_app_share_link,
+    ios_default_page,
     notification_type,
     firebase_server_key,
     firebase_topic,
@@ -125,7 +129,9 @@ const AndroidSettings = () => {
       values?.android_terms_conditions
     );
     formData.append("android_app_share_link", values?.android_app_share_link);
-    formData.append("app_default_page", values?.app_default_page);
+    formData.append("android_default_page", values?.android_default_page);
+    formData.append("ios_app_share_link", values?.ios_app_share_link);
+    formData.append("ios_default_page", values?.ios_default_page);
     formData.append("notification_type", values?.notification_type);
     formData.append("firebase_server_key", values?.firebase_server_key);
     formData.append("firebase_topic", values?.firebase_topic);
@@ -162,10 +168,11 @@ const AndroidSettings = () => {
         <div className="flex flex-col gap-2">
           <div className="w-full bg-white rounded-md p-2 flex flex-col gap-2">
             <h2 className="text-sm font-semibold">GENERAL SETTINGS</h2>
+
             <div className="w-full flex gap-2">
-              <div className="w-1/4">
+              <div className="w-1/2">
                 <label className="text-xs font-bold">
-                  Android Privacy Policy
+                  Android & iOS Privacy Policy
                 </label>
                 <input
                   type="text"
@@ -177,9 +184,9 @@ const AndroidSettings = () => {
                 />
               </div>
 
-              <div className="w-1/4">
+              <div className="w-1/2">
                 <label className="text-xs font-bold">
-                  Android Terms Conditions
+                  Android & iOS Terms and Conditions
                 </label>
                 <input
                   type="text"
@@ -190,8 +197,10 @@ const AndroidSettings = () => {
                   placeholder="N/A"
                 />
               </div>
+            </div>
 
-              <div className="w-1/4">
+            <div className="w-full flex gap-2">
+              <div className="w-1/2">
                 <label className="text-xs font-bold">
                   Android App Share Link
                 </label>
@@ -205,11 +214,42 @@ const AndroidSettings = () => {
                 />
               </div>
 
-              <div className="w-1/4">
-                <label className="text-xs font-bold">App Default Page</label>
+              <div className="w-1/2">
+                <label className="text-xs font-bold">
+                  Android Default Page
+                </label>
                 <select
-                  value={app_default_page}
-                  name="app_default_page"
+                  value={android_default_page}
+                  name="android_default_page"
+                  onChange={handleChange}
+                  className="border-2 border-gray-300 rounded-md py-[0.2rem] text-xs w-[100%]"
+                  placeholder="Home"
+                >
+                  <option value="">Select One</option>
+                  <option value="Live">Live</option>
+                  <option value="Home">Home</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="w-full flex gap-2">
+              <div className="w-1/2">
+                <label className="text-xs font-bold">iOS App Share Link</label>
+                <input
+                  type="text"
+                  value={ios_app_share_link}
+                  name="ios_app_share_link"
+                  onChange={handleChange}
+                  className="border-2 block w-full rounded-md border-gray-200 p-1 text-xs"
+                  placeholder="N/A"
+                />
+              </div>
+
+              <div className="w-1/2">
+                <label className="text-xs font-bold">iOS Default Page</label>
+                <select
+                  value={ios_default_page}
+                  name="ios_default_page"
                   onChange={handleChange}
                   className="border-2 border-gray-300 rounded-md py-[0.2rem] text-xs w-[100%]"
                   placeholder="Home"

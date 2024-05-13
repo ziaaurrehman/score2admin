@@ -94,7 +94,7 @@ const MatchList = ({ isGrid, matchesArray }) => {
                       id="team-2"
                       className="flex gap-5 justify-end items-center w-[35%]"
                     >
-                      <h4 className="text-sm font-semibold">
+                      <h4 className="text-sm font-semibold flex text-end w-max">
                         {match.team_two}
                       </h4>
                       <div className="bg-white rounded-md border-2 border-gray-100 w-max p-2">

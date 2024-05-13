@@ -3,6 +3,7 @@ import express from "express";
 import multer from "multer";
 import fs from "fs";
 import News from "./newsModel.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 const newsUpdateRoute = express.Router();
 
 const storage = multer.diskStorage({
@@ -39,6 +40,7 @@ const upload = multer({
 newsUpdateRoute.put(
   "/news/:id",
   upload.single("filename"),
+  authMiddleware,
   async (req, res) => {
     const { title, category, image_url, publish_date, status, source_type } =
       req.body;

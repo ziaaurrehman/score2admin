@@ -4,11 +4,16 @@ import {
   deleteCountry,
   createAndUpdateCountryArray,
 } from "./blockController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const blockCountry = express.Router();
 
-blockCountry.post("/block-countries", createAndUpdateCountryArray);
-blockCountry.delete("/unblock-country/:country", deleteCountry);
+blockCountry.post(
+  "/block-countries",
+  authMiddleware,
+  createAndUpdateCountryArray
+);
+blockCountry.delete("/unblock-country/:country", authMiddleware, deleteCountry);
 blockCountry.get("/get-block-countries", getCountryArray);
 
 export default blockCountry;

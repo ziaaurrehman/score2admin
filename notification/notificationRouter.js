@@ -5,12 +5,28 @@ import {
   sendNotification,
 } from "./notificationController.js";
 import express from "express";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const notificationRouter = express.Router();
 
+// Public Route
 notificationRouter.get("/get-all-notifications", getAllNotifications);
-notificationRouter.post("/create-notification", createNotification);
-notificationRouter.delete("/delete-notification/:id", deleteNotification);
-notificationRouter.post("/send-notification/:id", sendNotification);
+
+// Protected Route
+notificationRouter.post(
+  "/create-notification",
+  authMiddleware,
+  createNotification
+);
+notificationRouter.delete(
+  "/delete-notification/:id",
+  authMiddleware,
+  deleteNotification
+);
+notificationRouter.post(
+  "/send-notification/:id",
+  authMiddleware,
+  sendNotification
+);
 
 export default notificationRouter;

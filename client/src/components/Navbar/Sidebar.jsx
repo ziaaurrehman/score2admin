@@ -15,7 +15,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         } transition-opacity`}
       >
         <img
-          className="font-bold rounded-full w-[45px] h-[45px] text-white text-xl flex justify-center items-center m-1 cursor-pointer shadow-sm p-1 border-2 border-black"
+          className="font-bold rounded-full w-[45px] h-[45px] text-white text-xl flex justify-center items-center m-1 cursor-pointer shadow-sm p-[0.125rem] border-2 border-blue-500"
           src={Football}
           alt="sports-dashboard"
         />

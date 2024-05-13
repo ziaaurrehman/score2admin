@@ -4,8 +4,10 @@ import User from "../Navbar/User.jsx";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
+import LoadingBar from "react-top-loading-bar";
 
 const Portal = ({ children }) => {
+  const [loading, setLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({});
@@ -13,7 +15,6 @@ const Portal = ({ children }) => {
 
   const handleOpen = () => {
     setOpen((prevState) => !prevState);
-    console.log(open);
   };
 
   const toggleSidebar = () => {
@@ -28,6 +29,18 @@ const Portal = ({ children }) => {
     getUser();
   }, []);
 
+  // This displays the loading bar on the top of the screen when a route changes
+  useEffect(() => {
+    setLoading(true);
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => {
+      clearTimeout(delay);
+    };
+  }, [location.pathname]);
+
   const getUser = () => {
     const value = JSON.parse(localStorage.getItem("user"));
     if (value) {
@@ -41,6 +54,7 @@ const Portal = ({ children }) => {
     <div className="flex w-full">
       {user ? (
         <>
+          <LoadingBar color="blue" progress={loading ? 100 : 0} height="4px" />
           <div>
             <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
           </div>

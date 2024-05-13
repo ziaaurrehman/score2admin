@@ -2,6 +2,7 @@ import path from "path";
 import express from "express";
 import multer from "multer";
 import News from "./newsModel.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const newsRoute = express.Router();
 
@@ -36,70 +37,75 @@ const upload = multer({
   },
 });
 
-newsRoute.post("/create/news", upload.single("filename"), async (req, res) => {
-  const { title, category, image_url, publish_date, status, source_type } =
-    req.body;
-  const filename = req?.file?.filename;
-  if (title && category && publish_date && status && source_type) {
-    try {
-      if (source_type.own || source_type.other) {
-        if (filename || image_url) {
-          if (filename) {
-            const news = new News({
-              title: title,
-              category: category,
-              status: status,
-              publish_date: publish_date,
-              source_type: source_type,
-              image: filename,
-            });
-            await news.save();
+newsRoute.post(
+  "/create/news",
+  upload.single("filename"),
+  authMiddleware,
+  async (req, res) => {
+    const { title, category, image_url, publish_date, status, source_type } =
+      req.body;
+    const filename = req?.file?.filename;
+    if (title && category && publish_date && status && source_type) {
+      try {
+        if (source_type.own || source_type.other) {
+          if (filename || image_url) {
+            if (filename) {
+              const news = new News({
+                title: title,
+                category: category,
+                status: status,
+                publish_date: publish_date,
+                source_type: source_type,
+                image: filename,
+              });
+              await news.save();
 
-            res.status(200).json({
-              success: true,
-              message: "News created successfully",
-            });
+              res.status(200).json({
+                success: true,
+                message: "News created successfully",
+              });
+            } else {
+              const news = new News({
+                title: title,
+                category: category,
+                status: status,
+                publish_date: publish_date,
+                source_type: source_type,
+                image_url: image_url,
+              });
+              await news.save();
+
+              res.status(200).json({
+                success: true,
+                message: "News created successfully",
+              });
+            }
           } else {
-            const news = new News({
-              title: title,
-              category: category,
-              status: status,
-              publish_date: publish_date,
-              source_type: source_type,
-              image_url: image_url,
-            });
-            await news.save();
-
-            res.status(200).json({
-              success: true,
-              message: "News created successfully",
+            res.status(400).json({
+              success: false,
+              message: "Please provide news image type",
             });
           }
         } else {
           res.status(400).json({
             success: false,
-            message: "Please provide news image type",
+            message: "Source type required",
           });
         }
-      } else {
+      } catch (error) {
+        console.log(error, "error");
         res.status(400).json({
           success: false,
-          message: "Source type required",
+          message: `${error?.message}`,
         });
       }
-    } catch (error) {
-      console.log(error, "error");
+    } else {
       res.status(400).json({
         success: false,
-        message: `${error?.message}`,
+        message: "something wents wrong",
       });
     }
-  } else {
-    res.status(400).json({
-      success: false,
-      message: "something wents wrong",
-    });
   }
-});
+);
 
 export default newsRoute;

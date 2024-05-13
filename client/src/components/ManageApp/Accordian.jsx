@@ -1,17 +1,15 @@
 import { useState } from "react";
 import SettingForms from "./SettingForms";
-import { IoLogoAndroid } from "react-icons/io";
+import { MdOutlineAppSettingsAlt } from "react-icons/md";
 import { FaAppStoreIos } from "react-icons/fa";
-import { FaApple } from "react-icons/fa";
+//import { FaApple } from "react-icons/fa";
 import { SiGoogleads } from "react-icons/si";
 import { MdBlock } from "react-icons/md";
 
 const Accordion = ({ title, form }) => {
   const getImgComponent = () => {
-    if (title === "Android Settings") {
-      return <IoLogoAndroid className="h-10 w-10" />;
-    } else if (title === "iOS Settings") {
-      return <FaApple className="h-10 w-10" />;
+    if (title === "Mobile App Settings") {
+      return <MdOutlineAppSettingsAlt className="h-10 w-10" />;
     } else if (title === "App Information") {
       return <FaAppStoreIos className="w-10 h-10" />;
     } else if (title === "Ads Control") {

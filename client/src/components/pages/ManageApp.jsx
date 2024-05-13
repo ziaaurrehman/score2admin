@@ -13,15 +13,15 @@ const ManageApp = () => {
       img: "https://placehold.jp/300x300.png",
     },
     {
-      title: "Android Settings",
+      title: "Mobile App Settings",
       form: "AndroidSettings",
       img: "https://placehold.jp/300x300.png",
     },
-    {
-      title: "iOS Settings",
-      form: "iOSSettings",
-      img: "https://placehold.jp/300x300.png",
-    },
+    // {
+    //   title: "iOS Settings",
+    //   form: "iOSSettings",
+    //   img: "https://placehold.jp/300x300.png",
+    // },
     {
       title: "Ads Control",
       form: "AdsControl",

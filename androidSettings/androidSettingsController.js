@@ -58,7 +58,9 @@ const createAndUpdateAndroid = async (req, res) => {
     android_privacy_policy,
     android_terms_conditions,
     android_app_share_link,
-    app_default_page,
+    android_default_page,
+    ios_app_share_link,
+    ios_default_page,
     notification_type,
     firebase_server_key,
     firebase_topic,
@@ -76,7 +78,9 @@ const createAndUpdateAndroid = async (req, res) => {
       (android_privacy_policy ||
         android_terms_conditions ||
         android_app_share_link ||
-        app_default_page ||
+        android_default_page ||
+        ios_app_share_link ||
+        ios_default_page ||
         required_enable_app ||
         notification_type ||
         firebase_server_key ||
@@ -99,8 +103,13 @@ const createAndUpdateAndroid = async (req, res) => {
           android_app_share_link:
             android_app_share_link ||
             android.general_settings.android_app_share_link,
-          app_default_page:
-            app_default_page || android.general_settings.app_default_page,
+          android_default_page:
+            android_default_page ||
+            android.general_settings.android_default_page,
+          ios_app_share_link:
+            ios_app_share_link || android.general_settings.ios_app_share_link,
+          ios_default_page:
+            ios_default_page || android.general_settings.ios_default_page,
           notification_type:
             notification_type || android.general_settings.notification_type,
           firebase_server_key:
@@ -145,7 +154,9 @@ const createAndUpdateAndroid = async (req, res) => {
           android_privacy_policy: android_privacy_policy,
           android_terms_conditions: android_terms_conditions,
           android_app_share_link: android_app_share_link,
-          app_default_page: app_default_page,
+          android_default_page: android_default_page,
+          ios_app_share_link: ios_app_share_link,
+          ios_default_page: ios_default_page,
           notification_type: notification_type,
           firebase_server_key: firebase_server_key,
           firebase_topic: firebase_topic,

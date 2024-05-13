@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const prod = "https://sportsdashboard.onrender.com/api/";
 const local = "http://localhost:5050/api";
 const axios = instance.create({
-  baseURL: local,
+  baseURL: prod,
   headers: {
     "Content-Type": "application/json",
   },
@@ -27,7 +27,7 @@ axios.interceptors.request.use(
     const user = JSON.parse(localStorage.getItem("user"));
     if (user?.token && user?.userId) {
       // Set token and userId from local storage to headers
-      config.headers.Authorization = `Bearer ${user.token}`;
+      config.headers.Authorization = user.token;
       config.headers.UserId = user.userId;
       return config;
     }

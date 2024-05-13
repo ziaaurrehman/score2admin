@@ -15,7 +15,15 @@ const androidSettingSchema = mongoose.Schema({
       type: String,
       trim: true,
     },
-    app_default_page: {
+    android_default_page: {
+      type: String,
+      trim: true,
+    },
+    ios_app_share_link: {
+      type: String,
+      trim: true,
+    },
+    ios_default_page: {
       type: String,
       trim: true,
     },

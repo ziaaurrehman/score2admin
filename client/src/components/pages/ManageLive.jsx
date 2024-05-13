@@ -39,9 +39,9 @@ const ManageLive = () => {
           match_time: match.match_time,
           sports_type: match.sport_type,
           team_one: match.team_one.name,
-          team_one_img: match.team_two.image,
+          team_one_img: match.team_one.image,
           team_two: match.team_two.name,
-          team_two_img: match.team_one.image,
+          team_two_img: match.team_two.image,
           stream_count: match.streaming_source.length,
         }));
         setMatches(extractedMatches);
@@ -156,7 +156,7 @@ const ManageLive = () => {
               </div>
             </div>
           </div>
-          <h3 className="text-xl m-3">ALL MATCHES</h3>
+          <h3 className="text-xl m-3 font-semibold">ALL MATCHES</h3>
           {loading ? (
             <div className="mt-3">
               <LoadingBall />
