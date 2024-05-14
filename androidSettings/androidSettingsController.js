@@ -5,7 +5,7 @@ import AndroidSetting from "./androidModel.js";
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "androidSettingupload/");
+    cb(null, "/androidSettingupload/");
   },
   filename(req, file, cb) {
     cb(null, `${Date.now()}.${file.originalname}`);
@@ -197,6 +197,8 @@ const getAndroidSettings = async (req, res) => {
 
     if (androidSetting) {
       const imageURL = `${baseURL}/androidSettingupload/${androidSetting.required_app.logo}`;
+      console.log(baseURL);
+      console.log(imageURL);
       androidSetting.required_app.logo = imageURL;
       res.status(200).json({
         message: "Android setting found",
