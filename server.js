@@ -34,7 +34,7 @@ dotenv.config();
 const MONGO_DB = process.env.MONGO_DB;
 connectDb(MONGO_DB);
 
-app.use("/api", router);
+app.use("/api", router); // User end points
 app.use("/api/notifications", notificationRouter);
 app.use("/api/manage-app/block", blockRoutes);
 app.use("/api/manage-app/app-information", appInformationRouter);
