@@ -3,10 +3,6 @@ import multer from "multer";
 import fs from "fs";
 import AppInformation from "./appInformationModel.js";
 
-let baseURL = "http://localhost:5050";
-if (process.env.NODE_ENV === "PRODUCTION") {
-  baseURL = "https://sportsdashboard.onrender.com";
-}
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     cb(null, "appInformationupload/");
@@ -170,6 +166,10 @@ const removeImage = (file) => {
 const getAppInformationSettings = async (req, res) => {
   try {
     const appSettings = await AppInformation.findOne();
+    let baseURL = "http://localhost:5050";
+    if (process.env.NODE_ENV === "PRODUCTION") {
+      baseURL = "https://sportsdashboard.onrender.com";
+    }
     if (appSettings) {
       // Create image url
       const imageURL = `${baseURL}/appInformationupload/${appSettings.app_logo}`;

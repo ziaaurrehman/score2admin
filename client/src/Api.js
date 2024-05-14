@@ -793,6 +793,7 @@ export const getLeagues = async () => {
 };
 export const saveLeagues = async (data) => {
   try {
+    console.log(data);
     const res = await axios.post(`/fixture/set-leagues`, data);
     toast.success("League saved!");
     return res;

@@ -3,11 +3,6 @@ import multer from "multer";
 import fs from "fs";
 import AndroidSetting from "./androidModel.js";
 
-let baseURL = "http://localhost:5050";
-if (process.env.NODE_ENV === "PRODUCTION") {
-  baseURL = "https://sportsdashboard.onrender.com";
-}
-
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     cb(null, "androidSettingupload/");
@@ -194,6 +189,12 @@ const createAndUpdateAndroid = async (req, res) => {
 const getAndroidSettings = async (req, res) => {
   try {
     const androidSetting = await AndroidSetting.findOne();
+
+    let baseURL = "http://localhost:5050";
+    if (process.env.NODE_ENV === "PRODUCTION") {
+      baseURL = "https://sportsdashboard.onrender.com";
+    }
+
     if (androidSetting) {
       const imageURL = `${baseURL}/androidSettingupload/${androidSetting.required_app.logo}`;
       androidSetting.required_app.logo = imageURL;

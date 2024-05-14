@@ -81,7 +81,7 @@ const Portal = ({ children }) => {
                   <User name={"moiz khan"} imgSrc={user.img} />
                   {open ? (
                     <Link
-                      className="absolute right-0 p-2 bg-white rounded-md z-10 min-w-[100px] flex gap-2 items-center justify-center font-sm transition hover:text-gray-500"
+                      className="absolute right-0 p-2 bg-white rounded-md z-10 min-w-[100px] flex gap-2 items-center justify-center font-sm transition hover:text-red-600"
                       to="/logout"
                     >
                       <CiLogout className="text-xl" />
