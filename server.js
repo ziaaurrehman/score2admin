@@ -16,7 +16,7 @@ import blockRoutes from "./blockedCountries/blockRoutes.js";
 import notificationRouter from "./notification/notificationRouter.js";
 import AdRoutes from "./AdsControl/AdRoutes.js";
 import androidSettingRouter from "./androidSettings/androidSettingsRoutes.js";
-import iosSettingRouter from "./iosSettings/iosSettingsRoutes.js";
+//import iosSettingRouter from "./iosSettings/iosSettingsRoutes.js";
 import matchRouter from "./match/matchRouter.js";
 import administratorSettings from "./AdminSettings/adminRoutes.js";
 import fixtureRouter from "./Leagues_Fixtures/fixtureRoutes.js";
@@ -54,10 +54,14 @@ app.use(
   "/androidSettingUpload",
   express.static(path.join(__dirname, "/androidSettingUpload"))
 );
+
+//log direname
+console.log(`\n${__dirname}\androidSettingUpload`.red);
 app.use(
   "/iosSettingUpload",
   express.static(path.join(__dirname, "/iosSettingUpload"))
 );
+
 app.use("/api", profileRoute);
 app.use("/api", newsRoute);
 app.use("/api", newsUpdateRoute);
