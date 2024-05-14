@@ -54,13 +54,10 @@ app.use(
   "/androidSettingUpload",
   express.static(path.join(__dirname, "/androidSettingUpload"))
 );
-
-//log direname
-console.log(`\n${__dirname}\androidSettingUpload`.red);
-app.use(
-  "/iosSettingUpload",
-  express.static(path.join(__dirname, "/iosSettingUpload"))
-);
+// app.use(
+//   "/iosSettingUpload",
+//   express.static(path.join(__dirname, "/iosSettingUpload"))
+// );
 
 app.use("/api", profileRoute);
 app.use("/api", newsRoute);

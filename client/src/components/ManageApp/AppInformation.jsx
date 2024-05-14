@@ -235,7 +235,7 @@ export const AppInformation = () => {
             </div>
           </div>
 
-          <div className="p-1">
+          {/* <div className="p-1">
             <h3 className="my-1 ml-1 text-sm font-bold">App Logo</h3>
             {previewImage ? (
               <div className="bg-gray-200 rounded-md p-3 flex gap-3 items-center">
@@ -292,7 +292,6 @@ export const AppInformation = () => {
               </div>
             )}
           </div>
-
           <div className="p-2">
             <label className="font-bold text-sm">Status</label>
             <input
@@ -306,7 +305,8 @@ export const AppInformation = () => {
             <label htmlFor="switch" id="toggle-btn">
               Toggle
             </label>
-          </div>
+          </div> */}
+
           <div className="flex justify-end">
             <button
               className="text-sm my-4 font-semibold right-12 bottom-5 bg-blue-600 py-2 px-4 text-white uppercase hover:bg-blue-800 transition active:scale-95 rounded-md shadow-lg"
