@@ -47,11 +47,6 @@ const NavList = () => {
       path: "/selected-leagues",
     },
     {
-      name: "Highlights",
-      icon: <BsCameraReelsFill />,
-      path: "/highlights",
-    },
-    {
       name: "News",
       icon: <FaNewspaper />,
       path: "/news",
