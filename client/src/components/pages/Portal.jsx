@@ -35,11 +35,8 @@ const Portal = ({ children }) => {
         navigation("/");
       }
     };
-    getUser();
-  }, [navigation]);
 
-  // This displays the loading bar on the top of the screen when a route changes
-  useEffect(() => {
+    getUser();
     setLoading(true);
     const delay = setTimeout(() => {
       setLoading(false);
@@ -48,7 +45,7 @@ const Portal = ({ children }) => {
     return () => {
       clearTimeout(delay);
     };
-  }, [location.pathname]);
+  }, [navigation, location.pathname]);
 
   // If user is null, don't render anything (since the user will be redirected)
   if (user === null) {
