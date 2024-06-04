@@ -22,6 +22,7 @@ const Fixtures = () => {
         const dailyFixtures = await getFixtures({
           date: selectedDate,
         });
+        console.log(dailyFixtures);
         setFixtures(dailyFixtures);
       } catch (err) {
         console.error("Error: ", err);
@@ -52,8 +53,12 @@ const Fixtures = () => {
               <div className="mt-5">
                 <LoadingBall />
               </div>
-            ) : (
+            ) : fixtures ? (
               <LeagueFixtures fixture={fixtures.fixtures} />
+            ) : (
+              <div className="text-center w-full text-bold text-red-500 font-semibold">
+                Could not fetch data
+              </div>
             )}
           </div>
         </div>

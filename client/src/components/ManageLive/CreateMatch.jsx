@@ -10,8 +10,6 @@ import "flatpickr/dist/themes/dark.css";
 
 const CreateMatch = () => {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-
   const defaultPortraitWatermark = {
     top: 1.1,
     bottom: null,
@@ -56,33 +54,36 @@ const CreateMatch = () => {
 
   // Populate values of search params if they exist
   useEffect(() => {
-    const id = searchParams.get("id");
-    const date = searchParams.get("date");
-    const homeName = searchParams.get("homeName");
-    const homeLogo = searchParams.get("homeLogo");
-    const awayName = searchParams.get("awayName");
-    const awayLogo = searchParams.get("awayLogo");
-    const matchTitle = searchParams.get("matchTitle");
-    const sports = searchParams.get("sports");
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams) {
+      const id = searchParams.get("id");
+      const date = searchParams.get("date");
+      const homeName = searchParams.get("homeName");
+      const homeLogo = searchParams.get("homeLogo");
+      const awayName = searchParams.get("awayName");
+      const awayLogo = searchParams.get("awayLogo");
+      const matchTitle = searchParams.get("matchTitle");
+      const sports = searchParams.get("sports");
 
-    setData((prevData) => ({
-      ...prevData,
-      sport_type: sports || prevData.sport_type,
-      match_title: matchTitle || prevData.match_title,
-      match_time: date || prevData.match_time,
-      fixture_id: id || prevData.fixture_id,
-      team_one: {
-        ...prevData.team_one,
-        name: homeName || prevData.team_one.name,
-        image: homeLogo || prevData.team_one.image,
-      },
-      team_two: {
-        ...prevData.team_two,
-        name: awayName || prevData.team_two.name,
-        image: awayLogo || prevData.team_two.image,
-      },
-    }));
-  }, []);
+      setData((prevData) => ({
+        ...prevData,
+        sport_type: sports || prevData.sport_type,
+        match_title: matchTitle || prevData.match_title,
+        match_time: date || prevData.match_time,
+        fixture_id: id || prevData.fixture_id,
+        team_one: {
+          ...prevData.team_one,
+          name: homeName || prevData.team_one.name,
+          image: homeLogo || prevData.team_one.image,
+        },
+        team_two: {
+          ...prevData.team_two,
+          name: awayName || prevData.team_two.name,
+          image: awayLogo || prevData.team_two.image,
+        },
+      }));
+    }
+  }, [location.search]);
 
   const {
     sport_type,
@@ -121,20 +122,9 @@ const CreateMatch = () => {
 
   // set date handler
   const handleDateChange = (date) => {
-    const selectedDateTime = new Date(date);
-
-    // Format the date and time
-    const formattedDateTime = selectedDateTime.toLocaleString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true, // Include AM/PM indicator
-    });
     setData({
       ...data,
-      match_time: formattedDateTime,
+      match_time: date[0], // Directly set the date from Flatpickr
     });
   };
 

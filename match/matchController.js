@@ -1,6 +1,8 @@
 import Matches from "./matchModel.js";
 import MobileView from "./viewModel.js";
+import MatchOrder from "./matchOrder.js";
 
+// Create match
 const createMatch = async (req, res) => {
   const {
     sport_type,
@@ -25,6 +27,9 @@ const createMatch = async (req, res) => {
     streaming_source
   ) {
     try {
+      const documentCount = (await Matches.countDocuments({})) - 1;
+      const newOrder = documentCount + 1;
+
       const newMatch = new Matches({
         sport_type: sport_type,
         match_time: match_time,
@@ -36,6 +41,7 @@ const createMatch = async (req, res) => {
         team_one: team_one,
         team_two: team_two,
         streaming_source: streaming_source,
+        order: newOrder,
       });
       const match = await newMatch.save();
 
@@ -59,6 +65,7 @@ const createMatch = async (req, res) => {
   }
 };
 
+// Get paginated matches
 const getMatches = async (req, res) => {
   // const page = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.perPage) || 10;
@@ -94,6 +101,7 @@ const getMatches = async (req, res) => {
   }
 };
 
+// Get match by ID
 const getMatchById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -113,6 +121,7 @@ const getMatchById = async (req, res) => {
   }
 };
 
+// Update a match
 const updateMatch = async (req, res) => {
   const { id } = req.params;
   const {
@@ -177,6 +186,7 @@ const updateMatch = async (req, res) => {
   }
 };
 
+// Delete match by ID
 const deleteMatchById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -200,6 +210,7 @@ const deleteMatchById = async (req, res) => {
   }
 };
 
+// Duplicate a match
 const duplicateMatchById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -242,6 +253,7 @@ const duplicateMatchById = async (req, res) => {
   }
 };
 
+// Create / View Mobile view
 const CreateOrUpdateMobileView = async (req, res) => {
   const { mobile_view } = req.body;
   try {
@@ -277,6 +289,40 @@ const getMobileView = async (req, res) => {
   }
 };
 
+// Create / Update order list
+const updateNumbersArray = async (req, res) => {
+  try {
+    const { numbers } = req.body;
+
+    // Check if the numbers array is provided
+    if (!numbers || !Array.isArray(numbers)) {
+      return res.status(400).json({ error: "Invalid numbers array" });
+    }
+
+    // Find the existing document or create a new one
+    const order = await MatchOrder.findOneAndUpdate(
+      {},
+      { numbers },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    res.status(200).json({ status: true, data: order });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+// get matchOrder
+const getMatchOrder = async (req, res) => {
+  try {
+    const order = await MatchOrder.findOne();
+    res.status(200).json({ status: true, data: order });
+  } catch (err) {
+    res.status(500).json({ status: false, message: "Internal server error" });
+  }
+};
+
 export {
   createMatch,
   getMatches,
@@ -286,4 +332,6 @@ export {
   duplicateMatchById,
   CreateOrUpdateMobileView,
   getMobileView,
+  updateNumbersArray,
+  getMatchOrder,
 };

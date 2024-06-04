@@ -8,20 +8,45 @@ import { useEffect, useState } from "react";
 import { Reorder } from "framer-motion";
 import { deleteMatch, duplicateMatch } from "../../Api.js";
 import LoadingBall from "../global/LoadingBall.jsx";
+import { updateMatchOrder, getOrder } from "../../Api.js";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
 const MatchList = ({ isGrid, matchesArray }) => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [runCount, setRunCount] = useState(0);
+
   useEffect(() => {
     setLoading(true);
-    try {
-      setMatches(matchesArray);
-    } catch (err) {
-      console.error("Error: ", err);
-    } finally {
-      setLoading(false);
-    }
+    const fetchData = async () => {
+      try {
+        const res = await myOrder();
+        if (!res) {
+          const orderValues = matchesArray.map((item) => item.order);
+          const req = updateMatchOrder(orderValues);
+          console.log(req.status);
+          setMatches(matchesArray);
+        } else {
+          const arrangedMatches = arrangeByOrder(matchesArray.slice(), res);
+          setMatches(arrangedMatches);
+        }
+      } catch (err) {
+        console.error("Error: ", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [matchesArray]);
+
+  // Arranging items
+  function arrangeByOrder(matchesArray, order) {
+    const orderMap = new Map(matchesArray.map((item) => [item.order, item]));
+    // Arrange the items based on the order array
+    return order.map((orderId) => orderMap.get(orderId)).filter((item) => item);
+  }
 
   const handleMoveUp = (index) => {
     if (index > 0) {
@@ -33,6 +58,37 @@ const MatchList = ({ isGrid, matchesArray }) => {
       setMatches(newItems);
     }
   };
+
+  const myOrder = async () => {
+    const res = await getOrder();
+    return res;
+  };
+
+  useEffect(() => {
+    if (runCount < 3) {
+      setRunCount((prevRunCount) => prevRunCount + 1);
+    }
+    if (runCount >= 2) {
+      const timeoutId = setTimeout(async () => {
+        const newOrder = matches.map((item) => item.order);
+        const res = await updateMatchOrder(newOrder);
+        console.log(res.status);
+        toast.success(`List reordered successfully`, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }, 1000);
+
+      return () => clearTimeout(timeoutId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matches]);
 
   const handleDelete = async (id) => {
     const res = await deleteMatch(id);
@@ -82,7 +138,7 @@ const MatchList = ({ isGrid, matchesArray }) => {
                       className="flex flex-col text-center w-[30%]"
                     >
                       <h3 className="text-sm font-semibold uppercase">
-                        {match.league_type}
+                        {match.league_type.split("-").join(" ")}
                       </h3>
                       <p className="text-gray-500 text-xs">
                         {match.match_time}
@@ -222,6 +278,34 @@ const MatchList = ({ isGrid, matchesArray }) => {
       )}
     </main>
   );
+};
+
+const Team = PropTypes.shape({
+  name: PropTypes.string,
+  image: PropTypes.string,
+});
+
+const Match = PropTypes.shape({
+  _id: PropTypes.string,
+  sport_type: PropTypes.string,
+  league_type: PropTypes.string,
+  match_title: PropTypes.string,
+  match_time: PropTypes.string,
+  fixture_id: PropTypes.string,
+  hot_match: PropTypes.bool,
+  status: PropTypes.string,
+  team_one: PropTypes.oneOfType([Team, PropTypes.any]),
+  team_two: PropTypes.oneOfType([Team, PropTypes.any]),
+  streaming_source: PropTypes.arrayOf(PropTypes.any), // Flexible for streaming source structure
+  order: PropTypes.number,
+  createdAt: PropTypes.string,
+  updatedAt: PropTypes.string,
+  __v: PropTypes.number,
+});
+
+MatchList.propTypes = {
+  isGrid: PropTypes.bool,
+  matchesArray: PropTypes.arrayOf(Match),
 };
 
 export default MatchList;

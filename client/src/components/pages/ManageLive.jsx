@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import LoadingBall from "../global/LoadingBall.jsx";
 
 const ManageLive = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [perPage, setPerPage] = useState(10);
   const [matches, setMatches] = useState([]);
@@ -22,6 +21,7 @@ const ManageLive = () => {
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
+      const currentPage = 1;
       try {
         const view = await fetchMobileView();
         const response = await fetchAllMatches(
@@ -30,10 +30,15 @@ const ManageLive = () => {
           perPage
         );
         const { paginatedMatches } = response.data;
+        // console.log("ML: ", paginatedMatches);
+        // console.log(
+        //   "Sorted: ",
+        //   paginatedMatches.sort((a, b) => a.order - b.order)
+        // );
         const extractedMatches = paginatedMatches.map((match) => ({
           id: match._id,
           status: match.status,
-          league_type: match.league_type.split("-").join(" "),
+          league_type: match.league_type,
           hot_match: match.hot_match,
           match_title: match.match_title,
           match_time: match.match_time,
@@ -43,6 +48,7 @@ const ManageLive = () => {
           team_two: match.team_two.name,
           team_two_img: match.team_two.image,
           stream_count: match.streaming_source.length,
+          order: match.order,
         }));
         setMatches(extractedMatches);
         setMobileView(view.data.data);

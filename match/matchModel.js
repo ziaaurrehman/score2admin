@@ -106,6 +106,7 @@ const matchSchema = mongoose.Schema(
         },
       },
     ],
+    order: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

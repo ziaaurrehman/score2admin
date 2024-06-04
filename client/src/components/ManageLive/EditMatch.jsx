@@ -129,20 +129,9 @@ const EditMatch = () => {
 
   // set date handler
   const handleDateChange = (date) => {
-    const selectedDateTime = new Date(date);
-
-    // Format the date and time
-    const formattedDateTime = selectedDateTime.toLocaleString("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true, // Include AM/PM indicator
-    });
     setData({
       ...data,
-      match_time: formattedDateTime,
+      match_time: date[0], // Directly set the date from Flatpickr
     });
   };
 

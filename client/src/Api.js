@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const prod = "https://sportsdashboard.onrender.com/api/";
 const local = "http://localhost:5050/api";
 const axios = instance.create({
-  baseURL: prod,
+  baseURL: local,
   headers: {
     "Content-Type": "application/json",
   },
@@ -227,6 +227,26 @@ export const updateMatch = async (id, formData) => {
       theme: "light",
     });
     return error;
+  }
+};
+
+export const updateMatchOrder = async (order) => {
+  try {
+    const res = await axios.post("/live/reorder", { numbers: order });
+    return res.data;
+  } catch (error) {
+    console.error("Error updating match order", error);
+    throw error;
+  }
+};
+
+export const getOrder = async () => {
+  try {
+    const res = await axios.get("/live/get-order");
+    return res.data.data.numbers;
+  } catch (err) {
+    console.log("Internal server error", err);
+    throw err;
   }
 };
 
