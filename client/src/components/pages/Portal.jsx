@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
 import LoadingBar from "react-top-loading-bar";
+import PropTypes from "prop-types";
 
 const Portal = ({ children }) => {
   const [loading, setLoading] = useState(false);
