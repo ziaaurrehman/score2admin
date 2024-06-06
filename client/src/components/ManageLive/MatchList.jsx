@@ -28,7 +28,7 @@ const MatchList = ({ isGrid, matchesArray }) => {
           console.log(req.status);
           setMatches(matchesArray);
         } else {
-          const arrangedMatches = arrangeByOrder(matchesArray.slice(), res);
+          const arrangedMatches = sortObjectsByOrder(matchesArray.slice(), res);
           setMatches(arrangedMatches);
         }
       } catch (err) {
@@ -42,10 +42,35 @@ const MatchList = ({ isGrid, matchesArray }) => {
   }, [matchesArray]);
 
   // Arranging items
-  function arrangeByOrder(matchesArray, order) {
-    const orderMap = new Map(matchesArray.map((item) => [item.order, item]));
-    // Arrange the items based on the order array
-    return order.map((orderId) => orderMap.get(orderId)).filter((item) => item);
+  function sortObjectsByOrder(arrayOfObjects, orderArray) {
+    // Create a Set to store unique order values from the arrayOfObjects
+    const uniqueOrders = new Set(arrayOfObjects.map((obj) => obj.order));
+
+    // Filter the orderArray to only include values that exist in uniqueOrders
+    const validOrders = orderArray.filter((order) => uniqueOrders.has(order));
+
+    return arrayOfObjects.sort((a, b) => {
+      const aIndex = validOrders.indexOf(a.order);
+      const bIndex = validOrders.indexOf(b.order);
+
+      if (aIndex === -1 && bIndex === -1) {
+        // If both orders are not present in the validOrders array, maintain their original order
+        return 0;
+      }
+
+      if (aIndex === -1) {
+        // If a.order is not present in the validOrders array, move it to the end
+        return 1;
+      }
+
+      if (bIndex === -1) {
+        // If b.order is not present in the validOrders array, move it to the end
+        return -1;
+      }
+
+      // Sort based on the order of elements in the validOrders array
+      return aIndex - bIndex;
+    });
   }
 
   const handleMoveUp = (index) => {
@@ -59,6 +84,7 @@ const MatchList = ({ isGrid, matchesArray }) => {
     }
   };
 
+  // get the order of the list items
   const myOrder = async () => {
     const res = await getOrder();
     return res;

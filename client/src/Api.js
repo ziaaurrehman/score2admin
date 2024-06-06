@@ -1,10 +1,11 @@
 import instance from "axios";
 import { toast } from "react-toastify";
 
+// eslint-disable-next-line no-unused-vars
 const prod = "https://sportsdashboard.onrender.com/api/";
 const local = "http://localhost:5050/api";
 const axios = instance.create({
-  baseURL: prod,
+  baseURL: local,
   headers: {
     "Content-Type": "application/json",
   },

@@ -2,17 +2,15 @@ import Sidebar from "../Navbar/Sidebar.jsx";
 import { GiHamburgerMenu } from "react-icons/gi";
 import User from "../Navbar/User.jsx";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
-import LoadingBar from "react-top-loading-bar";
+import PropTypes from "prop-types";
 
 const Portal = ({ children }) => {
-  const [loading, setLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
   const navigation = useNavigate();
-  const location = useLocation();
 
   const handleOpen = () => {
     setOpen((prevState) => !prevState);
@@ -27,25 +25,13 @@ const Portal = ({ children }) => {
   };
 
   useEffect(() => {
-    const getUser = () => {
-      const value = JSON.parse(localStorage.getItem("user"));
-      if (value) {
-        setUser(value);
-      } else {
-        navigation("/");
-      }
-    };
-
-    getUser();
-    setLoading(true);
-    const delay = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    return () => {
-      clearTimeout(delay);
-    };
-  }, [navigation, location.pathname]);
+    const value = JSON.parse(localStorage.getItem("user"));
+    if (value) {
+      setUser(value);
+    } else {
+      navigation("/");
+    }
+  }, [navigation]);
 
   // If user is null, don't render anything (since the user will be redirected)
   if (user === null) {
@@ -65,7 +51,6 @@ const Portal = ({ children }) => {
     <div className="flex w-full">
       {user ? (
         <>
-          <LoadingBar color="blue" progress={loading ? 100 : 0} height="4px" />
           <div>
             <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
           </div>
@@ -110,6 +95,10 @@ const Portal = ({ children }) => {
       ) : null}
     </div>
   );
+};
+
+Portal.propTypes = {
+  children: PropTypes.node,
 };
 
 export default Portal;
