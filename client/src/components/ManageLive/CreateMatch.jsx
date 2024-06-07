@@ -7,6 +7,7 @@ import Portal from "../pages/Portal.jsx";
 import { toast } from "react-toastify";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
+import moment from "moment-timezone";
 
 const CreateMatch = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const CreateMatch = () => {
     image: "http://windfootball.com/logo/logo1.png",
   };
 
+  const [localDate, setLocalDate] = useState("");
   const [data, setData] = useState({
     sport_type: "",
     league_type: "",
@@ -121,11 +123,21 @@ const CreateMatch = () => {
   const navigation = useNavigate();
 
   // set date handler
-  const handleDateChange = (date) => {
-    setData({
-      ...data,
-      match_time: date[0], // Directly set the date from Flatpickr
-    });
+  const handleDateChange = (selectedDates) => {
+    setLocalDate(selectedDates[0]);
+    if (selectedDates.length > 0) {
+      // Assume the selected time is in the local timezone (e.g., Pakistan)
+      const localTime = moment(selectedDates[0]);
+      // Convert the selected time to Nepal timezone
+      const nepalTime = localTime
+        .tz("Asia/Kathmandu")
+        .format("YYYY-MM-DD hh:mm A");
+      console.log("Selected date in Nepal Time: ", nepalTime);
+      setData((prevData) => ({
+        ...prevData,
+        match_time: nepalTime,
+      }));
+    }
   };
 
   // scroll to top button
@@ -294,7 +306,7 @@ const CreateMatch = () => {
                       enableTime: true,
                       dateFormat: "Y-m-d h:i K",
                     }}
-                    value={data.match_time}
+                    value={localDate}
                     onChange={handleDateChange}
                   />
                 </div>

@@ -6,10 +6,12 @@ import { FaRegArrowAltCircleUp } from "react-icons/fa";
 import Portal from "../pages/Portal.jsx";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
+import moment from "moment-timezone";
 
 const EditMatch = () => {
   const location = useLocation();
   const [isClicked, setIsClicked] = useState(false);
+  const [localDate, setLocalDate] = useState("");
 
   const defaultPortraitWatermark = {
     top: 1.1,
@@ -69,7 +71,6 @@ const EditMatch = () => {
     team_two,
     streaming_source,
   } = data;
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -129,11 +130,18 @@ const EditMatch = () => {
   const navigation = useNavigate();
 
   // set date handler
-  const handleDateChange = (date) => {
-    setData({
-      ...data,
-      match_time: date[0], // Directly set the date from Flatpickr
-    });
+  const handleDateChange = (selectedDates) => {
+    setLocalDate(selectedDates[0]);
+    if (selectedDates.length > 0) {
+      // Convert selected date to Nepal timezone (UTC+05:45)
+      const nepalTime = moment(selectedDates[0])
+        .tz("Asia/Kathmandu")
+        .format("YYYY-MM-DD hh:mm A");
+      setData((prevData) => ({
+        ...prevData,
+        match_time: nepalTime,
+      }));
+    }
   };
 
   // scroll to top button
@@ -186,6 +194,7 @@ const EditMatch = () => {
       });
 
       setData(value);
+      setLocalDate(value.match_time);
     }
   };
 
@@ -305,7 +314,7 @@ const EditMatch = () => {
                       enableTime: true,
                       dateFormat: "Y-m-d h:i K",
                     }}
-                    value={match_time}
+                    value={localDate}
                     onChange={handleDateChange}
                   />
                 </div>
