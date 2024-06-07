@@ -6,7 +6,7 @@ import { FaRegArrowAltCircleUp } from "react-icons/fa";
 import Portal from "../pages/Portal.jsx";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
-import { moment } from "moment-timezone";
+import moment from "moment-timezone";
 
 const EditMatch = () => {
   const location = useLocation();
@@ -137,6 +137,7 @@ const EditMatch = () => {
       const nepalTime = moment(selectedDates[0])
         .tz("Asia/Kathmandu")
         .format("YYYY-MM-DD hh:mm A");
+      console.log("Selected date in Nepal Time: ", nepalTime);
       setData((prevData) => ({
         ...prevData,
         match_time: nepalTime,
