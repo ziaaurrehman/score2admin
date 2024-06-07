@@ -6,7 +6,7 @@ import { FaRegArrowAltCircleUp } from "react-icons/fa";
 import Portal from "../pages/Portal.jsx";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
-import moment from "moment-timezone";
+import { moment } from "moment-timezone";
 
 const EditMatch = () => {
   const location = useLocation();

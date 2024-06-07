@@ -7,7 +7,7 @@ import Portal from "../pages/Portal.jsx";
 import { toast } from "react-toastify";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
-import moment from "moment-timezone";
+import { moment } from "moment-timezone";
 
 const CreateMatch = () => {
   const location = useLocation();
