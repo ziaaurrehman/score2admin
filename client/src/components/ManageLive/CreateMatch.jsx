@@ -127,16 +127,12 @@ const CreateMatch = () => {
     setLocalDate(selectedDates[0]);
     if (selectedDates.length > 0) {
       // Convert selected date to Nepal timezone (UTC+05:45)
-      const nepalTime = moment(selectedDates[0]).tz("Asia/Kathmandu").toDate(); // Convert to JavaScript Date object in Nepal Time
-
-      // Convert Nepal Time to ISO string in UTC
-      const nepalTimeInUtcFormat = nepalTime.toISOString();
-
-      console.log("Nepal Time: ", nepalTimeInUtcFormat);
+      const localDate = moment(selectedDates[0], "YYYY-MM-DD HH:mm A");
+      const localFormat = localDate.format();
 
       setData((prevData) => ({
         ...prevData,
-        match_time: nepalTimeInUtcFormat,
+        match_time: localFormat,
       }));
     }
   };

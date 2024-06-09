@@ -133,17 +133,22 @@ const EditMatch = () => {
   const handleDateChange = (selectedDates) => {
     setLocalDate(selectedDates[0]);
     if (selectedDates.length > 0) {
-      // Convert selected date to Nepal timezone (UTC+05:45)
-      const nepalTime = moment(selectedDates[0]).tz("Asia/Kathmandu").toDate(); // Convert to JavaScript Date object in Nepal Time
+      // Step 1: Parse the selected date in local time
+      const localDate = moment(selectedDates[0], "YYYY-MM-DD HH:mm A");
+      const localFormat = localDate.format();
 
-      // Convert Nepal Time to ISO string in UTC
-      const nepalTimeInUtcFormat = nepalTime.toISOString();
+      // Step 2: Convert local date to Nepal timezone
+      // const nepalTime = localDate.clone().tz("Asia/Kathmandu");
+      // const formatted = nepalTime.format();
+      // console.log("Nepal Time:", formatted);
 
-      console.log("Nepal Time: ", nepalTimeInUtcFormat);
-
+      // // Step 3: Convert Nepal Time to ISO string in UTC
+      // const nepalTimeInUtcFormat = nepalTime.clone().utc().toISOString();
+      // console.log("Nepal Time in UTC Format:", nepalTimeInUtcFormat);
+      // Update state with the new match_time
       setData((prevData) => ({
         ...prevData,
-        match_time: nepalTimeInUtcFormat,
+        match_time: localFormat,
       }));
     }
   };
