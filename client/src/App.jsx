@@ -29,27 +29,30 @@ function App() {
     <>
       <UserContextProvider>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/manage-live" element={<ManageLive />} />
-          <Route path="/fixtures" element={<Fixtures />} />
-          <Route path="/manage-apps" element={<ManageApp />} />
-          <Route path="/selected-leagues" element={<Leagues />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/administration" element={<Administration />} />
-          <Route path="/types" element={<Types />} />
-          <Route path="/manage-live/edit/:id" element={<EditMatch />} />
-          <Route path="/manage-live/create-match" element={<CreateMatch />} />
-          <Route path="/news/create-news" element={<AddNews />} />
-          <Route path="/news/edit-news/:id" element={<EditNews />} />
-          <Route path="/highlights" element={<Highlights />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/notifications" element={<Notification />} />
+          <Route path="/admin" element={<Login />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/manage-live" element={<ManageLive />} />
+          <Route path="/admin/fixtures" element={<Fixtures />} />
+          <Route path="/admin/manage-apps" element={<ManageApp />} />
+          <Route path="/admin/selected-leagues" element={<Leagues />} />
+          <Route path="/admin/news" element={<News />} />
+          <Route path="/admin/administration" element={<Administration />} />
+          <Route path="/admin/types" element={<Types />} />
+          <Route path="/admin/manage-live/edit/:id" element={<EditMatch />} />
           <Route
-            path="/notification/create-notification"
+            path="/admin/manage-live/create-match"
+            element={<CreateMatch />}
+          />
+          <Route path="/admin/news/create-news" element={<AddNews />} />
+          <Route path="/admin/news/edit-news/:id" element={<EditNews />} />
+          <Route path="/admin/highlights" element={<Highlights />} />
+          <Route path="/admin/contact-us" element={<ContactUs />} />
+          <Route path="/admin/notifications" element={<Notification />} />
+          <Route
+            path="/admin/notification/create-notification"
             element={<CreateNotification />}
           />
-          <Route path="/logout" element={<Logout />} />
+          <Route path="/admin/logout" element={<Logout />} />
         </Routes>
         {/* <Portal /> */}
         <ToastContainer />

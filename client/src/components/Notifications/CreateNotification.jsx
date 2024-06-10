@@ -29,7 +29,7 @@ const CreateNotification = () => {
     try {
       const res = await createNotification(notification);
       console.log(res.status);
-      navigation("/notifications");
+      navigation("/admin/notifications");
     } catch (err) {
       console.error(err);
     }

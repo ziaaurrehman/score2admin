@@ -115,7 +115,7 @@ const ManageLive = () => {
                 </label>
               </div>
 
-              <Link to="/manage-live/create-match">
+              <Link to="/admin/manage-live/create-match">
                 <button className="py-2 px-4 text-sm uppercase bg-blue-500 text-white rounded-md hover:bg-blue-700 transition active:scale-95 font-semibold">
                   Create a Match
                 </button>

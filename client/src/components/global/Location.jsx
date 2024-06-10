@@ -17,7 +17,7 @@ const Location = ({ location }) => {
   const path = getPathname(location.pathname);
   return (
     <div className="p-2 flex text-sm font-semibold items-center gap-1">
-      <Link to="/dashboard">
+      <Link to="/admin/dashboard">
         <FaHome className="h-5 w-5 text-blue-600 cursor-pointer transition hover:text-gray-600" />
       </Link>
       <p className="font-semibold">&gt;</p>

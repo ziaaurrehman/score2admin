@@ -30,7 +30,7 @@ export const UserContextProvider = ({ children }) => {
         setUser({ isAuth: true, ...res?.data });
 
         if (res?.data?.role === "admin") {
-          navigation("/dashboard");
+          navigation("/admin/dashboard");
         }
         return true;
       }
@@ -45,7 +45,7 @@ export const UserContextProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
     toast.success("Logged out successfully!");
-    navigation("/");
+    navigation("/admin/");
   };
 
   return (

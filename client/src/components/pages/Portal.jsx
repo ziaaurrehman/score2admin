@@ -33,7 +33,7 @@ const Portal = ({ children }) => {
       if (value) {
         setUser(value);
       } else {
-        navigation("/");
+        navigation("/admin");
       }
     };
 
@@ -90,11 +90,11 @@ const Portal = ({ children }) => {
                   </div>
                 </div>
                 <div className="relative" onClick={handleOpen}>
-                  <User name={"moiz khan"} imgSrc={user.img} />
+                  <User name={"john doe"} imgSrc={user.img} />
                   {open ? (
                     <Link
                       className="absolute right-0 p-2 bg-white rounded-md z-10 min-w-[100px] flex gap-2 items-center justify-center font-sm transition hover:text-red-600"
-                      to="/logout"
+                      to="/admin/logout"
                     >
                       <CiLogout className="text-xl" />
                       <p>Logout</p>

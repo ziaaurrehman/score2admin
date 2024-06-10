@@ -2,18 +2,15 @@ import { useState } from "react";
 import { deleteNotification, sendNotification } from "../../Api";
 import { IoIosSend } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 
 const NotificationItem = ({ notification }) => {
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigate();
   // Delete notif function
   const handleDelete = async (id) => {
     setLoading(true);
     try {
       await deleteNotification(id);
       console.log("Notification deleted successfully");
-      navigation("/notifications");
     } catch (error) {
       console.error("Error deleting notification:", error);
     } finally {
