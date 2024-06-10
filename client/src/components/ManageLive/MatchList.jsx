@@ -11,11 +11,23 @@ import LoadingBall from "../global/LoadingBall.jsx";
 import { updateMatchOrder, getOrder } from "../../Api.js";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import { format, parseISO } from "date-fns";
+import addMinutes from "date-fns/addMinutes";
 
 const MatchList = ({ isGrid, matchesArray }) => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [runCount, setRunCount] = useState(0);
+
+  const formatTime = (isoString) => {
+    const date = parseISO(isoString);
+
+    // Nepali Standard Time is UTC+5:45
+    const nstDate = addMinutes(date, 345); // 5 hours * 60 minutes + 45 minutes = 345 minutes
+
+    // Format the Date object to "YYYY-MM-DD hh:mm a"
+    return format(nstDate, "yyyy-MM-dd hh:mm a");
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -167,7 +179,7 @@ const MatchList = ({ isGrid, matchesArray }) => {
                         {match.league_type.split("-").join(" ")}
                       </h3>
                       <p className="text-gray-500 text-xs">
-                        {match.match_time}
+                        {formatTime(match.match_time)}
                       </p>
                       <p className="text-gray-500 text-sm">VS</p>
                     </div>
