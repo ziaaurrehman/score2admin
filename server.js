@@ -78,7 +78,7 @@ app.get("/privacy", (req, res) => {
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "./client/dist")));
 
-  app.get("*", (req, res) =>
+  app.get("/admin/*", (req, res) =>
     res.sendFile(path.resolve(__dirname, "./client/dist/index.html"))
   );
 } else {
