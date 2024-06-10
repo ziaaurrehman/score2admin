@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const prod = "https://sportsdashboard.onrender.com/api/";
 const local = "http://localhost:5050/api";
 const axios = instance.create({
-  baseURL: local,
+  baseURL: prod,
   headers: {
     "Content-Type": "application/json",
   },
