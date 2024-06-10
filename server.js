@@ -75,6 +75,11 @@ app.get("/privacy", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "privacy.html"));
 });
 
+// Define routes for contact-us page
+app.get("/contact", (req, res) => {
+  res.sendFile(path.join(__dirname, "static", "contact-us.html"));
+});
+
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "./client/dist")));
 
