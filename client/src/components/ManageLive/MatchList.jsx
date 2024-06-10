@@ -228,7 +228,7 @@ const MatchList = ({ isGrid, matchesArray }) => {
                         className="text-blue-400 cursor-pointer"
                         onClick={() => handleDuplicate(match.id)}
                       />
-                      <Link to={`/manage-live/edit/${match.id}`}>
+                      <Link to={`/admin/manage-live/edit/${match.id}`}>
                         <FiEdit className="text-blue-400 cursor-pointer" />
                       </Link>
                       <RiDeleteBin5Line
@@ -298,7 +298,7 @@ const MatchList = ({ isGrid, matchesArray }) => {
                         className="text-blue-400 cursor-pointer"
                         onClick={() => handleDuplicate(match.id)}
                       />
-                      <Link to={`/admin/manage-live/edit?id=${match.id}`}>
+                      <Link to={`/admin/manage-live/edit/${match.id}`}>
                         <FiEdit className="text-blue-400 cursor-pointer" />
                       </Link>
                       <RiDeleteBin5Line

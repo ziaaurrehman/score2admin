@@ -197,6 +197,7 @@ const getAndroidSettings = async (req, res) => {
 
     if (androidSetting) {
       const imageURL = `${baseURL}/androidSettingupload/${androidSetting.required_app.logo}`;
+      console.log(imageURL);
       androidSetting.required_app.logo = imageURL;
       res.status(200).json({
         message: "Android setting found",
