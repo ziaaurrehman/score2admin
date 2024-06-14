@@ -65,7 +65,16 @@ app.use("/api", newsUpdateRoute);
 app.use("/api", newsRouter);
 app.use("/api/live", matchRouter);
 
-// Define routes for terms and conditions page
+// Define routes for static pages
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "static", "lander.html"));
+});
+
+app.get("/app-ads.txt", (req, res) => {
+  res.sendFile(path.join(__dirname, "static", "app-ads.txt"));
+});
+
 app.get("/terms", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "terms.html"));
 });
