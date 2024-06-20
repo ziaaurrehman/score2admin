@@ -194,7 +194,7 @@ const CreateMatch = () => {
           progress: undefined,
           theme: "light",
         });
-        navigation("/manage-live");
+        navigation("/admin/manage-live");
       }
     } catch (error) {
       console.log(error?.message);
