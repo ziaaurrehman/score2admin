@@ -214,7 +214,7 @@ const EditMatch = () => {
     try {
       const res = await updateMatch(id, data);
       if (res?.data?.success) {
-        navigation("/manage-live");
+        navigation("/admin/manage-live");
       }
       // console.log(res);
     } catch (error) {
