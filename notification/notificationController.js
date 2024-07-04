@@ -112,10 +112,10 @@ const sendToFirebase = async (message) => {
   // Setting topic and image variable
   const topic = "blueFootball";
 
-  // Initliaze message function
+  // Initialize message function
   const { messaging } = firebase;
 
-  // preparing notification message
+  // Preparing notification message
   let notification = {};
 
   if (message.image) {
@@ -126,6 +126,29 @@ const sendToFirebase = async (message) => {
         imageUrl: message.image,
       },
       topic: topic,
+      apns: {
+        headers: {
+          "apns-priority": "10",
+        },
+        payload: {
+          aps: {
+            alert: {
+              title: message.title,
+              body: message.body,
+            },
+            badge: 1,
+            sound: "default",
+          },
+        },
+      },
+      android: {
+        priority: "high",
+        notification: {
+          title: message.title,
+          body: message.body,
+          imageUrl: message.image,
+        },
+      },
     };
   } else {
     notification = {
@@ -134,8 +157,31 @@ const sendToFirebase = async (message) => {
         body: message.body,
       },
       topic: topic,
+      apns: {
+        headers: {
+          "apns-priority": "10",
+        },
+        payload: {
+          aps: {
+            alert: {
+              title: message.title,
+              body: message.body,
+            },
+            badge: 1,
+            sound: "default",
+          },
+        },
+      },
+      android: {
+        priority: "high",
+        notification: {
+          title: message.title,
+          body: message.body,
+        },
+      },
     };
   }
+
   // Send a message to devices subscribed to the provided topic.
   await messaging()
     .send(notification)
