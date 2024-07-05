@@ -1,4 +1,5 @@
 import Notification from "./notificationModel.js";
+import NotificationHistory from "./notifHistory.js";
 import firebase from "../config/firebase.js";
 
 // Create Notifications
@@ -47,6 +48,22 @@ const getAllNotifications = async (req, res) => {
       status: true,
       message: "Notifications retrieved",
       data: notifications,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// Get Notification History
+
+const getNotificationHistory = async (req, res) => {
+  try {
+    const history = await NotificationHistory.find(); // Fetch history
+    res.status(200).json({
+      status: true,
+      message: "History retrieved",
+      data: history,
     });
   } catch (err) {
     console.log(err);
@@ -111,6 +128,14 @@ const sendNotification = async (req, res) => {
 const sendToFirebase = async (message) => {
   // Setting topic and image variable
   const topic = "blueFootball";
+
+  const notif = {
+    title: message.title,
+    body: message.body,
+    image: message.image || "",
+  };
+
+  const notifHistory = new NotificationHistory(notif);
 
   // Initialize message function
   const { messaging } = firebase;
@@ -183,6 +208,7 @@ const sendToFirebase = async (message) => {
   }
 
   // Send a message to devices subscribed to the provided topic.
+
   await messaging()
     .send(notification)
     .then((response) => {
@@ -191,6 +217,8 @@ const sendToFirebase = async (message) => {
     .catch((error) => {
       console.log("Error sending message:", error);
     });
+
+  await notifHistory.save();
 };
 
 export {
@@ -198,4 +226,5 @@ export {
   getAllNotifications,
   deleteNotification,
   sendNotification,
+  getNotificationHistory,
 };
