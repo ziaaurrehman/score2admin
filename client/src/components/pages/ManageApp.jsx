@@ -23,8 +23,13 @@ const ManageApp = () => {
     //   img: "https://placehold.jp/300x300.png",
     // },
     {
-      title: "Ads Control",
-      form: "AdsControl",
+      title: "Android Ads Control",
+      form: "AndroidAdsControl",
+      img: "https://placehold.jp/300x300.png",
+    },
+    {
+      title: "iOS Ads Control",
+      form: "iOSAdsControl",
       img: "https://placehold.jp/300x300.png",
     },
     {

@@ -3,7 +3,7 @@ import { createUpdateAdSettings, getAdsSettings } from "../../Api.js";
 import LoadingSemiCircle from "../global/LoadingSemiCircle.jsx";
 import { toast } from "react-toastify";
 
-const Ads = () => {
+const IOSAds = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     ad_status: "active",
@@ -21,7 +21,7 @@ const Ads = () => {
     try {
       getAdsSettings()
         .then((settings) => {
-          const setting = settings.adSettings.android;
+          const setting = settings.adSettings.ios;
           setData({
             ad_status: setting.ad_status || "",
             click_control: setting.click_control || "",
@@ -56,8 +56,8 @@ const Ads = () => {
     return values;
   };
   const handleSave = async () => {
-    const fetchData = { android: getValues(), ios: undefined };
-    if (!fetchData.android.ad_status || !fetchData.android.click_control) {
+    const fetchData = { android: undefined, ios: getValues() };
+    if (!fetchData.ios.ad_status || !fetchData.ios.click_control) {
       toast.error("Enter required values");
     } else {
       const res = createUpdateAdSettings(fetchData);
@@ -238,4 +238,4 @@ const Ads = () => {
   );
 };
 
-export default Ads;
+export default IOSAds;

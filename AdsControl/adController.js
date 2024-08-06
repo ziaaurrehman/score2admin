@@ -1,45 +1,48 @@
 import AdModel from "./AdModel.js";
 
-// Create ad function
+// Create and update ad settings function
 const createAndUpdateAdSettings = async (req, res) => {
   try {
-    const {
-      ad_status,
-      click_control,
-      google_app_id,
-      google_app_open_ads,
-      google_banner_ads,
-      google_interstitial_ads,
-      google_adaptive_interstitial_ads,
-      google_native_ads,
-      google_rewarded_ads_code,
-    } = req.body;
+    const { android, ios } = req.body;
 
     // Check if ad settings already exist, if not create new, else update
     let adSettings = await AdModel.findOne();
     if (!adSettings) {
       adSettings = new AdModel({
-        ad_status,
-        click_control,
-        google_app_id,
-        google_app_open_ads,
-        google_banner_ads,
-        google_interstitial_ads,
-        google_adaptive_interstitial_ads,
-        google_native_ads,
-        google_rewarded_ads_code,
+        android,
+        ios,
       });
     } else {
-      adSettings.ad_status = ad_status;
-      adSettings.click_control = click_control;
-      adSettings.google_app_id = google_app_id;
-      adSettings.google_app_open_ads = google_app_open_ads;
-      adSettings.google_banner_ads = google_banner_ads;
-      adSettings.google_interstitial_ads = google_interstitial_ads;
-      adSettings.google_adaptive_interstitial_ads =
-        google_adaptive_interstitial_ads;
-      adSettings.google_native_ads = google_native_ads;
-      adSettings.google_rewarded_ads_code = google_rewarded_ads_code;
+      if (android) {
+        adSettings.android.ad_status = android.ad_status || "";
+        adSettings.android.click_control = android.click_control || "";
+        adSettings.android.google_app_id = android.google_app_id || "";
+        adSettings.android.google_app_open_ads =
+          android.google_app_open_ads || "";
+        adSettings.android.google_banner_ads = android.google_banner_ads || "";
+        adSettings.android.google_interstitial_ads =
+          android.google_interstitial_ads || "";
+        adSettings.android.google_adaptive_interstitial_ads =
+          android.google_adaptive_interstitial_ads || "";
+        adSettings.android.google_native_ads = android.google_native_ads || "";
+        adSettings.android.google_rewarded_ads_code =
+          android.google_rewarded_ads_code || "";
+      }
+
+      if (ios) {
+        adSettings.ios.ad_status = ios.ad_status || "";
+        adSettings.ios.click_control = ios.click_control || "";
+        adSettings.ios.google_app_id = ios.google_app_id || "";
+        adSettings.ios.google_app_open_ads = ios.google_app_open_ads || "";
+        adSettings.ios.google_banner_ads = ios.google_banner_ads || "";
+        adSettings.ios.google_interstitial_ads =
+          ios.google_interstitial_ads || "";
+        adSettings.ios.google_adaptive_interstitial_ads =
+          ios.google_adaptive_interstitial_ads || "";
+        adSettings.ios.google_native_ads = ios.google_native_ads || "";
+        adSettings.ios.google_rewarded_ads_code =
+          ios.google_rewarded_ads_code || "";
+      }
     }
 
     // Save the ad settings

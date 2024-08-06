@@ -4,6 +4,7 @@ import AndroidSettings from "./AndroidSettings";
 //import IOS from "./IOS";
 import Ads from "./Ads";
 import BlockCountries from "./BlockCountries";
+import IOSAds from "./IOSAds";
 
 const SettingForms = ({ form }) => {
   return form === "AppInformation" ? (
@@ -16,9 +17,13 @@ const SettingForms = ({ form }) => {
     </>
   ) : form === "SocialLinks" ? (
     <div>SocialLinks</div>
-  ) : form === "AdsControl" ? (
+  ) : form === "AndroidAdsControl" ? (
     <>
       <Ads />
+    </>
+  ) : form === "iOSAdsControl" ? (
+    <>
+      <IOSAds />
     </>
   ) : form === "BlockCountries" ? (
     <>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import SettingForms from "./SettingForms";
 import { MdOutlineAppSettingsAlt } from "react-icons/md";
 import { FaAppStoreIos } from "react-icons/fa";
-//import { FaApple } from "react-icons/fa";
+import { FaApple } from "react-icons/fa";
 import { SiGoogleads } from "react-icons/si";
 import { MdBlock } from "react-icons/md";
 
@@ -12,8 +12,10 @@ const Accordion = ({ title, form }) => {
       return <MdOutlineAppSettingsAlt className="h-10 w-10" />;
     } else if (title === "App Information") {
       return <FaAppStoreIos className="w-10 h-10" />;
-    } else if (title === "Ads Control") {
+    } else if (title === "Android Ads Control") {
       return <SiGoogleads className="h-10 w-10" />;
+    } else if (title === "iOS Ads Control") {
+      return <FaApple className="h-10 w-10" />;
     } else if (title === "Block Countries") {
       return <MdBlock className="h-10 w-10" />;
     }
