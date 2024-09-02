@@ -7,7 +7,7 @@ const IOSAds = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     ad_status: "active",
-    click_control: "5",
+    click_control: "off",
     google_adaptive_interstitial_ads: "74d68F8769GF76G68GG999g67g6",
     google_app_id: "7CEec7ee4ewxwx7EC475G457",
     google_app_open_ads: "67ff8Ff8gv8f75565889T7F6",
