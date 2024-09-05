@@ -102,11 +102,11 @@ const matchSchema = mongoose.Schema(
         stream_thumbnail: {
           type: String,
           trim: true,
-          required: true,
         },
       },
     ],
     order: { type: Number, default: 0 },
+    thumbnail: { type: String, trim: true, required: true }
   },
   { timestamps: true }
 );

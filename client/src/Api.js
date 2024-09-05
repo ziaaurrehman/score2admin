@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const prod = "https://sportsdashboard.onrender.com/api";
 const local = "http://localhost:5050/api";
 const axios = instance.create({
-  baseURL: prod,
+  baseURL: local,
   headers: {
     "Content-Type": "application/json",
   },
@@ -245,6 +245,17 @@ export const getOrder = async () => {
   try {
     const res = await axios.get("/live/get-order");
     return res.data.data.numbers;
+  } catch (err) {
+    console.log("Internal server error", err);
+    throw err;
+  }
+};
+
+export const getThumbnail = async (data) => {
+  try {
+    console.log(data)
+    const res = await axios.post("/live/gen-thumbnail", data);
+    return res.data.thumbnail
   } catch (err) {
     console.log("Internal server error", err);
     throw err;

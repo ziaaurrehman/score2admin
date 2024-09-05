@@ -1,6 +1,16 @@
 import Matches from "./matchModel.js";
 import MobileView from "./viewModel.js";
 import MatchOrder from "./matchOrder.js";
+import { createCanvas, loadImage } from "canvas";
+import path from 'path'
+import fetch from "node-fetch";
+import { fileURLToPath } from 'url';
+import fs from 'fs'
+
+
+// Get __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Create match
 const createMatch = async (req, res) => {
@@ -15,6 +25,7 @@ const createMatch = async (req, res) => {
     team_one,
     team_two,
     streaming_source,
+    thumbnail
   } = req.body;
   if (
     sport_type &&
@@ -42,6 +53,7 @@ const createMatch = async (req, res) => {
         team_two: team_two,
         streaming_source: streaming_source,
         order: newOrder,
+        thumbnail: thumbnail,
       });
       const match = await newMatch.save();
 
@@ -234,6 +246,7 @@ const duplicateMatchById = async (req, res) => {
       team_one: originalMatch.team_one,
       team_two: originalMatch.team_two,
       streaming_source: originalMatch.streaming_source,
+      thumbnail: originalMatch.thumbnail,
     });
 
     // Save the new match to the database
@@ -323,6 +336,77 @@ const getMatchOrder = async (req, res) => {
   }
 };
 
+// create thumbnail
+const generateThumbnail = async (req, res) => {
+  try {
+    const { logo1, logo2, name1, name2, time } = req.body;
+    console.log(logo1, logo2, name1, name2, time);
+
+    // Create a canvas with the new size 450x300
+    const canvas = createCanvas(450, 300);
+    const ctx = canvas.getContext('2d');
+
+    // Function to load an image from a URL
+    const loadImageFromUrl = async (url) => {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load image from URL: ${url}`);
+      }
+
+      const buffer = await response.arrayBuffer();
+      return loadImage(Buffer.from(buffer));
+    };
+
+    // Set background
+    ctx.fillStyle = '#f0f0f0';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Load and draw both team logos
+    const team1Logo = await loadImageFromUrl(logo1);
+    const team2Logo = await loadImageFromUrl(logo2);
+
+    // Adjust the positions and sizes of the logos for the larger canvas
+    ctx.drawImage(team1Logo, 25, 50, 150, 150);
+    ctx.drawImage(team2Logo, 275, 50, 150, 150);
+
+    // Add team names below the logos, centered under the logos
+    ctx.fillStyle = '#333333';
+    ctx.font = 'bold 20px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(name1, 100, 230); // Below logo1
+    ctx.fillText(name2, 350, 230); // Below logo2
+
+    // Load the VS image from the file system and convert it to base64
+    const vsImagePath = path.join(__dirname, '../client/src/assets/vs.png');
+    const vsImageBase64 = fs.readFileSync(vsImagePath, 'base64');
+
+    // Load the VS image from the base64 string
+    const vsImage = await loadImage(`data:image/png;base64,${vsImageBase64}`);
+
+    // Draw the VS image on the canvas
+    ctx.drawImage(vsImage, 200, 120, 80, 70); // Adjust the position and size as needed
+
+    // Add the time below everything, centered
+    ctx.font = 'bold 18px Montserrat';
+    ctx.fillText(time, canvas.width / 2, 280);
+
+    // Convert canvas to data URL
+    const dataUrl = canvas.toDataURL('image/png');
+
+    // Save the image locally (optional)
+    // const buffer = canvas.toBuffer('image/png');
+    // fs.writeFileSync('./thumbnail.png', buffer);
+
+    // Respond with the generated thumbnail data
+    res.status(200).json({ status: true, thumbnail: dataUrl });
+  } catch (err) {
+    console.error('Error generating thumbnail:', err.message);
+    res.status(500).json({ status: false, error: err.message });
+  }
+};
+
+
 export {
   createMatch,
   getMatches,
@@ -334,4 +418,5 @@ export {
   getMobileView,
   updateNumbersArray,
   getMatchOrder,
+  generateThumbnail
 };

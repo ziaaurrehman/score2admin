@@ -645,7 +645,7 @@ const EditMatch = () => {
                             />
                           </div>
 
-                          <div className="w-1/2">
+                          {/* <div className="w-1/2">
                             <label
                               htmlFor="stream_thumbnail"
                               className="text-xs font-bold"
@@ -660,7 +660,7 @@ const EditMatch = () => {
                               value={streaming.stream_thumbnail}
                               onChange={(e) => handleStreamingChange(e, index)}
                             />
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </form>

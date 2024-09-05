@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
 import moment from "moment-timezone";
+import { getThumbnail } from "../../Api.js";
+
 
 const CreateMatch = () => {
   const location = useLocation();
@@ -182,7 +184,18 @@ const CreateMatch = () => {
 
   const handleSubmit = async () => {
     try {
-      const res = await createMatch(data);
+      const thumbdata = {
+        logo1: data.team_one.image,
+        name1: data.team_one.name,
+        logo2: data.team_two.image,
+        name2: data.team_two.name,
+        time: new Date(data.match_time).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }),
+      }
+
+      const thumbnail = await getThumbnail(thumbdata);
+      const newData = { ...data, thumbnail: thumbnail }
+
+      const res = await createMatch(newData);
       if (res?.data?.success) {
         toast.success(`${res?.data?.message}`, {
           position: "top-right",
@@ -625,7 +638,7 @@ const CreateMatch = () => {
                             />
                           </div>
 
-                          <div className="w-1/2">
+                          {/* <div className="w-1/2">
                             <label
                               htmlFor="stream_thumbnail"
                               className="text-xs font-bold"
@@ -640,7 +653,7 @@ const CreateMatch = () => {
                               value={streaming.stream_thumbnail}
                               onChange={(e) => handleStreamingChange(e, index)}
                             />
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </form>

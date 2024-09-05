@@ -1,16 +1,16 @@
 import axios from "axios";
 import League from "./leagueModel.js";
 
-const RapidAPiIKey = "ed7be6ad4bmsha6c731b28c9ed43p13483ajsn0f5639cdd0f2";
+const RapidAPiIKey = "d0e757645b65635c612f5dad12525aed";
 // Request for league search
 const getRapidRequest = (country) => {
   const rapidApi = {
     method: "GET",
-    url: "https://api-football-v1.p.rapidapi.com/v3/leagues",
+    url: "https://v3.football.api-sports.io/leagues",
     params: { country: country },
     headers: {
-      "X-RapidAPI-Key": RapidAPiIKey,
-      "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
+      "x-apisports-key": RapidAPiIKey, // Use API-Sports key header
+      "x-rapidapi-host": "v3.football.api-sports.io", // API-Sports host
     },
   };
   return rapidApi;
@@ -40,11 +40,11 @@ const getFixturesRequest = (date) => {
   ) {
     const options = {
       method: "GET",
-      url: "https://api-football-v1.p.rapidapi.com/v3/fixtures",
+      url: "https://v3.football.api-sports.io/fixtures",
       params: { date: date },
       headers: {
-        "X-RapidAPI-Key": RapidAPiIKey,
-        "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
+        "x-apisports-key": RapidAPiIKey, // Use API-Sports key header
+        "x-rapidapi-host": "v3.football.api-sports.io", // API-Sports host
       },
     };
     return options;

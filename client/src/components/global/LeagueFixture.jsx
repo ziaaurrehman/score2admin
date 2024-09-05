@@ -85,15 +85,11 @@ const LeagueFixtures = ({ fixture }) => {
                 <td>{fixture.fixture.id}</td>
                 <td>
                   <Link
-                    to={`/manage-live/create-match?id=${
-                      fixture.fixture.id
-                    }&date=${fixture.fixture.date.split("T")[0]}&homeName=${
-                      fixture.teams.home.name
-                    }&homeLogo=${fixture.teams.home.logo}&awayName=${
-                      fixture.teams.away.name
-                    }&awayLogo=${fixture.teams.away.logo}&matchTitle=${
-                      fixture.teams.home.name
-                    } vs ${fixture.teams.away.name}&sports=${"football"}`}
+                    to={`/admin/manage-live/create-match?id=${fixture.fixture.id
+                      }&date=${fixture.fixture.date.split("T")[0]}&homeName=${fixture.teams.home.name
+                      }&homeLogo=${fixture.teams.home.logo}&awayName=${fixture.teams.away.name
+                      }&awayLogo=${fixture.teams.away.logo}&matchTitle=${fixture.teams.home.name
+                      } vs ${fixture.teams.away.name}&sports=${"football"}`}
                     className="p-2 text-sm m-1 text-white rounded-md shadow-md cursor-pointer bg-blue-600 hover:bg-blue-800 transition active:scale-95"
                   >
                     Add Live
