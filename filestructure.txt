@@ -1097,6 +1097,7 @@
                         |-- Vorskla Poltava.png
                         |-- Zorya Lugansk.png
                 |-- README.md
+            |-- vs.png
         |-- components
             |-- AdminSettings
                 |-- AppsSocialSettings.jsx

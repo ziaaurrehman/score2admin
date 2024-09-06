@@ -10,9 +10,9 @@ import "flatpickr/dist/themes/dark.css";
 import moment from "moment-timezone";
 import { getThumbnail } from "../../Api.js";
 
-
 const CreateMatch = () => {
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
   const defaultPortraitWatermark = {
     top: 1.1,
     bottom: null,
@@ -58,6 +58,7 @@ const CreateMatch = () => {
 
   // Populate values of search params if they exist
   useEffect(() => {
+    setLoading(true);
     const searchParams = new URLSearchParams(location.search);
     if (searchParams) {
       const id = searchParams.get("id");
@@ -87,6 +88,7 @@ const CreateMatch = () => {
         },
       }));
     }
+    setLoading(false);
   }, [location.search]);
 
   const {
@@ -183,17 +185,23 @@ const CreateMatch = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const thumbdata = {
         logo1: data.team_one.image,
         name1: data.team_one.name,
         logo2: data.team_two.image,
         name2: data.team_two.name,
-        time: new Date(data.match_time).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }),
-      }
+        time: new Date(data.match_time).toLocaleString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          second: "numeric",
+          hour12: true,
+        }),
+      };
 
       const thumbnail = await getThumbnail(thumbdata);
-      const newData = { ...data, thumbnail: thumbnail }
+      const newData = { ...data, thumbnail: thumbnail };
 
       const res = await createMatch(newData);
       if (res?.data?.success) {
@@ -207,9 +215,11 @@ const CreateMatch = () => {
           progress: undefined,
           theme: "light",
         });
+        setLoading(false);
         navigation("/admin/manage-live");
       }
     } catch (error) {
+      setLoading(false);
       console.log(error?.message);
     }
   };
@@ -673,7 +683,10 @@ const CreateMatch = () => {
 
           <button
             onClick={handleSubmit}
-            className="absolute text-sm font-semibold right-12 bottom-[60px] bg-blue-600 py-2 px-4 text-white uppercase animate-bounce hover:bg-blue-800 transition active:scale-95 rounded-md shadow-lg"
+            disabled={loading}
+            className={`absolute text-sm font-semibold right-12 bottom-[60px] py-2 px-4 text-white uppercase animate-bounce transition active:scale-95 rounded-md shadow-lg ${
+              loading ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-800"
+            }`}
           >
             Create Match
           </button>
