@@ -11,22 +11,37 @@ import LoadingBall from "../global/LoadingBall.jsx";
 import { updateMatchOrder, getOrder } from "../../Api.js";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { format, parseISO } from "date-fns";
-import addMinutes from "date-fns/addMinutes";
+//import { format } from "date-fns";
+//import addMinutes from "date-fns/addMinutes";
+import moment from "moment-timezone";
 
 const MatchList = ({ isGrid, matchesArray }) => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [runCount, setRunCount] = useState(0);
 
-  const formatTime = (isoString) => {
-    const date = parseISO(isoString);
+  const formatTime = (time) => {
+    // Create a Date object from the UTC time string
+    const date = new Date(time);
 
-    // Nepali Standard Time is UTC+5:45
-    const nstDate = addMinutes(date, 345); // 5 hours * 60 minutes + 45 minutes = 345 minutes
+    // Get the individual components and pad the month, day, hours, and minutes
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
 
-    // Format the Date object to "YYYY-MM-DD hh:mm a"
-    return format(nstDate, "yyyy-MM-dd hh:mm a");
+    // Get hours and minutes for AM/PM format
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    // Determine AM/PM and adjust hours
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12; // Convert to 12-hour format and ensure 12 AM/PM is correct
+
+    // Pad hours for consistency
+    const paddedHours = String(hours).padStart(2, "0");
+
+    // Combine into the final formatted string
+    return `${year}-${month}-${day} ${paddedHours}:${minutes} ${ampm}`;
   };
 
   useEffect(() => {

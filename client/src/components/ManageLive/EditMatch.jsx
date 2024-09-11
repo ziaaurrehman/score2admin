@@ -6,7 +6,8 @@ import { FaRegArrowAltCircleUp } from "react-icons/fa";
 import Portal from "../pages/Portal.jsx";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
-import moment from "moment-timezone";
+//import moment from "moment-timezone";
+//import { getThumbnail } from "../../Api.js";
 
 const EditMatch = () => {
   const location = useLocation();
@@ -139,24 +140,16 @@ const EditMatch = () => {
 
   // set date handler
   const handleDateChange = (selectedDates) => {
+    //console.log("Selected Date: ", selectedDates[0]);
     setLocalDate(selectedDates[0]);
     if (selectedDates.length > 0) {
-      // Step 1: Parse the selected date in local time
-      const localDate = moment(selectedDates[0], "YYYY-MM-DD HH:mm A");
-      const localFormat = localDate.format();
-
-      // Step 2: Convert local date to Nepal timezone
-      // const nepalTime = localDate.clone().tz("Asia/Kathmandu");
-      // const formatted = nepalTime.format();
-      // console.log("Nepal Time:", formatted);
-
-      // // Step 3: Convert Nepal Time to ISO string in UTC
-      // const nepalTimeInUtcFormat = nepalTime.clone().utc().toISOString();
-      // console.log("Nepal Time in UTC Format:", nepalTimeInUtcFormat);
-      // Update state with the new match_time
+      // Convert selected date to Nepal timezone (UTC+05:45)
+      //const nstDate = moment(selectedDates[0]).tz("Asia/Kathmandu");
+      //const nstFormat = nstDate.format("YYYY-MM-DDTHH:mm:ssZ");
+      //console.log("NST: ", nstFormat);
       setData((prevData) => ({
         ...prevData,
-        match_time: localFormat,
+        match_time: selectedDates[0],
       }));
     }
   };
@@ -222,9 +215,10 @@ const EditMatch = () => {
     try {
       const res = await updateMatch(id, data);
       if (res?.data?.success) {
-        setLoading(false);
         navigation("/admin/manage-live");
       }
+      setLoading(false);
+
       // console.log(res);
     } catch (error) {
       setLoading(false);

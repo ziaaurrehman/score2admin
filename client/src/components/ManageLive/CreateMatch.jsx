@@ -128,15 +128,16 @@ const CreateMatch = () => {
 
   // set date handler
   const handleDateChange = (selectedDates) => {
+    //console.log("Selected Date: ", selectedDates[0]);
     setLocalDate(selectedDates[0]);
     if (selectedDates.length > 0) {
       // Convert selected date to Nepal timezone (UTC+05:45)
-      const localDate = moment(selectedDates[0], "YYYY-MM-DD HH:mm A");
-      const localFormat = localDate.format();
-
+      //const nstDate = moment(selectedDates[0]).tz("Asia/Kathmandu");
+      //const nstFormat = nstDate.format("YYYY-MM-DDTHH:mm:ssZ");
+      //console.log("NST: ", nstFormat);
       setData((prevData) => ({
         ...prevData,
-        match_time: localFormat,
+        match_time: selectedDates[0],
       }));
     }
   };
@@ -184,6 +185,12 @@ const CreateMatch = () => {
     });
   };
 
+  const formatTime = (time) => {
+    const nepalDate = moment(time).tz("Asia/Kathmandu");
+    // Format the date
+    return nepalDate.format("YYYY-MM-DD hh:mm A");
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -192,12 +199,7 @@ const CreateMatch = () => {
         name1: data.team_one.name,
         logo2: data.team_two.image,
         name2: data.team_two.name,
-        time: new Date(data.match_time).toLocaleString("en-US", {
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
-          hour12: true,
-        }),
+        time: formatTime(data.match_time),
       };
 
       const thumbnail = await getThumbnail(thumbdata);
@@ -215,9 +217,9 @@ const CreateMatch = () => {
           progress: undefined,
           theme: "light",
         });
-        setLoading(false);
         navigation("/admin/manage-live");
       }
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log(error?.message);
