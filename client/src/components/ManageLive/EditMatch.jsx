@@ -6,7 +6,7 @@ import { FaRegArrowAltCircleUp } from "react-icons/fa";
 import Portal from "../pages/Portal.jsx";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/dark.css";
-//import moment from "moment-timezone";
+import moment from "moment-timezone";
 //import { getThumbnail } from "../../Api.js";
 
 const EditMatch = () => {
@@ -140,20 +140,15 @@ const EditMatch = () => {
 
   // set date handler
   const handleDateChange = (selectedDates) => {
-    //console.log("Selected Date: ", selectedDates[0]);
-    setLocalDate(selectedDates[0]);
     if (selectedDates.length > 0) {
-      // Convert selected date to Nepal timezone (UTC+05:45)
-      //const nstDate = moment(selectedDates[0]).tz("Asia/Kathmandu");
-      //const nstFormat = nstDate.format("YYYY-MM-DDTHH:mm:ssZ");
-      //console.log("NST: ", nstFormat);
+      const utcDate = moment(selectedDates[0]).utc();
+      setLocalDate(utcDate.toDate());
       setData((prevData) => ({
         ...prevData,
-        match_time: selectedDates[0],
+        match_time: utcDate.toISOString(),
       }));
     }
   };
-
   // scroll to top button
   const scrollToTop = () => {
     window.scrollTo({
@@ -325,11 +320,19 @@ const EditMatch = () => {
                     className="border-2 border-gray-300 cursor-pointer w-full rounded-md p-1 text-black"
                     options={{
                       enableTime: true,
-                      dateFormat: "Y-m-d h:i K",
+                      dateFormat: "Z",
+                      time_24hr: true,
+                      utc: true,
                     }}
                     value={localDate}
                     onChange={handleDateChange}
                   />
+                  {localDate && (
+                    <p className="text-xs mt-1">
+                      Selected UTC time:{" "}
+                      {moment.utc(localDate).format("YYYY-MM-DD HH:mm")} UTC
+                    </p>
+                  )}
                 </div>
 
                 <div className="p-2 w-[33.3%]">
