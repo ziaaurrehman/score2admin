@@ -266,6 +266,7 @@ const EditMatch = () => {
                     >
                       <option value="">Select a League</option>
                       <option value="la-liga">La Liga</option>
+                      <option value="international">International</option>
                       <option value="bundesliga">Bundesliga</option>
                       <option value="ligue-1">Ligue 1</option>
                       <option value="serie-a">Serie A</option>

@@ -75,6 +75,7 @@ const CreateMatch = () => {
         sport_type: sports || prevData.sport_type,
         match_title: matchTitle || prevData.match_title,
         match_time: date || prevData.match_time,
+        league_type: "international",
         fixture_id: id || prevData.fixture_id,
         team_one: {
           ...prevData.team_one,
@@ -267,6 +268,7 @@ const CreateMatch = () => {
                       onChange={handleChange}
                     >
                       <option value="">Select a League</option>
+                      <option value="international">International</option>
                       <option value="la-liga">La Liga</option>
                       <option value="bundesliga">Bundesliga</option>
                       <option value="ligue-1">Ligue 1</option>
