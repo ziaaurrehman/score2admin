@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 //import { format } from "date-fns";
 //import addMinutes from "date-fns/addMinutes";
-import moment from "moment-timezone";
+//import moment from "moment-timezone";
 
 const MatchList = ({ isGrid, matchesArray }) => {
   const [matches, setMatches] = useState([]);

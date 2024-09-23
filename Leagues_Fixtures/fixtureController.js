@@ -1,30 +1,39 @@
 import axios from "axios";
 import League from "./leagueModel.js";
+import AppInformation from "../AppInformation/appInformationModel.js";
 
-const RapidAPiIKey = "d0e757645b65635c612f5dad12525aed";
-// Request for league search
-const getRapidRequest = (country) => {
-  const rapidApi = {
+// Function to get the latest API key
+const getRapidAPIKey = async () => {
+  try {
+    const appInformation = await AppInformation.findOne();
+    return appInformation.sports_api_key;
+  } catch (err) {
+    console.error("Error occurred while fetching API key: ", err);
+    throw err;
+  }
+};
+
+// Updated function to get Rapid API request config
+const getRapidRequest = async (country) => {
+  const apiKey = await getRapidAPIKey();
+  return {
     method: "GET",
     url: "https://v3.football.api-sports.io/leagues",
     params: { country: country },
     headers: {
-      "x-apisports-key": RapidAPiIKey, // Use API-Sports key header
-      "x-rapidapi-host": "v3.football.api-sports.io", // API-Sports host
+      "x-apisports-key": apiKey,
+      "x-rapidapi-host": "v3.football.api-sports.io",
     },
   };
-  return rapidApi;
 };
 
-// Request for fixture search
-const getFixturesRequest = (date) => {
+// Updated function to get fixtures request config
+const getFixturesRequest = async (date) => {
   const regex = /^\d{4}-\d{2}-\d{2}$/;
   const isValidFormat = regex.test(date);
 
-  // Check the validity of date string
   if (!isValidFormat) return false;
 
-  // Check if the date itself is valid
   const dateParts = date.split("-");
   const year = parseInt(dateParts[0]);
   const month = parseInt(dateParts[1]) - 1;
@@ -32,38 +41,74 @@ const getFixturesRequest = (date) => {
 
   const dateObject = new Date(year, month, day);
 
-  // Check if the date object is valid
   if (
     dateObject.getFullYear() === year &&
     dateObject.getMonth() === month &&
     dateObject.getDate() === day
   ) {
-    const options = {
+    const apiKey = await getRapidAPIKey();
+    return {
       method: "GET",
       url: "https://v3.football.api-sports.io/fixtures",
       params: { date: date },
       headers: {
-        "x-apisports-key": RapidAPiIKey, // Use API-Sports key header
-        "x-rapidapi-host": "v3.football.api-sports.io", // API-Sports host
+        "x-apisports-key": apiKey,
+        "x-rapidapi-host": "v3.football.api-sports.io",
       },
     };
-    return options;
   } else {
     return false;
   }
 };
 
-// Fetch a league from rapid api (used for searching functionality)
+// Updated getLeaguesRapid function
 const getLeaguesRapid = async (req, res) => {
   try {
     const { country } = req.params;
-    const rapidRequest = getRapidRequest(country);
+    const rapidRequest = await getRapidRequest(country);
 
     const response = await axios.request(rapidRequest);
     const firstThreeItems = response.data.response.slice(0, 3);
     res.status(200).json({
       status: true,
       data: firstThreeItems,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      error: error,
+    });
+    console.error(error);
+  }
+};
+
+// Updated getFixturesRapid function
+const getFixturesRapid = async (req, res) => {
+  try {
+    const { date } = req.body;
+
+    if (!date) {
+      return res.status(400).json({
+        status: false,
+        message: "Please enter the required field data for the request...",
+      });
+    }
+
+    const rapidRequest = await getFixturesRequest(date);
+
+    if (!rapidRequest) {
+      return res.status(500).json({
+        status: false,
+        message: "Invalid date format",
+      });
+    }
+
+    const response = await axios.request(rapidRequest);
+    const firstTwentyItems = response.data.response.slice(0, 20);
+
+    res.status(200).json({
+      status: true,
+      fixtures: firstTwentyItems,
     });
   } catch (error) {
     res.status(500).json({
@@ -140,46 +185,6 @@ const deleteLeague = async (req, res) => {
       message: "Internal server error",
       error: err,
     });
-  }
-};
-
-// Get fixtures based on season / league ID from sports-api
-const getFixturesRapid = async (req, res) => {
-  try {
-    const { date } = req.body;
-
-    if (!date) {
-      res.status(400).json({
-        status: false,
-        message: "Please enter the required field data for the request...",
-      });
-    }
-
-    // Get a rapid request from the function
-    const rapidRequest = getFixturesRequest(date);
-
-    // If the response if false, we return an error
-    if (!rapidRequest) {
-      res.status(500).json({
-        status: false,
-        message: "Invalid date format",
-      });
-    }
-
-    // Make a request to sports api for fixtures
-    const response = await axios.request(rapidRequest);
-    const firstTwentyItems = response.data.response.slice(0, 20);
-
-    res.status(200).json({
-      status: true,
-      fixtures: firstTwentyItems,
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: false,
-      error: error,
-    });
-    console.error(error);
   }
 };
 
