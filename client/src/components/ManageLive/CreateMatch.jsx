@@ -224,7 +224,7 @@ const CreateMatch = () => {
       const missing = validationStatus.data.join(", ");
       toast.error(`Missing fields: ${missing}`);
       setLoading(false);
-      // commit change
+      // commit change for second time
       return false;
     }
     try {
