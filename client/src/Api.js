@@ -253,12 +253,11 @@ export const getOrder = async () => {
 
 export const getThumbnail = async (data) => {
   try {
-    console.log(data);
     const res = await axios.post("/live/gen-thumbnail", data);
     return res.data.thumbnail;
   } catch (err) {
     console.log("Internal server error", err);
-    throw err;
+    return false;
   }
 };
 

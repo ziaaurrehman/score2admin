@@ -188,8 +188,44 @@ const CreateMatch = () => {
     return moment.utc(time).format("YYYY-MM-DD HH:mm:ss [UTC]");
   };
 
+  const validateFields = () => {
+    const validationArray = [];
+
+    if (data?.sport_type === "") {
+      validationArray.push("Sport Type");
+    }
+    if (data?.match_title === "") {
+      validationArray.push("Match Title");
+    }
+    if (data?.league_type === "") {
+      validationArray.push("League Type");
+    }
+    if (data?.match_time === "") {
+      validationArray.push("Match Time");
+    }
+    if (data?.team_one.name === "") {
+      validationArray.push("Team One");
+    }
+    if (data?.team_two.name === "") {
+      validationArray.push("Team Two");
+    }
+
+    if (validationArray.length !== 0)
+      return { status: false, data: validationArray };
+
+    return true;
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
+
+    const validationStatus = validateFields();
+    if (validationStatus !== true && !validationStatus.status) {
+      const missing = validationStatus.data.join(", ");
+      toast.error(`Missing fields: ${missing}`);
+      setLoading(false);
+      return false;
+    }
     try {
       const thumbdata = {
         logo1: data.team_one.image,
@@ -200,6 +236,14 @@ const CreateMatch = () => {
       };
 
       const thumbnail = await getThumbnail(thumbdata);
+
+      if (!thumbnail) {
+        toast.error(
+          `Thumbnail generation error, please check your team logo links`
+        );
+        setLoading(false);
+        return false;
+      }
       const newData = { ...data, thumbnail: thumbnail };
 
       const res = await createMatch(newData);
