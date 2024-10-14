@@ -11,7 +11,8 @@ import {
   getMobileView,
   updateNumbersArray,
   getMatchOrder,
-  generateThumbnail
+  generateThumbnail,
+  getMobileMatches,
 } from "./matchController.js";
 
 const matchRouter = express.Router();
@@ -27,8 +28,9 @@ matchRouter.post("/duplicate/:id", authMiddleware, duplicateMatchById);
 // Public routes
 matchRouter.get("/get-view", getMobileView);
 matchRouter.get("/all-matches", getMatches);
+matchRouter.get("/all-matches-mobile", getMobileMatches);
 matchRouter.get("/get-single-match/:id", getMatchById);
 matchRouter.get("/get-order", getMatchOrder);
-matchRouter.post("/gen-thumbnail", generateThumbnail)
+matchRouter.post("/gen-thumbnail", generateThumbnail);
 
 export default matchRouter;

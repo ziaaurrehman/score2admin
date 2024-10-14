@@ -8,7 +8,6 @@ import { fileURLToPath } from "url";
 import sharp from "sharp";
 import fs from "fs";
 
-// Get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -107,6 +106,7 @@ const getMatches = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Matches",
+      totalMatchesFetched: matches.length,
       mobile_view: view.mobile_view,
       totalPages,
       paginatedMatches: matches,
@@ -133,6 +133,44 @@ const getMatchById = async (req, res) => {
       success: false,
       mesaage: `${error?.message}`,
     });
+  }
+};
+
+// Get paginated matches for mobile
+const getMobileMatches = async (req, res) => {
+  // Fixed number of items per page for mobile
+  const perPage = 10;
+  const page = parseInt(req.query.page) || 1;
+  const searchQuery = req.query.search || "";
+
+  try {
+    const view = await MobileView.findOne();
+    let query = {};
+    if (searchQuery) {
+      query.league_type = { $regex: searchQuery, $options: "i" };
+    }
+
+    // Count the total number of matches based on the query
+    const totalCount = await Matches.countDocuments(query);
+
+    // Fetch the paginated matches based on the query, sorting by league_type
+    const matches = await Matches.find(query)
+      .sort({ league_type: 1 })
+      .skip((page - 1) * perPage)
+      .limit(perPage);
+
+    const hasMore = totalCount > page * perPage;
+
+    res.status(200).json({
+      success: true,
+      message: "Mobile Matches",
+      mobile_view: view.mobile_view,
+      hasMore,
+      currentPage: page,
+      matches,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -239,6 +277,9 @@ const duplicateMatchById = async (req, res) => {
       });
     }
 
+    const maxOrderMatch = await Matches.findOne().sort({ order: -1 }).limit(1);
+    const newOrder = maxOrderMatch ? maxOrderMatch.order + 1 : 1;
+
     const newMatch = new Matches({
       sport_type: originalMatch.sport_type,
       league_type: originalMatch.league_type,
@@ -249,6 +290,7 @@ const duplicateMatchById = async (req, res) => {
       hot_match: originalMatch.hot_match,
       team_one: originalMatch.team_one,
       team_two: originalMatch.team_two,
+      order: newOrder,
       streaming_source: originalMatch.streaming_source,
       thumbnail: originalMatch.thumbnail,
     });
@@ -399,41 +441,35 @@ const generateThumbnail = async (req, res) => {
     ctx.fillStyle = "#333333";
     ctx.font = "bold 14px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(name1, 65, 150); // Below logo1
-    ctx.fillText(name2, 235, 150); // Below logo2
+    ctx.fillText(name1, 65, 150); // logo 1
+    ctx.fillText(name2, 235, 150); // logo 2
 
-    // Load the VS image from the file system and convert it to base64
     const vsImagePath = path.join(__dirname, "../client/src/assets/vs.png");
     const vsImageBase64 = fs.readFileSync(vsImagePath, "base64");
 
-    // Load the VS image from the base64 string
     const vsImage = await loadImage(`data:image/png;base64,${vsImageBase64}`);
 
-    // Draw the VS image on the canvas
+    // Draw the VS image
     ctx.drawImage(vsImage, 130, 75, 40, 35);
 
-    // Add the time below everything, centered
+    // Add the time
     ctx.font = "bold 12px Arial";
     ctx.fillText(time, canvas.width / 2, 185);
 
-    // Convert canvas to buffer
     const buffer = canvas.toBuffer("image/png");
 
-    // Use sharp to compress the image
+    // compress image
     const compressedBuffer = await sharp(buffer)
       .png({ quality: 80 })
       .toBuffer();
 
-    // Convert compressed buffer to base64
     const base64 = compressedBuffer.toString("base64");
     const dataUrl = `data:image/png;base64,${base64}`;
 
-    // Check if the dataUrl is too large (e.g., over 5MB to be safe)
     if (dataUrl.length > 5 * 1024 * 1024) {
       throw new Error("Generated thumbnail is too large for MongoDB storage");
     }
 
-    // Respond with the generated thumbnail data
     res.status(200).json({ status: true, thumbnail: dataUrl });
   } catch (err) {
     console.error("Error generating thumbnail:", err.message);
@@ -453,4 +489,5 @@ export {
   updateNumbersArray,
   getMatchOrder,
   generateThumbnail,
+  getMobileMatches,
 };

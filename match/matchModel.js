@@ -106,7 +106,7 @@ const matchSchema = mongoose.Schema(
       },
     ],
     order: { type: Number, default: 0 },
-    thumbnail: { type: String, trim: true, required: true }
+    thumbnail: { type: String, trim: true, required: true },
   },
   { timestamps: true }
 );

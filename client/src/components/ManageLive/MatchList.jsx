@@ -11,37 +11,22 @@ import LoadingBall from "../global/LoadingBall.jsx";
 import { updateMatchOrder, getOrder } from "../../Api.js";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-//import { format } from "date-fns";
-//import addMinutes from "date-fns/addMinutes";
-//import moment from "moment-timezone";
+import { format, parseISO } from "date-fns";
+import addMinutes from "date-fns/addMinutes";
 
 const MatchList = ({ isGrid, matchesArray }) => {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [runCount, setRunCount] = useState(0);
 
-  const formatTime = (time) => {
-    // Create a Date object from the UTC time string
-    const date = new Date(time);
+  const formatTime = (isoString) => {
+    const date = parseISO(isoString);
 
-    // Get the individual components and pad the month, day, hours, and minutes
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+    // Nepali Standard Time is UTC+5:45
+    const nstDate = addMinutes(date, 345); // 5 hours * 60 minutes + 45 minutes = 345 minutes
 
-    // Get hours and minutes for AM/PM format
-    let hours = date.getHours();
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-
-    // Determine AM/PM and adjust hours
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12; // Convert to 12-hour format and ensure 12 AM/PM is correct
-
-    // Pad hours for consistency
-    const paddedHours = String(hours).padStart(2, "0");
-
-    // Combine into the final formatted string
-    return `${year}-${month}-${day} ${paddedHours}:${minutes} ${ampm}`;
+    // Format the Date object to "YYYY-MM-DD hh:mm a"
+    return format(nstDate, "yyyy-MM-dd hh:mm a");
   };
 
   useEffect(() => {
@@ -49,13 +34,24 @@ const MatchList = ({ isGrid, matchesArray }) => {
     const fetchData = async () => {
       try {
         const res = await myOrder();
+        let order = res;
+        if (matchesArray.length >= res.length) {
+          const orderValues = matchesArray.map((item) => item.order);
+          await updateMatchOrder(orderValues);
+          order = orderValues;
+        }
         if (!res) {
           const orderValues = matchesArray.map((item) => item.order);
-          const req = updateMatchOrder(orderValues);
-          console.log(req.status);
+          await updateMatchOrder(orderValues);
+          order = orderValues;
+          //console.log(req.status);
           setMatches(matchesArray);
+          //console.log(orderValues);
         } else {
-          const arrangedMatches = sortObjectsByOrder(matchesArray.slice(), res);
+          const arrangedMatches = sortObjectsByOrder(
+            matchesArray.slice(),
+            order
+          );
           setMatches(arrangedMatches);
         }
       } catch (err) {
@@ -70,6 +66,8 @@ const MatchList = ({ isGrid, matchesArray }) => {
 
   // Arranging items
   function sortObjectsByOrder(arrayOfObjects, orderArray) {
+    //console.log("AOB: ", arrayOfObjects);
+    //console.log("OR: ", orderArray);
     // Create a Set to store unique order values from the arrayOfObjects
     const uniqueOrders = new Set(arrayOfObjects.map((obj) => obj.order));
 
